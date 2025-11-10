@@ -1,0 +1,17 @@
+{
+    "paulo silva": {
+        "display_name": "Paulo Silva",
+        "numero": "188534",
+        "data": "07/11/2025",
+        "empresa": "CDIL",
+        "nif": "307442705",
+        "horas": {
+            "20/10/2025": {
+                "entrada": "",
+                "saida_almoco": "",
+                "retorno": "",
+                "saida_final": ""
+            }
+        }
+    }
+}
