@@ -1,43 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2196f3">
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Registro de Horas</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background:#f5f5f5;
-  margin:0; padding:0;
-  display:flex; justify-content:center; align-items:flex-start;
-  min-height:100vh; padding-top:30px;
-}
-.tela { display:none; background:white; padding:30px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.1); width:380px; max-width:95%; }
-.tela.ativa { display:block; }
-h2 { margin-top:0; text-align:center; }
-input { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; font-size:16px; box-sizing:border-box; }
-.input-wrap { position:relative; width:100%; }
-.input-wrap input { padding-right:44px; }
-.eye-btn { position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:none; cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center; padding:0; }
-.eye-btn:hover { background:rgba(0,0,0,0.05); border-radius:5px; }
-.eye-btn svg { width:20px; height:20px; stroke:#222; fill:none; }
-button { padding:10px 15px; margin:5px 0; border:none; border-radius:5px; cursor:pointer; width:100%; font-size:16px; }
-#btn-entrar, #btn-salvar-cadastro, #btn-gerar-csv, #btn-logout { background:#2196f3; color:white; }
-#btn-abrir-cadastro, #btn-voltar-login { background:#e0e0e0; }
-.erro { color:red; margin-bottom:10px; text-align:center; }
-#lista-dias { max-height:60vh; overflow-y:auto; }
-.card-dia { background:#f9f9f9; padding:10px; border-radius:8px; margin-bottom:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-.card-dia .destaque { font-weight:bold; text-align:center; margin-bottom:5px; padding:3px; border-radius:4px; }
-.campo { display:flex; flex-direction:column; margin-bottom:5px; }
-.campo label { font-size:12px; margin-bottom:2px; }
-.campo input { padding:5px; border-radius:4px; border:1px solid #ccc; }
-.erro-hora { font-size:12px; color:red; min-height:14px; }
-.btn-salvar-dia { background:#2196f3; color:white; padding:5px; border-radius:4px; cursor:pointer; margin-top:5px; }
-</style>
+  <!-- ... (seus links de head) ... -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css">
+  <title>Registro de Horas</title>
 </head>
+
 <body>
 
 <!-- LOGIN -->
@@ -68,205 +38,74 @@ button { padding:10px 15px; margin:5px 0; border:none; border-radius:5px; cursor
   <button id="btn-voltar-login">Voltar</button>
 </div>
 
-<!-- REGISTRO -->
-<div id="tela-registro" class="tela">
-  <h2 id="usuario-logado"></h2>
-  <div id="lista-dias"></div>
-  <button id="btn-gerar-csv">Exportar CSV</button>
-  <button id="btn-logout">Logout</button>
+<!-- PERFIL -->
+<div id="tela-perfil" class="tela">
+  <div class="perfil-app">
+
+    <!-- BOTÃO DE CONFIGURAÇÕES -->
+    <button id="btn-configuracoes-perfil" class="icon-btn top-right" aria-label="Configurações">
+        ⚙️
+    </button>
+
+    <!-- Topo do Perfil com Foto e Lápis -->
+    <div class="perfil-topo">
+      <div class="foto-container">
+        <!-- Adicionado ID na imagem -->
+        <img src="URL_DA_SUA_FOTO.jpg" alt="" class="profile-pic" id="profile-image-display">
+
+        <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
+
+        <!-- Botão do Lápis -->
+        <button id="edit-pic-btn" class="edit-btn" aria-label="Alterar foto">
+          ✏️
+        </button>
+
+        <!-- Botão para Remover Foto (X) -->
+        <button id="remove-pic-btn" class="edit-btn remove-btn" aria-label="Remover foto">
+          ❌
+        </button>
+      </div>
+    </div>
+
+    <!-- Informações e Botões do Perfil -->
+    <div class="perfil-card">
+      <h2>Paulo Silva</h2>
+      <p class="cargo">cargo</p>
+      <p class="descricao">
+        <!-- Descrição aqui se necessário -->
+      </p>
+
+      <!-- Contentor para os botões do meio -->
+      <div class="perfil-info">
+        <button id="btn-registrar-hora" class="btn-perfil-acao">Registrar Horas</button>
+      </div>
+
+       <!-- BOTÃO DE LOGOUT -->
+       <!-- ID RENOMEADO para evitar conflito com o global #btn-logout usado no CSS de cores -->
+      <button id="btn-logout-perfil" class="icon-btn bottom-right" aria-label="Logout">
+          Sair
+      </button>
+
+    </div>
+  </div>
 </div>
 
-<script>
-  if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js')
-    .then(() => console.log('Service Worker registrado'))
-    .catch(err => console.error('Erro SW:', err));
-}
-document.addEventListener("DOMContentLoaded", () => {
-let usuario_atual=null, registros={};
+<!-- AJUSTES -->
+<div id="tela-configurações" class="tela">
+  <h2>Ajustes</h2>
+  <button id="btn-configurações-voltar">Voltar</button>
+  <button id="btn-excluir-usuario">EXCLUIR USUARIO</button>
+</div>
 
-function mostrar(tela){ document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa")); document.getElementById(tela).classList.add("ativa"); }
-function salvarLS(c,v){ localStorage.setItem(c, JSON.stringify(v)); }
-function carregarLS(c){ return JSON.parse(localStorage.getItem(c)||"{}"); }
+<!-- REGISTRO -->
+<div id="tela-registro" class="tela">
+  <h2 id="usuario-logado" class="usuario-h2"></h2>
+  <div id="lista-dias"></div>
+  <button id="btn-gerar-csv">Exportar CSV</button>
+  <button id="btn-registro-voltar">Voltar</button>
+</div>
 
-// LOGIN
-document.getElementById("btn-entrar").onclick=()=>{
-  const u=document.getElementById("usuario").value.trim().toLowerCase();
-  const s=document.getElementById("senha").value.trim();
-  const us=carregarLS("usuarios");
-  const erro=document.getElementById("erro-login");
-  erro.innerText="";
-  if(u in us && us[u].numero===s){
-    usuario_atual=u;
-    document.getElementById("usuario-logado").innerText="Usuário: "+us[u].display_name;
-    iniciarRegistro();
-    mostrar("tela-registro");
-  } else erro.innerText="Usuário ou senha incorretos.";
-};
-document.getElementById("btn-abrir-cadastro").onclick=()=>mostrar("tela-cadastro");
-document.getElementById("btn-voltar-login").onclick=()=>mostrar("tela-login");
-
-// CADASTRO
-document.getElementById("btn-salvar-cadastro").onclick=()=>{
-  const u=document.getElementById("cad-colaborador").value.trim().toLowerCase();
-  const n=document.getElementById("cad-numero").value.trim();
-  const erro=document.getElementById("erro-cadastro");
-  erro.innerText="";
-  if(!u||!n){erro.innerText="Preencha todos os campos";return;}
-  const us=carregarLS("usuarios");
-  us[u]={display_name:u, numero:n};
-  salvarLS("usuarios",us);
-  document.getElementById("usuario").value=u;
-  document.getElementById("senha").value=n;
-  mostrar("tela-login");
-};
-
-// REGISTRO
-function gerarPeriodo(){
-  const hoje=new Date();
-  let inicio=hoje.getDate()<20 ? new Date(hoje.getFullYear(), hoje.getMonth()-1,20) : new Date(hoje.getFullYear(), hoje.getMonth(),20);
-  let fim=new Date(inicio); fim.setDate(inicio.getDate()+30);
-  return[inicio,fim];
-}
-
-async function buscarFeriados(ano,pais='BR'){
-  const cacheKey = `feriados_${pais}_${ano}`;
-  const cache = localStorage.getItem(cacheKey);
-  if(cache) return JSON.parse(cache).map(d=>new Date(d));
-  try{
-    const resp = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${ano}/${pais}`);
-    if(!resp.ok) return [];
-    const feriadosData = await resp.json();
-    const datas = feriadosData.map(h=>h.date);
-    localStorage.setItem(cacheKey, JSON.stringify(datas));
-    return datas.map(d=>new Date(d));
-  } catch(e){ console.error("Erro ao buscar feriados:",e); return []; }
-}
-
-function isWeekend(date){ return date.getDay()===0 || date.getDay()===6; }
-function isHoliday(date, holidays){ return holidays.some(h=>h.toDateString()===date.toDateString()); }
-
-async function iniciarRegistro(){
-  registros = carregarLS("horas_"+usuario_atual) || {};
-  const lista = document.getElementById("lista-dias");
-  lista.innerHTML="";
-  const [inicio,fim] = gerarPeriodo();
-  const feriados = await buscarFeriados(inicio.getFullYear());
-
-  for(let d=new Date(inicio); d<=fim; d.setDate(d.getDate()+1)){
-    const ds=d.toLocaleDateString("pt-BR");
-    const r=registros[ds]||{entrada:"",saida_alm:"",retorno:"",saida_final:""};
-
-    const div=document.createElement("div"); div.className="card-dia";
-    const weekend=isWeekend(d);
-    const holiday=isHoliday(d,feriados);
-
-    if(weekend && holiday) div.style.backgroundColor="#fcf8e3";
-    else if(weekend) div.style.backgroundColor="#f2dede";
-    else if(holiday) div.style.backgroundColor="#d9edf7";
-
-    let destaqueTexto="";
-    if(weekend) destaqueTexto+="Final de Semana";
-    if(holiday) destaqueTexto+=(destaqueTexto?" / ":"")+"Feriado";
-    let destaqueHTML = destaqueTexto?`<div class="destaque">${destaqueTexto}</div>`:"";
-
-    div.innerHTML=`
-      ${destaqueHTML}<strong>${ds}</strong>
-      <div class="campo"><label>Entrada</label><input id="e_${ds}" value="${r.entrada}"><div class="erro-hora"></div></div>
-      <div class="campo"><label>Saída Almoço</label><input id="s_${ds}" value="${r.saida_alm}"><div class="erro-hora"></div></div>
-      <div class="campo"><label>Retorno</label><input id="r_${ds}" value="${r.retorno}"><div class="erro-hora"></div></div>
-      <div class="campo"><label>Saída Final</label><input id="f_${ds}" value="${r.saida_final}"><div class="erro-hora"></div></div>
-      <button class="btn-salvar-dia" onclick="salvarDia('${ds}')">Salvar</button>
-    `;
-    lista.appendChild(div);
-  }
-}
-
-// SALVAR DIA
-window.salvarDia=(d)=>{
-  registros[d]={entrada:document.getElementById("e_"+d).value.trim(),
-                saida_alm:document.getElementById("s_"+d).value.trim(),
-                retorno:document.getElementById("r_"+d).value.trim(),
-                saida_final:document.getElementById("f_"+d).value.trim()};
-  salvarLS("horas_"+usuario_atual,registros);
-  alert("Salvo!");
-};
-
-// CSV
-document.getElementById("btn-gerar-csv").onclick=()=>{
-  let linhas=["Data,Entrada,Saída Almoço,Retorno,Saída Final"];
-  for(const d in registros){ const r=registros[d]; linhas.push(`${d},${r.entrada},${r.saida_alm},${r.retorno},${r.saida_final}`); }
-  const blob=new Blob([linhas.join("\n")],{type:"text/csv"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download=`horas_${usuario_atual}.csv`;
-  a.click();
-};
-
-// LOGOUT
-document.getElementById("btn-logout").onclick=()=>mostrar("tela-login");
-
-// OLHO SENHA
-let show=false;
-document.getElementById("toggle-senha").onclick=()=>{
-  show=!show;
-  document.getElementById("senha").type = show?"text":"password";
-  document.getElementById("icon-eye").innerHTML = show
-    ? `<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>`
-    : `<path d="M1 12c3-5 8-8 11-8s8 3 11 8"/><path d="M1 1l22 22"/>`;
-};
-
-function aplicarMascaraHora(input){
-  const campo = input.closest(".campo");
-  const erroDiv = campo.querySelector(".erro-hora");
-
-  input.addEventListener("input", function(){
-    let v = this.value.replace(/\D/g,"");
-    if(v.length > 4) v = v.slice(0,4);
-    if(v.length >= 3) v = v.slice(0,2) + ":" + v.slice(2);
-    this.value = v;
-    limparErro();
-  });
-
-  // Evento keypress para avisar letras ou símbolos
-  input.addEventListener("keypress", function(e){
-    if(!/[0-9]/.test(e.key)){
-      e.preventDefault(); // impede a digitação
-      if(erroDiv) erroDiv.innerText = "Só são permitidos números";
-      input.style.border = "2px solid red";
-    }
-  });
-
-  input.addEventListener("blur", function(){
-    if(this.value === "") return;
-    const partes = this.value.split(":");
-    if(partes.length !== 2) return marcarErro("Formato inválido HH:MM");
-
-    let h = parseInt(partes[0],10);
-    let m = parseInt(partes[1],10);
-    if(h>23 || m>59) marcarErro("Hora inválida 00:00-23:59");
-    else limparErro();
-  });
-
-  function marcarErro(msg){
-    input.style.border = "2px solid red";
-    if(erroDiv) erroDiv.innerText = msg;
-  }
-
-  function limparErro(){
-    input.style.border = "1px solid #ccc";
-    if(erroDiv) erroDiv.innerText = "";
-  }
-}
-
-
-// Observer para inputs dinâmicos
-const observer=new MutationObserver(()=>{
-  document.querySelectorAll("#lista-dias input").forEach(inp=>aplicarMascaraHora(inp));
-});
-observer.observe(document.getElementById("lista-dias"),{childList:true,subtree:true});
-
-});
-</script>
+<script src="script.js"></script>
+<script src="service-worker.js"></script>
 </body>
 </html>
