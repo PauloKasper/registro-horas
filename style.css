@@ -1,15 +1,17 @@
 /* ---------- Body ---------- */
 body {
     margin: 0;
-    padding: 0;
+    padding: 0; /* Remova o padding-top: 30px; daqui */
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
+
+    /* Garante que o gradiente cubra toda a tela */
     height: 100vh;
+
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* mantém o alinhamento das telas */
-    min-height: 100vh;
-    padding-top: 30px;
+    align-items: flex-start; /* mantém o alinhamento das telas no topo do body */
+    /* Remova min-height: 100vh; daqui */
 }
 
 /* ---------- Telas de Login/Cadastro ---------- */
@@ -28,8 +30,10 @@ body {
 
 .tela.ativa {
     display: flex;
-    min-height: 100vh;
+    /* Remova min-height: 100vh; daqui */
     background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
+    /* Adicione padding-top: 30px; aqui se precisar de espaço no topo APENAS nesta tela */
+    padding-top: 30px;
 }
 
 h2 {
@@ -179,11 +183,11 @@ body::-webkit-scrollbar-track {
 /* ---------- Perfil Geral ---------- */
 .perfil-app {
     width: 320px;
-    height: 600px;
+    /* height: 600px; Remova esta altura fixa se quiser que ocupe a tela toda */
     overflow: hidden;
     position: relative;
     color: white;
-    min-height: 100vh;
+    /* Remova min-height: 100vh; daqui */
 }
 
 /* ---------- Topo do Perfil (Foto) ---------- */
@@ -384,4 +388,3 @@ body::-webkit-scrollbar-track {
     color: white;
     transform: none;
 }
-
