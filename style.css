@@ -11,41 +11,39 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
-
-    /* Garante que o gradiente cubra toda a tela, inclusive o notch/barra inferior */
     height: 100vh;
     width: 100vw;
-    height: -webkit-fill-available; /* Compatibilidade extra WebKit */
-
+    height: -webkit-fill-available;
+    background-color: #F5F5F5;
+    color: #000;
     display: flex;
-    justify-content: center; /* Centraliza horizontalmente o conteúdo (as suas .tela) */
-    align-items: center;     /* Centraliza verticalmente o conteúdo (as suas .tela) */
+    justify-content: center; /* Mantém a centralização horizontal */
+    align-items: flex-start; /* Alinha o conteúdo ao TOPO */
     min-height: 100vh;
-    color: white;
 }
 
 
-/* ---------- Telas de Login/Cadastro ---------- */
+
+/* ---------- Telas em Geral ---------- */
 .tela {
+    /* As telas agora são contentores flex que ocupam a largura total do body centralizado */
+    width: 100%;
+    max-width: 400px; /* Limite a largura da interface em ecrãs muito grandes */
+    padding: 20px;
+    box-sizing: border-box;
+    /* ... (outros estilos display none, flex-direction column, gap) ... */
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    width: 320px;
-    max-width: 95%;
-    /* Remova min-height se quiser que a caixa fique ajustada ao conteúdo */
+    gap: 15px; /* Aumentei o espaço entre os elementos */
 }
 
 .tela.ativa {
     display: flex;
-    /* Remova estas propriedades, o body lida com isso agora */
-    /* min-height: 100vh; */
-    background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
-    /* padding-top: 30px; */
+    background-color: transparent;
+    /* Padding seguro para o topo e rodapé do iPhone */
+    padding-top: env(safe-area-inset-top, 20px);
+    padding-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 h2 {
@@ -151,7 +149,7 @@ body::-webkit-scrollbar-track {
     border-radius: 8px;
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    color: #000
+    color: #000;
 }
 
 .card-dia .destaque {
@@ -216,22 +214,21 @@ body::-webkit-scrollbar-track {
 }
 
 .foto-container {
+    width: 120px; /* Diminuí ligeiramente o tamanho da foto */
+    height: 120px;
+    margin: 0 auto; /* Centraliza a foto dentro do perfil-topo */
+    /* ... (mantenha os estilos de border-radius, border, overflow hidden) ... */
     position: relative;
-    width: 150px;
-    height: 150px;
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .profile-pic {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
-
 }
 
 /* ---------- Estilos Comuns para Ícones (Engrenagem e Sair) ---------- */
@@ -261,17 +258,20 @@ body::-webkit-scrollbar-track {
 
 /* Posição Topo Direita (Configurações) */
 .top-right {
-    top: 15px;
-    right: -130px;
+    top: 1px; /* Distância do topo */
+    right: -150px; /* Distância da direita */
+
+    color: #555; /* Exemplo de cor para o ícone */
 }
 
 /* Posição Rodapé Direita (Logout) */
 .bottom-right {
-    bottom: 15px;
-    right: 15px;
+    position: absolute; /* Certifica-se de que está absoluta */
+    bottom: env(safe-area-inset-bottom, 15px); /* Fixa no rodapé seguro */
+    right: 20px; /* Distância da borda direita */
     font-size: 0.9rem;
+    color: blue; /* Cor que definiu */
 }
-
 /* ---------- Estilos para os Botões da Foto (Lápis e X) ---------- */
 .edit-btn {
     position: absolute;
@@ -345,6 +345,8 @@ body::-webkit-scrollbar-track {
 .top-right {
     top: 15px;
     right: center;
+        transition: transform 0.2s ease-in-out, background-color 0.9s ease-in-out, opacity 0.2s ease-in-out;
+
 }
 
 /* Posição Rodapé Direita (Logout) */
@@ -352,6 +354,7 @@ body::-webkit-scrollbar-track {
     bottom: 15px;
     right: 15px;
     font-size: 0.9rem; /* Torna o texto "Sair" um pouco menor */
+        color: blue;
 }
 
 
@@ -372,23 +375,25 @@ body::-webkit-scrollbar-track {
 }
 
 
-/* ---------- Infos do Perfil ---------- */
+/* ---------- O NOVO CARD DE PERFIL (Flutuante) ---------- */
 .perfil-card {
     text-align: center;
-    padding: 0 20px 20px 20px;
-    padding-bottom: 50px;
+    padding: 20px;
+    background: #FFFFFF; /* Fundo branco puro para o card flutuar */
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidade */
+    width: 100%;
+    max-width: 350px;
 }
 
 .perfil-card h2 { margin: 0; font-size: 22px; color: inherit; }
 .perfil-card .cargo { font-size: 14px; margin: 5px 0; opacity: 0.8; }
 .perfil-card .descricao { font-size: 14px; margin: 15px 0; }
 
-/* Contentor para os botões do meio */
-.perfil-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 15px;
+/* ---------- Topo do Perfil (Foto) ---------- */
+.perfil-topo {
+    /* Removi justify-content: center; padding, pois o flexbox do card centraliza */
+    padding-bottom: 15px; /* Espaço entre a foto e o texto */
 }
 
 /* Estilos para o botão "Registrar Horas" */
@@ -402,3 +407,25 @@ body::-webkit-scrollbar-track {
     color: white;
     transform: none;
 }
+
+.perfil-info-text h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #333; /* Cor escura para o texto no card branco */
+}
+.perfil-info-text .cargo {
+    font-size: 14px;
+    margin: 5px 0 0 0;
+    opacity: 0.7;
+    color: #555;
+}
+
+/* Estilos para o botão "Registrar Horas" (fora do card, abaixo dele) */
+#btn-registrar-hora {
+    background-color: #2196f3; /* Cor primária azul */
+    color: white;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 20px; /* Espaço entre o card e o botão */
+}
+
