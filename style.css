@@ -1,50 +1,382 @@
+/* ---------- Body ---------- */
 body {
-  font-family: Arial, sans-serif;
-  background: #f5f6fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5; /* fundo da página */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* mantém o alinhamento das telas */
+    min-height: 100vh;
+    padding-top: 30px;
 }
 
+/* ---------- Telas de Login/Cadastro ---------- */
 .tela {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  width: 320px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    width: 320px;
+    max-width: 95%;
 }
 
 .tela.ativa {
-  display: flex;
+    display: flex;
+    /* background: #f5f5f5; (Removido para usar o fundo branco do card login/cadastro) */
+}
+
+h2 {
+    margin-top: 0;
+    text-align: center;
 }
 
 input {
-  padding: 10px;
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.input-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.input-wrap input {
+    padding-right: 44px;
+}
+
+.eye-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.eye-btn:hover {
+    background: rgba(0,0,0,0.05);
+    border-radius: 5px;
+}
+
+.eye-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #222;
+    fill: none;
 }
 
 button {
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  background-color: #3498db;
-  color: white;
-  cursor: pointer;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+    transform: none; /* Garante que não há escala por padrão */
 }
 
+#btn-entrar, #btn-salvar-cadastro, #btn-gerar-csv, #btn-logout {
+    background: #2196f3;
+    color: white;
+}
+
+#btn-abrir-cadastro, #btn-voltar-login {
+    background: #e0e0e0;
+}
+
+/* Remove hover global problemático */
 button:hover {
-  background-color: #2980b9;
 }
 
 .erro {
-  color: red;
-  font-size: 0.9em;
+    color: red;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/* ---------- Lista de Dias ---------- */
+#lista-dias {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+body::-webkit-scrollbar-track {
+}
+.usuario-h2{
+    visibility: hidden;
+}
+
+.card-dia {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card-dia .destaque {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+    padding: 50px;
+    border-radius: 4px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 9px;
+}
+
+.campo label {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.campo input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.erro-hora {
+    font-size: 12px;
+    color: red;
+    min-height: 14px;
+}
+
+.btn-salvar-dia {
+    background: #2196f3;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+/* ---------- Perfil Geral ---------- */
+.perfil-app {
+    width: 320px;
+    height: 600px;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
+    position: relative;
+    color: white;
+}
+
+/* ---------- Topo do Perfil (Foto) ---------- */
+.perfil-topo {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+.foto-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* ---------- Estilos Comuns para Ícones (Engrenagem e Sair) ---------- */
+.icon-btn {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+    /* Estes botões estão sempre visíveis */
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.icon-btn:hover {
+    color: #4CAF50;
+    transform: scale(1.2);
+}
+
+.icon-btn:active {
+    transform: scale(0.9);
+}
+
+/* Posição Topo Direita (Configurações) */
+.top-right {
+    top: 15px;
+    right: -130px;
+}
+
+/* Posição Rodapé Direita (Logout) */
+.bottom-right {
+    bottom: 15px;
+    right: 15px;
+    font-size: 0.9rem;
+}
+
+/* ---------- Estilos para os Botões da Foto (Lápis e X) ---------- */
+.edit-btn {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+    /* ESCONDE O BOTÃO POR PADRÃO (Lápis e X) */
+    opacity: 0;
+    pointer-events: none; /* Permite clicar através dele quando invisível */
+}
+
+/* MOSTRA O LÁPIS E O X QUANDO O MOUSE ESTÁ SOBRE O contentor pai (.foto-container) */
+.foto-container:hover .edit-btn {
+    opacity: 1; /* Torna o botão visível */
+    pointer-events: auto; /* Permite clicar nele quando visível */
+}
+
+/* Posição do Lápis (inferior direito) */
+#edit-pic-btn {
+    bottom: 5px;
+    right: 58px;
+}
+
+/* Posição e estilo do botão Remover (superior direito da foto) */
+#remove-pic-btn {
+    top: 5px;
+    right: 58px;
+    bottom: auto;
+    background-color: rgba(100, 100, 100, 0.6) !important; /* Força a cor cinzenta */
+    color: white !important;
+}
+
+#remove-pic-btn:hover {
+    background-color: rgba(80, 80, 80, 0.8) !important;
+    transform: scale(1.1);
+}
+
+.edit-btn:hover {
+    transform: scale(1.2);
+}
+.edit-btn:active {
+    transform: scale(0.9);
+}
+/* ---------- Estilos Base Comuns para Ícones (Engrenagem e Sair) ---------- */
+.icon-btn {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    opacity: 1;
+    pointer-events: auto;
+    /* Movemos a transição para os seletores de ID específicos */
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+/* Posição Topo Direita (Configurações) */
+.top-right {
+    top: 15px;
+    right: center;
+}
+
+/* Posição Rodapé Direita (Logout) */
+.bottom-right {
+    bottom: 15px;
+    right: 15px;
+    font-size: 0.9rem; /* Torna o texto "Sair" um pouco menor */
+}
+
+
+/* ---------- Estilos ESPECÍFICOS para a Engrenagem (usando ID) ---------- */
+#btn-configuracoes-perfil {
+    color: white;
+    /* Adicionamos a transição e a cor aqui */
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+#btn-configuracoes-perfil:hover {
+    color: #4CAF50;
+    transform: scale(1.2);
+}
+
+#btn-configuracoes-perfil:active {
+    transform: scale(0.9);
+}
+
+
+/* ---------- Infos do Perfil ---------- */
+.perfil-card {
+    text-align: center;
+    padding: 0 20px 20px 20px;
+    padding-bottom: 50px;
+}
+
+.perfil-card h2 { margin: 0; font-size: 22px; color: inherit; }
+.perfil-card .cargo { font-size: 14px; margin: 5px 0; opacity: 0.8; }
+.perfil-card .descricao { font-size: 14px; margin: 15px 0; }
+
+/* Contentor para os botões do meio */
+.perfil-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Estilos para o botão "Registrar Horas" */
+.perfil-info button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.perfil-info button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: white;
+    transform: none;
 }
