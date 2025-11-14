@@ -3,9 +3,10 @@
 <head>
   <!-- ... (seus links de head) ... -->
   <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#F5F5F5">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"> <!-- Usará ícones escuros na barra de status clara -->
   <link rel="stylesheet" href="style.css">
   <title>Registro de Horas</title>
 </head>
@@ -41,55 +42,46 @@
 </div>
 
 <!-- PERFIL -->
+<!-- PERFIL -->
 <div id="tela-perfil" class="tela">
-  <div class="perfil-app">
 
-    <!-- BOTÃO DE CONFIGURAÇÕES -->
+
+
+    <!-- O NOVO CARD DE PERFIL -->
+    <div class="perfil-card">
+        <!-- Topo do Perfil com Foto e Lápis -->
+        <div class="perfil-topo">
+            <!-- Botão de Configurações (mantido no topo) -->
     <button id="btn-configuracoes-perfil" class="icon-btn top-right" aria-label="Configurações">
         ⚙️
     </button>
+            <div class="foto-container">
+                <img src="URL_DA_SUA_FOTO.jpg" alt="" class="profile-pic" id="profile-image-display">
+                <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
+                <!-- Botão do Lápis -->
+                <button id="edit-pic-btn" class="edit-btn" aria-label="Alterar foto">✏️</button>
+                <!-- Botão para Remover Foto (X) -->
+                <button id="remove-pic-btn" class="edit-btn remove-btn" aria-label="Remover foto">❌</button>
+            </div>
+        </div>
 
-    <!-- Topo do Perfil com Foto e Lápis -->
-    <div class="perfil-topo">
-      <div class="foto-container">
-        <!-- Adicionado ID na imagem -->
-        <img src="URL_DA_SUA_FOTO.jpg" alt="" class="profile-pic" id="profile-image-display">
-
-        <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
-
-        <!-- Botão do Lápis -->
-        <button id="edit-pic-btn" class="edit-btn" aria-label="Alterar foto">
-          ✏️
-        </button>
-
-        <!-- Botão para Remover Foto (X) -->
-        <button id="remove-pic-btn" class="edit-btn remove-btn" aria-label="Remover foto">
-          ❌
-        </button>
-      </div>
+        <!-- Informações (Nome e Cargo) -->
+        <div class="perfil-info-text">
+            <h2 id="nome-usuario-perfil">Paulo Silva</h2>
+            <p class="cargo" id="cargo-usuario-perfil">cargo</p>
+        </div>
     </div>
+    <!-- FIM DO CARD DE PERFIL -->
 
-    <!-- Informações e Botões do Perfil -->
-    <div class="perfil-card">
-      <h2>Paulo Silva</h2>
-      <p class="cargo">cargo</p>
-      <p class="descricao">
-        <!-- Descrição aqui se necessário -->
-      </p>
+    <!-- BOTÃO REGISTRAR HORAS (FORA DO CARD, ABAIXO DELE) -->
+    <button id="btn-registrar-hora" class="btn-perfil-acao">Registrar Horas</button>
 
-      <!-- Contentor para os botões do meio -->
-      <div class="perfil-info">
-        <button id="btn-registrar-hora" class="btn-perfil-acao">Registrar Horas</button>
-      </div>
 
-       <!-- BOTÃO DE LOGOUT -->
-       <!-- ID RENOMEADO para evitar conflito com o global #btn-logout usado no CSS de cores -->
-      <button id="btn-logout-perfil" class="icon-btn bottom-right" aria-label="Logout">
-          Sair
-      </button>
+    <!-- BOTÃO DE LOGOUT (FORA DO CARD, POSICIONADO NO RODAPÉ VIA CSS) -->
+    <button id="btn-logout-perfil" class="icon-btn bottom-right" aria-label="Logout">
+        Sair
+    </button>
 
-    </div>
-  </div>
 </div>
 
 <!-- AJUSTES -->
