@@ -18,8 +18,12 @@ body {
     color: #000;
     display: flex;
     justify-content: center; /* Mantém a centralização horizontal */
-    align-items: flex-start; /* Alinha o conteúdo ao TOPO */
+    align-items: center; /* Alinha o conteúdo ao TOPO */
     min-height: 100vh;
+}
+/* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
+#tela-perfil.tela.ativa {
+    align-self: flex-start; /* Alinha este item flex específico ao topo */
 }
 
 
