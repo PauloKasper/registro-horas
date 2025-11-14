@@ -323,27 +323,35 @@ body::-webkit-scrollbar-track {
     transform: scale(1.03);
 }
 
-.edit-btn:hover {
-    /* Reduz a escala de 1.2 para 1.05 */
+.icon-btn:hover {
+    color: #4CAF50;
+    /* Efeito de escala subtil (cresce 5%) */
     transform: scale(1.05);
 }
-.edit-btn:active {
-    /* Reduz a escala de 0.9 para 0.98 */
+
+.icon-btn:active {
+     /* Efeito de escala subtil (diminui 2%) */
     transform: scale(0.98);
+    /* Remove qualquer sombra ao clicar */
+    box-shadow: none;
 }
 /* ---------- Estilos Base Comuns para Ícones (Engrenagem e Sair) ---------- */
 .icon-btn {
     position: absolute;
-    background-color: transparent;
+    background-color: transparent; /* Garante que o fundo é transparente */
     border: none;
     cursor: pointer;
-    padding: 0;
+    padding: 0; /* Essencial para que a área clicável não seja maior que o conteúdo */
     border-radius: 5px;
-    font-size: 1.2rem;
+    font-size: 1.2rem; /* Controla o tamanho do ícone SVG, se usar font-based icons */
     opacity: 1;
     pointer-events: auto;
-    /* Movemos a transição para os seletores de ID específicos */
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+    /* Adições para remover efeitos indesejados */
+    outline: none;
+    box-shadow: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* Posição Topo Direita (Configurações) */
