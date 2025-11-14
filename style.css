@@ -248,12 +248,14 @@ body::-webkit-scrollbar-track {
 }
 
 .icon-btn:hover {
-    color: #4CAF50;
-    transform: scale(1.2);
+    color: #4CAF50; /* Mantém a cor, se quiser */
+    /* Reduz a escala de 1.2 para 1.05 (pequeno brilho) */
+    transform: scale(1.05);
 }
 
 .icon-btn:active {
-    transform: scale(0.9);
+    /* Reduz a escala de 0.9 para 0.98 */
+    transform: scale(0.98);
 }
 
 /* Posição Topo Direita (Configurações) */
@@ -317,14 +319,17 @@ body::-webkit-scrollbar-track {
 
 #remove-pic-btn:hover {
     background-color: rgba(80, 80, 80, 0.8) !important;
-    transform: scale(1.1);
+    /* Reduz a escala de 1.1 para 1.03 (muito subtil) */
+    transform: scale(1.03);
 }
 
 .edit-btn:hover {
-    transform: scale(1.2);
+    /* Reduz a escala de 1.2 para 1.05 */
+    transform: scale(1.05);
 }
 .edit-btn:active {
-    transform: scale(0.9);
+    /* Reduz a escala de 0.9 para 0.98 */
+    transform: scale(0.98);
 }
 /* ---------- Estilos Base Comuns para Ícones (Engrenagem e Sair) ---------- */
 .icon-btn {
