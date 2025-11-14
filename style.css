@@ -10,18 +10,21 @@
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;/* Remova o padding-top: 30px; daqui */
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
 
-    /* Garante que o gradiente cubra toda a tela */
-
+    /* Garante que o gradiente cubra toda a tela, inclusive o notch/barra inferior */
+    height: 100vh;
+    width: 100vw;
+    height: -webkit-fill-available; /* Compatibilidade extra WebKit */
 
     display: flex;
-    justify-content: center;
-    align-items: flex-start; /* mantém o alinhamento das telas no topo do body */
-    /* Remova min-height: 100vh; daqui */
+    justify-content: center; /* Centraliza horizontalmente o conteúdo (as suas .tela) */
+    align-items: center;     /* Centraliza verticalmente o conteúdo (as suas .tela) */
+    min-height: 100vh;
+    color: white;
 }
+
 
 /* ---------- Telas de Login/Cadastro ---------- */
 .tela {
@@ -34,15 +37,15 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     width: 320px;
     max-width: 95%;
-
+    /* Remova min-height se quiser que a caixa fique ajustada ao conteúdo */
 }
 
 .tela.ativa {
     display: flex;
-    /* Remova min-height: 100vh; daqui */
+    /* Remova estas propriedades, o body lida com isso agora */
+    /* min-height: 100vh; */
     background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
-    /* Adicione padding-top: 30px; aqui se precisar de espaço no topo APENAS nesta tela */
-    padding-top: 30px;
+    /* padding-top: 30px; */
 }
 
 h2 {
