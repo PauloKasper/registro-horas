@@ -4,7 +4,7 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
-
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start; /* mantém o alinhamento das telas */
@@ -384,3 +384,4 @@ body::-webkit-scrollbar-track {
     color: white;
     transform: none;
 }
+
