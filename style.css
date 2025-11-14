@@ -1,12 +1,21 @@
+/* Aplica padding seguro a todos os elementos principais da UI, se necessário */
+/* Exemplo aplicado à classe .app-container-inner ou similar */
+.app-container-inner, .tela, .perfil-app {
+    padding-top: env(safe-area-inset-top, 20px); /* Garante padding suficiente no topo (Dynamic Island) */
+    padding-bottom: env(safe-area-inset-bottom, 20px); /* Garante padding suficiente no rodapé (Home Indicator) */
+    /* ... outros paddings laterais, se necessário ... */
+}
+
 /* ---------- Body ---------- */
 body {
     margin: 0;
-    padding: 0; /* Remova o padding-top: 30px; daqui */
+    padding: 0;
+    height: 100vh;/* Remova o padding-top: 30px; daqui */
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, rgb(72, 0, 144), rgb(255, 64, 129));
 
     /* Garante que o gradiente cubra toda a tela */
-    height: 100vh;
+
 
     display: flex;
     justify-content: center;
