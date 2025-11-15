@@ -1,4 +1,13 @@
 
+.header {
+  background: linear-gradient(80deg, #ff3377, #3D55DF);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; /* Ajuste para incluir o espaço da barra de status */
+  padding-top: env(safe-area-inset-top); /* Usa a variável de ambiente para o notch/barra de status */
+}
 
 
 /* ---------- BODY ---------- */
@@ -90,5 +99,6 @@ body::before {
   display: block;
   height: env(safe-area-inset-top);
 }
+
 
 
