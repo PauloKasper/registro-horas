@@ -1,9 +1,7 @@
 /* Aplica padding seguro a todos os elementos principais da UI, se necessário */
 /* Exemplo aplicado à classe .app-container-inner ou similar */
 .app-container-inner, .tela, .perfil-app {
-    padding-top: env(safe-area-inset-top, 20px); /* Garante padding suficiente no topo (Dynamic Island) */
-    padding-bottom: env(safe-area-inset-bottom, 20px); /* Garante padding suficiente no rodapé (Home Indicator) */
-    /* ... outros paddings laterais, se necessário ... */
+    /* Estas regras já estão OK, mas serão ajustadas em .tela.ativa para maior precisão */
 }
 
 /* ---------- Body ---------- */
@@ -11,21 +9,22 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    height: 100vh;
+    /* NOVO / ALTERADO: Garantir 100% da área visível em todos os browsers móveis */
+    height: 100vh; /* Fallback */
+    height: 100dvh; /* Dynamic Viewport Height (moderno) */
     width: 100vw;
-    height: -webkit-fill-available;
+    /* height: -webkit-fill-available; <-- Remova esta linha, dvh é melhor */
     background-color: #F5F5F5;
     color: #000;
     display: flex;
     justify-content: center; /* Mantém a centralização horizontal */
-    align-items: center; /* Alinha o conteúdo ao TOPO */
+    align-items: center; /* Alinha o conteúdo ao TOPO (porque alterámos abaixo) */
     min-height: 100vh;
 }
 /* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
 #tela-perfil.tela.ativa {
     align-self: flex-start; /* Alinha este item flex específico ao topo */
 }
-
 
 
 /* ---------- Telas em Geral ---------- */
@@ -45,9 +44,14 @@ body {
 .tela.ativa {
     display: flex;
     background-color: transparent;
-    /* Padding seguro para o topo e rodapé do iPhone */
-    padding-top: env(safe-area-inset-top, 20px);
-    padding-bottom: env(safe-area-inset-bottom, 20px);
+    /* NOVO / ALTERADO: Padding seguro para o topo e rodapé do iPhone */
+    /* Agora o padding vem do body para não interferir com a posição absolute do botão */
+    /* Remova estes paddings daqui: */
+    /* padding-top: env(safe-area-inset-top, 20px); */
+    /* padding-bottom: env(safe-area-inset-bottom, 20px); */
+
+    /* Em vez disso, adicione padding ao body para que o conteúdo não fique por baixo da Dynamic Island/Home Indicator */
+    /* (veja a secção BODY acima, se já não o fez) */
 }
 
 h2 {
@@ -270,8 +274,8 @@ body::-webkit-scrollbar-track {
 /* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
 #tela-perfil.tela.ativa {
     align-self: flex-start; /* Alinha este item flex específico ao topo */
-    margin-top: 40px; /* Adiciona espaço entre o topo da janela e o cartão do perfil */
-    /* Pode ajustar 40px para o valor que preferir */
+    /* margin-top: 40px; Remova este margin-top ou ajuste para usar env() */
+    margin-top: calc(env(safe-area-inset-top, 20px) + 20px);
 }
 
 /* Seu código base, ligeiramente ajustado */
@@ -300,118 +304,44 @@ body::-webkit-scrollbar-track {
 .icon-btn:active {
     transform: scale(0.96);
 }
+
 /* Posição Topo Direita (Configurações) */
 .top-right {
     /* PROPRIEDADE ESSENCIAL: Define o contexto de posicionamento */
     position: absolute;
 
-    /* Distância do topo e da direita */
-    top: 10px;
+    /* NOVO / ALTERADO: top dinâmico para respeitar a Dynamic Island */
+    top: calc(env(safe-area-inset-top, 10px) + 10px);
     right: 10px;
 
     /* Ajustes de estilo para melhor visualização */
-    color: #007bff !important;
-    width: 10px; */ /* width muito pequeno, remova ou ajuste para o conteúdo */
+    color: #007bff !important; /* Mantém o !important para garantir o azul */
+    /* width: 10px; <-- Isto é um comentário, mas a propriedade width abaixo estava incompleta */
+    width: auto; /* Melhor usar auto para o ícone */
     padding: 9px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra menor (blur de 5px) e meio transparente (0.3 de opacidade) */
 
     /* align-icon não é uma propriedade CSS válida, use flexbox ou text-align para alinhamento */
-    /* Exemplo para centralizar conteúdo dentro deste elemento: */
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* NOVO: Adiciona um background para garantir que a área da Dynamic Island não o torne ilegível */
+    background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semi-transparente */
+    border-radius: 20%; /* Faz o botão de menu parecer um círculo */
 }
 
 
 /* Posição Rodapé Direita (Logout) */
 .bottom-right {
     position: absolute; /* Certifica-se de que está absoluta */
+    /* NOVO / ALTERADO: bottom dinâmico para respeitar o Home Indicator inferior */
     bottom: env(safe-area-inset-bottom, 15px); /* Fixa no rodapé seguro */
     right: 20px; /* Distância da borda direita */
     font-size: 0.9rem;
-    color: blue; /* Cor que definiu */
-}
-/* Estilo básico para os botões de texto Editar/Remover */
-.text-btn-edit-pic {
-    background-color: transparent;
-    border: none;
-    color: #007bff; /* Cor de link moderna */
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 0.9em;
-    margin-top: 10px;
-    display: inline-block; /* Ficam um ao lado do outro */
-    text-decoration: underline;
-    width: auto; /* Remove a largura de 100% que a regra 'button' geral aplica */
+    color: blue; /* Cor que defini */
 }
 
-.text-btn-edit-pic:hover {
-    color: #0056b3;
-    text-decoration: none;
-}
-
-/* Garante algum espaçamento entre eles */
-#edit-pic-btn {
-    margin-right: 10px;
-}
-
-#remove-pic-btn {
-    color: #dc3545; /* Cor de perigo (vermelho) para remover */
-}
-
-#remove-pic-btn:hover {
-    color: #a71d2a;
-}
-
-
-/* Outros ajustes necessários do seu código original que não devem ser removidos */
-
-/* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
-#tela-perfil.tela.ativa {
-    align-self: flex-start; /* Alinha este item flex específico ao topo */
-    margin-top: 40px; /* Adiciona espaço entre o topo da janela e o cartão do perfil */
-}
-/* MOSTRA O LÁPIS E O X QUANDO O MOUSE ESTÁ SOBRE O contentor pai (.foto-container) */
-.foto-container:hover .edit-btn {
-    opacity: 1; /* Torna o botão visível */
-    pointer-events: auto; /* Permite clicar nele quando visível */
-}
-
-
-/* ---------- Estilos Base Comuns para Ícones (Engrenagem e Sair) ---------- */
-.icon-btn {
-    position: absolute;
-    background-color: transparent; /* Garante que o fundo é transparente */
-    border: none;
-    cursor: pointer;
-    padding: 0; /* Essencial para que a área clicável não seja maior que o conteúdo */
-    border-radius: 5px;
-    font-size: 1.2rem; /* Controla o tamanho do ícone SVG, se usar font-based icons */
-    opacity: 1;
-    pointer-events: auto;
-    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out, opacity 0.2s ease-in-out;
-
-    /* Adições para remover efeitos indesejados */
-    outline: none;
-    box-shadow: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Posição Topo Direita (Configurações) */
-.top-right {
-    top: 15px;
-    right: center;
-        transition: transform 0.2s ease-in-out, background-color 0.9s ease-in-out, opacity 0.2s ease-in-out;
-
-}
-
-/* Posição Rodapé Direita (Logout) */
-.bottom-right {
-    bottom: 15px;
-    right: 15px;
-    font-size: 0.9rem; /* Torna o texto "Sair" um pouco menor */
-        color: blue;
-}
 
 
 /* ---------- Estilos ESPECÍFICOS para a Engrenagem (usando ID) ---------- */
