@@ -14,6 +14,18 @@
     background-color: red; /* cor da faixa */
     z-index: 9999; /* acima de tudo */
 }
+/* Faixa vermelha apenas no topo seguro do iPhone */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: env(safe-area-inset-top, 20px); /* fallback para iPhones sem notch */
+    background-color: red;
+    z-index: 10000;
+    pointer-events: none; /* não bloqueia clique */
+}
 
 
 body {
@@ -595,6 +607,7 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
+
 
 
 
