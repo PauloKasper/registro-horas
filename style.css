@@ -1,108 +1,115 @@
-/* ---------- Body ---------- */
+/* ---------- Padding seguro para todos os elementos principais ---------- */
+.app-container-inner, .tela, .perfil-app {
+    /* Ajustes finos serão feitos em .tela.ativa se necessário */
+}
+
 body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-  margin: 0;
-  font-family: Arial, sans-serif;
-  height: 100dvh;
-  max-height: 150vh;
-  width: auto;
-  color: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #F5F5F5;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 150vh;
+    width: auto;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+
+    /* Fundo neutro, você pode substituir pelo gradiente se quiser */
+    background-color: #F5F5F5;
 }
 
-/* Força a tela de perfil a alinhar-se ao topo */
-#tela-perfil.tela.ativa {
-  align-self: flex-start;
-  margin-top: calc(env(safe-area-inset-top, 20px) + 20px);
-}
-
-/* ---------- Telas em Geral ---------- */
+/* ---------- Telas ---------- */
 .tela {
-  width: 100vw;
-  max-width: 400px;
-  padding: 20px;
-  box-sizing: border-box;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
+    width: 100vw;
+    max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
 .tela.ativa {
-  display: flex;
-  background-color: transparent;
+    display: flex;
+    background-color: transparent;
 }
 
-/* ---------- Inputs e botões ---------- */
+/* ---------- Headings ---------- */
+h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+/* ---------- Inputs ---------- */
 input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  box-sizing: border-box;
-  color: #000;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+    color: #000;
 }
 
 .input-wrap {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 .input-wrap input {
-  padding-right: 44px;
+    padding-right: 44px;
 }
 
 .eye-btn {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .eye-btn:hover {
-  background: rgba(0,0,0,0.05);
-  border-radius: 5px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 5px;
 }
 
 .eye-btn svg {
-  width: 20px;
-  height: 20px;
-  stroke: #222;
-  fill: none;
+    width: 20px;
+    height: 20px;
+    stroke: #222;
+    fill: none;
 }
 
+/* ---------- Botões e ícones ---------- */
 button,
 .icon-btn,
 .text-btn-edit-pic,
 .btn-salvar-dia,
 #btn-gerir-foto,
-.popup-opcoes .opcao-foto,
-.card-dia,
-.perfil-card
+.popup-opcoes .opcao-foto
 {
-  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-  transform: none;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
+    transition: transform 0.1s ease-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    transform: none;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
 button:active,
@@ -110,185 +117,327 @@ button:active,
 .text-btn-edit-pic:active,
 .btn-salvar-dia:active,
 #btn-gerir-foto:active,
-.popup-opcoes .opcao-foto:active,
-.card-dia:active,
-.perfil-card:active
+.popup-opcoes .opcao-foto:active
 {
-  transform: scale(0.96);
+    transform: scale(0.96);
 }
 
-/* ---------- Botões principais ---------- */
 button {
-  padding: 10px 15px;
-  margin: 5px 0;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 16px;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
 }
 
-#btn-entrar,
-#btn-salvar-cadastro,
-#btn-gerar-csv,
-#btn-logout {
-  background: #2196f3;
-  color: white;
+#btn-entrar, #btn-salvar-cadastro, #btn-gerar-csv, #btn-logout {
+    background: #2196f3;
+    color: white;
 }
 
-#btn-abrir-cadastro,
-#btn-voltar-login {
-  background: #e0e0e0;
+#btn-abrir-cadastro, #btn-voltar-login {
+    background: #e0e0e0;
 }
 
 .erro {
-  color: red;
-  margin-bottom: 10px;
-  text-align: center;
-  font-size: 0.9em;
+    color: red;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.9em;
 }
 
 /* ---------- Lista de Dias ---------- */
 #lista-dias {
-  max-height: 72vh;
-  overflow-y: auto;
+    max-height: 72vh;
+    overflow-y: auto;
 }
 
 #tela-registro.tela.ativa {
-  align-self: flex-start;
-  margin-top: 40px;
+    align-self: flex-start;
+    margin-top: 40px;
 }
 
 .usuario-h2{
-  display: none;
+    display: none;
 }
 
 .card-dia {
-  background: #f9f9f9;
-  padding: 25px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  color: #000;
-  cursor: pointer;
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: #000;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .card-dia:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    transform: scale(1.02);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.card-dia:active {
+    transform: scale(0.96);
+}
+
+.card-dia .destaque {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+    padding: 50px;
+    border-radius: 4px;
+}
+
+/* ---------- Campos de formulário ---------- */
+.campo {
+    display: flex;
+    height: 40px;
+    flex-direction: column;
+    margin-bottom: 17px;
+}
+
+.campo label {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.campo input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.erro-hora {
+    font-size: 12px;
+    color: red;
+    min-height: 14px;
+}
+
+.btn-salvar-dia {
+    background: #2196f3;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
 }
 
 /* ---------- Perfil Geral ---------- */
 .perfil-app {
-  width: 320px;
-  overflow: hidden;
-  position: relative;
-  color: white;
+    width: 320px;
+    overflow: hidden;
+    position: relative;
+    color: white;
 }
 
-.perfil-card {
-  text-align: center;
-  padding: 15px;
-  background: #FFFFFF;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 350px;
-  cursor: pointer;
-}
-
-.perfil-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-/* ---------- Topo do Perfil (Foto) ---------- */
 .perfil-topo {
-  display: flex;
-  justify-content: center;
-  padding-bottom: 15px;
-  position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    position: relative;
+    padding-bottom: 15px; /* espaçamento do card */
 }
 
 .foto-container {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto;
-  position: relative;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 0px solid #fff;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 0px solid #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .profile-pic {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
 }
 
-/* ---------- Botões e ícones ---------- */
+#tela-perfil.tela.ativa {
+    align-self: flex-start;
+    margin-top: calc(env(safe-area-inset-top, 20px) + 20px);
+}
+
+.perfil-card {
+    text-align: center;
+    padding: 15px;
+    background: #FFFFFF;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.perfil-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.perfil-card:active {
+    transform: scale(0.96);
+}
+
+.perfil-card h2 { margin: 0; font-size: 22px; color: inherit; }
+.perfil-card .cargo { font-size: 14px; margin: 5px 0; opacity: 0.8; }
+.perfil-card .descricao { font-size: 14px; margin: 15px 0; }
+
+.perfil-info button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.perfil-info button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: white;
+    transform: none;
+}
+
+.perfil-info-text h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #333;
+}
+
+.perfil-info-text .cargo {
+    font-size: 14px;
+    margin: 5px 0 0 0;
+    opacity: 0.7;
+    color: #555;
+}
+
+#btn-registrar-hora {
+    background-color: #2196f3;
+    color: white;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 20px;
+}
+
+/* ---------- Botões de perfil e ícones ---------- */
 .icon-btn {
-  position: absolute;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  border-radius: 5px;
-  font-size: 1.4rem;
-  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
-  opacity: 1;
-  pointer-events: auto;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 5px;
+    font-size: 1.4rem;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+    opacity: 1;
+    pointer-events: auto;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
-.icon-btn:hover {
-  color: #4CAF50;
-  transform: scale(1.05);
-}
+.icon-btn:hover { color: #4CAF50; transform: scale(1.05); }
+.icon-btn:active { transform: scale(0.96); }
 
-.icon-btn:active {
-  transform: scale(0.96);
-}
-
-/* ---------- Top Right / Bottom Right ---------- */
 .top-right {
-  position: absolute;
-  top: calc(env(safe-area-inset-top, 10px) + 10px);
-  right: 10px;
-  color: #007bff !important;
-  width: auto;
-  padding: 9px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 20%;
+    position: absolute;
+    top: calc(env(safe-area-inset-top, 10px) + 10px);
+    right: 10px;
+    color: #007bff !important;
+    width: auto;
+    padding: 9px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20%;
 }
 
 .bottom-right {
-  position: absolute;
-  bottom: env(safe-area-inset-bottom, 15px);
-  right: center;
-  padding: 25px;
-  font-size: 0.9rem;
-  color: blue;
+    position: absolute;
+    bottom: env(safe-area-inset-bottom, 15px);
+    right: center;
+    padding: 25px;
+    font-size: 0.9rem;
+    color: blue;
 }
 
-/* ---------- Botão Configurações ---------- */
 #btn-configuracoes-perfil {
-  color: white;
-  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+    color: white;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-#btn-configuracoes-perfil:hover {
-  color: #4CAF50;
-  transform: scale(1.2);
+#btn-configuracoes-perfil:hover { color: #4CAF50; transform: scale(1.2); }
+#btn-configuracoes-perfil:active { transform: scale(0.9); }
+
+/* ---------- Pop-ups de foto ---------- */
+.menu-foto-container { position: relative; width: 100%; }
+
+#btn-gerir-foto {
+    background: #2196f3;
+    color: white;
+    width: auto !important;
+    font-size: 0.7em !important;
+    padding: 5px 10px !important;
+    margin: 15px 0;
+    display: relative;
+    transition: transform 0.1s ease;
 }
 
-#btn-configuracoes-perfil:active {
-  transform: scale(0.9);
+#btn-gerir-foto:hover { background: #0d8aee; }
+#btn-gerir-foto:active { transform: scale(1.05); }
+
+.popup-opcoes {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    width: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 10;
+    overflow: hidden;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+}
+
+.popup-opcoes .opcao-foto {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    background: none;
+    cursor: pointer;
+    font-size: 0.7em;
+    color: #333;
+    transition: transform 0.1s ease;
+}
+
+.popup-opcoes .opcao-foto:hover { background-color: rgba(0, 0, 0, 0.05); }
+.popup-opcoes .opcao-foto:active { transform: scale(0.95); }
+.popup-opcoes .opcao-foto.remover { color: #dc3545; border-bottom: none; }
+
+/* ---------- Botão de editar foto ---------- */
+.text-btn-edit-pic {
+    background: none;
+    border: none;
+    color: #2196f3;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 0.7em;
+    text-decoration: underline;
+    width: auto;
+    margin-top: 0px;
+    margin-bottom: 40px;
+}
+
+.text-btn-edit-pic:hover {
+    text-decoration: none;
+    opacity: 0.8;
 }
