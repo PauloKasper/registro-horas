@@ -3,7 +3,11 @@
 .app-container-inner, .tela, .perfil-app {
     /* Estas regras já estão OK, mas serão ajustadas em .tela.ativa para maior precisão */
 }
-
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 /* Faixa vermelha apenas no topo seguro do iPhone */
 .safe-top-bar {
     position: fixed;
@@ -607,6 +611,7 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
+
 
 
 
