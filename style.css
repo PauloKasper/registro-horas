@@ -338,7 +338,8 @@ body::-webkit-scrollbar-track {
     position: absolute; /* Certifica-se de que está absoluta */
     /* NOVO / ALTERADO: bottom dinâmico para respeitar o Home Indicator inferior */
     bottom: env(safe-area-inset-bottom, 15px); /* Fixa no rodapé seguro */
-    right: 20px; /* Distância da borda direita */
+    right: center; /* Distância da borda direita */
+    padding: 25px;
     font-size: 0.9rem;
     color: blue; /* Cor que defini */
 }
