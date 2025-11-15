@@ -7,24 +7,21 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    height: 100dvh; /* Dynamic Viewport Height (moderno) */
+    height: 100dvh;
     width: 100vw;
-    max-height: auto;
     color: #000;
     display: flex;
-    justify-content: center; /* Mantém a centralização horizontal */
-    align-items: center; /* Alinha o conteúdo ao TOPO */
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
-
-    /* >>> GRADIENTE APLICADO AQUI <<< */
-    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
-    background-attachment: fixed; /* Mantém o gradiente fixo ao rolar */
-
-    /* Padding seguro para iPhones e outros dispositivos */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+
+    /* Gradiente com topo vermelho */
+    background: linear-gradient(to bottom, #ff4d4d 0%, #ff4d4d 150px, #7f8c8d 150px, #3498db 50%, #e67e22 100%);
+    background-attachment: fixed;
 }
 
 /* ---------- Telas em Geral ---------- */
@@ -482,3 +479,4 @@ button:hover {
     color: #dc3545;
     border-bottom: none;
 }
+
