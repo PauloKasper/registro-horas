@@ -3,7 +3,10 @@
 .app-container-inner, .tela, .perfil-app {
     /* Estas regras já estão OK, mas serão ajustadas em .tela.ativa para maior precisão */
 }
-
+#tela-perfil.tela.ativa {
+    margin-top: calc(env(safe-area-inset-top, 20px));
+    background-color: red; /* isso força a cor da barra do topo */
+}
 body {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
@@ -583,3 +586,4 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
+
