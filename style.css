@@ -12,6 +12,7 @@ body {
     /* NOVO / ALTERADO: Garantir 100% da área visível em todos os browsers móveis */
     height: 100vh; /* Fallback */
     height: 100dvh; /* Dynamic Viewport Height (moderno) */
+    max-height: auto;
     width: 100vw;
     /* height: -webkit-fill-available; <-- Remova esta linha, dvh é melhor */
     background-color: #F5F5F5;
@@ -30,7 +31,7 @@ body {
 /* ---------- Telas em Geral ---------- */
 .tela {
     /* As telas agora são contentores flex que ocupam a largura total do body centralizado */
-    width: 100%;
+    width: 100vw;
     max-width: 400px; /* Limite a largura da interface em ecrãs muito grandes */
     padding: 20px;
     box-sizing: border-box;
