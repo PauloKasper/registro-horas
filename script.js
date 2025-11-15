@@ -1,199 +1,252 @@
-document.addEventListener("DOMContentLoaded", () => {
-    let usuario_atual = null, registros = {};
+/* ---------- SAFE AREA UNIVERSAL ---------- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 
-    // --- REGISTRO DO SERVICE WORKER ---
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service-worker.js")
-            .then(() => console.log("Service Worker registrado"))
-            .catch(err => console.error("Erro ao registrar Service Worker:", err));
-    }
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 
-    // --- FUNÇÃO PARA TROCAR TELAS ---
-    function mostrar(tela) {
-        document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
-        document.getElementById(tela).classList.add("ativa");
-        if (tela === 'tela-perfil') {
-            const btnConfig = document.getElementById("btn-configuracoes-perfil");
-            if (btnConfig) btnConfig.onclick = () => mostrar("tela-configurações");
-        }
-    }
-    window.mostrar = mostrar;
+    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
+    min-height: 100vh;
 
-    // --- LOCAL STORAGE ---
-    function salvarLS(c, v) { localStorage.setItem(c, JSON.stringify(v)); }
-    function carregarLS(c) { return JSON.parse(localStorage.getItem(c) || "{}"); }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    // --- LOGIN ---
-    if (document.getElementById("btn-entrar")) {
-        document.getElementById("btn-entrar").onclick = () => {
-            const u = document.getElementById("usuario").value.trim().toLowerCase();
-            const s = document.getElementById("senha").value.trim();
-            const us = carregarLS("usuarios");
-            const erro = document.getElementById("erro-login");
-            erro.innerText = "";
-            if (u in us && us[u].numero === s) {
-                usuario_atual = u;
-                const usuarioLogadoEl = document.getElementById("usuario-logado");
-                if (usuarioLogadoEl) usuarioLogadoEl.innerText = "Usuário: " + us[u].display_name;
-                iniciarRegistro();
-                mostrar("tela-perfil");
-            } else {
-                erro.innerText = "Usuário ou senha incorretos.";
-            }
-        };
-    }
-    if (document.getElementById("btn-abrir-cadastro")) document.getElementById("btn-abrir-cadastro").onclick = () => mostrar("tela-cadastro");
-    if (document.getElementById("btn-voltar-login")) document.getElementById("btn-voltar-login").onclick = () => mostrar("tela-login");
+    color: #000;
 
-    // --- CADASTRO ---
-    if (document.getElementById("btn-salvar-cadastro")) {
-        document.getElementById("btn-salvar-cadastro").onclick = () => {
-            const u = document.getElementById("cad-colaborador").value.trim().toLowerCase();
-            const n = document.getElementById("cad-numero").value.trim();
-            const erro = document.getElementById("erro-cadastro");
-            erro.innerText = "";
-            if (!u || !n) { erro.innerText = "Preencha todos os campos"; return; }
-            const us = carregarLS("usuarios");
-            us[u] = { display_name: u, numero: n };
-            salvarLS("usuarios", us);
-            document.getElementById("usuario").value = u;
-            document.getElementById("senha").value = n;
-            mostrar("tela-login");
-        };
-    }
+    /* 🎨 GRADIENTE — substitui QUALQUER vermelho */
+    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
+}
 
-    // --- REGISTRO ---
-    function gerarPeriodo() {
-        const hoje = new Date();
-        let inicio = hoje.getDate() < 20 ? new Date(hoje.getFullYear(), hoje.getMonth() - 1, 20) : new Date(hoje.getFullYear(), hoje.getMonth(), 20);
-        let fim = new Date(inicio); fim.setDate(inicio.getDate() + 30);
-        return [inicio, fim];
-    }
+/* ---------- TELAS ---------- */
+.tela {
+    width: 100vw;
+    max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
 
-    async function buscarFeriados(ano, pais = 'BR') {
-        const cacheKey = `feriados_${pais}_${ano}`;
-        const cache = localStorage.getItem(cacheKey);
-        if (cache) return JSON.parse(cache).map(d => new Date(d));
-        try {
-            const resp = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${ano}/${pais}`);
-            if (!resp.ok) return [];
-            const feriadosData = await resp.json();
-            const datas = feriadosData.map(h => h.date);
-            localStorage.setItem(cacheKey, JSON.stringify(datas));
-            return datas.map(d => new Date(d));
-        } catch (e) { console.error("Erro ao buscar feriados:", e); return []; }
-    }
+.tela.ativa {
+    display: flex;
+    background-color: transparent;
+}
 
-    function isWeekend(date) { return date.getDay() === 0 || date.getDay() === 6; }
-    function isHoliday(date, holidays) { return holidays.some(h => h.toDateString() === date.toDateString()); }
+/* Alinha telas específicas ao topo */
+#tela-perfil.tela.ativa,
+#tela-registro.tela.ativa {
+    align-self: flex-start;
+}
 
-    async function iniciarRegistro() {
-        registros = carregarLS("horas_" + usuario_atual) || {};
-        const lista = document.getElementById("lista-dias");
-        if (!lista) return;
-        lista.innerHTML = "";
-        const [inicio, fim] = gerarPeriodo();
-        const feriados = await buscarFeriados(inicio.getFullYear());
+/* ---------- FORM CONTROLS ---------- */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+    color: #000;
+}
 
-        for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
-            const ds = d.toLocaleDateString("pt-BR");
-            const r = registros[ds] || { entrada: "", saida_alm: "", retorno: "", saida_final: "" };
-            const div = document.createElement("div"); div.className = "card-dia";
-            const weekend = isWeekend(d);
-            const holiday = isHoliday(d, feriados);
-            if (weekend && holiday) div.style.backgroundColor = "#fcf8e3";
-            else if (weekend) div.style.backgroundColor = "#f2dede";
-            else if (holiday) div.style.backgroundColor = "#d9edf7";
-            let destaqueTexto = "";
-            if (weekend) destaqueTexto += "Final de Semana";
-            if (holiday) destaqueTexto += (destaqueTexto ? " / " : "") + "Feriado";
-            let destaqueHTML = destaqueTexto ? `<div class="destaque">${destaqueTexto}</div>` : "";
-            div.innerHTML = `${destaqueHTML}<strong>${ds}</strong>
-                <div class="campo"><label>Entrada</label><input id="e_${ds}" value="${r.entrada}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Saída Almoço</label><input id="s_${ds}" value="${r.saida_alm}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Retorno</label><input id="r_${ds}" value="${r.retorno}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Saída Final</label><input id="f_${ds}" value="${r.saida_final}"><div class="erro-hora"></div></div>
-                <button class="btn-salvar-dia" onclick="salvarDia('${ds}')">Salvar</button>`;
-            lista.appendChild(div);
-        }
-    }
+.input-wrap {
+    position: relative;
+    width: 100%;
+}
 
-    // --- SALVAR DIA ---
-    window.salvarDia = (d) => {
-        registros[d] = {
-            entrada: document.getElementById("e_" + d).value.trim(),
-            saida_alm: document.getElementById("s_" + d).value.trim(),
-            retorno: document.getElementById("r_" + d).value.trim(),
-            saida_final: document.getElementById("f_" + d).value.trim()
-        };
-        salvarLS("horas_" + usuario_atual, registros);
-        alert("Salvo!");
-    };
+.input-wrap input { padding-right: 44px; }
 
-    // --- GERAR CSV ---
-    if (document.getElementById("btn-gerar-csv")) {
-        document.getElementById("btn-gerar-csv").onclick = () => {
-            let linhas = ["Data,Entrada,Saída Almoço,Retorno,Saída Final"];
-            for (const d in registros) {
-                const r = registros[d];
-                linhas.push(`${d},${r.entrada},${r.saida_alm},${r.retorno},${r.saida_final}`);
-            }
-            const blob = new Blob([linhas.join("\n")], { type: "text/csv" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = `horas_${usuario_atual}.csv`;
-            a.click();
-        };
-    }
+.eye-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    // --- BOTÕES ---
-    if(document.getElementById("btn-configurações-voltar")) document.getElementById("btn-configurações-voltar").onclick = () => mostrar("tela-perfil");
-    if(document.getElementById("btn-registrar-hora")) document.getElementById("btn-registrar-hora").onclick = () => mostrar("tela-registro");
-    if(document.getElementById("btn-registro-voltar")) document.getElementById("btn-registro-voltar").onclick = () => mostrar("tela-perfil");
-    if(document.getElementById("btn-logout-perfil")) document.getElementById("btn-logout-perfil").onclick = () => mostrar("tela-login");
+.eye-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #222;
+    fill: none;
+}
 
-    // --- PERFIL E UPLOAD DE FOTO ---
-    const btnGerirFoto = document.getElementById('btn-gerir-foto');
-    const popupOpcoesFoto = document.getElementById('popup-opcoes-foto');
-    const btnAdicionarNovaFoto = document.getElementById('btn-adicionar-nova-foto');
-    const btnRemoverFoto = document.getElementById('btn-remover-foto');
-    const fileInput = document.getElementById('file-input');
-    const profileImageDisplay = document.getElementById('profile-image-display');
-    const defaultProfilePicUrl = 'URL_DA_SUA_FOTO_PADRAO.jpg';
+/* ---------- BOTÕES COM EFEITO ---------- */
+button,
+.icon-btn,
+.text-btn-edit-pic,
+.btn-salvar-dia,
+#btn-gerir-foto,
+.popup-opcoes .opcao-foto {
+    transition: transform 0.1s ease-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    transform: none;
+}
 
-    if (btnGerirFoto && popupOpcoesFoto && btnAdicionarNovaFoto && btnRemoverFoto && fileInput && profileImageDisplay) {
-        btnGerirFoto.onclick = (e) => { e.stopPropagation(); popupOpcoesFoto.style.display = (popupOpcoesFoto.style.display === 'block') ? 'none' : 'block'; };
-        document.addEventListener('click', () => { popupOpcoesFoto.style.display = 'none'; });
-        popupOpcoesFoto.addEventListener('click', (e) => { e.stopPropagation(); });
+button:active,
+.icon-btn:active,
+.text-btn-edit-pic:active,
+.btn-salvar-dia:active,
+#btn-gerir-foto:active,
+.popup-opcoes .opcao-foto:active {
+    transform: scale(0.96);
+}
 
-        btnAdicionarNovaFoto.onclick = () => { fileInput.value=''; fileInput.click(); };
-        btnRemoverFoto.onclick = () => {
-            if(usuario_atual){
-                localStorage.removeItem(`profile_pic_${usuario_atual}`);
-                profileImageDisplay.src = defaultProfilePicUrl;
-                fileInput.value='';
-                alert("Foto de perfil removida.");
-            }
-        };
-        fileInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if(file){
-                const reader = new FileReader();
-                reader.onload = function(e){
-                    profileImageDisplay.src = e.target.result;
-                    if(usuario_atual) localStorage.setItem(`profile_pic_${usuario_atual}`, e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
 
-        function loadProfilePic() {
-            if(usuario_atual){
-                const savedPic = localStorage.getItem(`profile_pic_${usuario_atual}`);
-                profileImageDisplay.src = savedPic || defaultProfilePicUrl;
-            } else profileImageDisplay.src = defaultProfilePicUrl;
-        }
-        loadProfilePic();
-    }
+#btn-entrar, #btn-salvar-cadastro, #btn-gerar-csv, #btn-logout {
+    background: #2196f3;
+    color: #fff;
+}
 
-});
+#btn-abrir-cadastro, #btn-voltar-login {
+    background: #e0e0e0;
+}
+
+/* ---------- LISTA DE DIAS ---------- */
+#lista-dias {
+    max-height: 72vh;
+    overflow-y: auto;
+}
+
+.card-dia {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: #000;
+}
+
+.card-dia .destaque {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+    padding: 50px;
+}
+
+/* ---------- PERFIL ---------- */
+.perfil-app {
+    width: 320px;
+    overflow: hidden;
+    position: relative;
+    color: white;
+}
+
+.perfil-topo {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.foto-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 0px solid #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.profile-pic {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* ---------- ÍCONES DO PERFIL ---------- */
+.icon-btn {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 5px;
+    font-size: 1.4rem;
+}
+
+.top-right {
+    position: absolute;
+    top: calc(env(safe-area-inset-top, 10px) + 10px);
+    right: 10px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 9px;
+    border-radius: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-right {
+    position: absolute;
+    bottom: env(safe-area-inset-bottom, 15px);
+    right: center;
+    padding: 25px;
+    font-size: 0.9rem;
+}
+
+/* ---------- CARD DE PERFIL ---------- */
+.perfil-card {
+    text-align: center;
+    padding: 15px;
+    background: #FFF;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 350px;
+}
+
+/* ---------- LOGIN GLASS ---------- */
+#tela-login.tela.ativa {
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 40px 30px;
+    max-width: 350px;
+}
+
+/* Inputs login */
+#tela-login input {
+    background-color: rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+/* ---------- POPUP FOTO ---------- */
+.popup-opcoes {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    width: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255,255,255,0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 10;
+}
