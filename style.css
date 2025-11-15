@@ -6,7 +6,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
 }
 /* Faixa vermelha apenas no topo seguro do iPhone */
 .safe-top-bar {
@@ -611,6 +611,7 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
+
 
 
 
