@@ -234,6 +234,12 @@ body::-webkit-scrollbar-track {
     height: 100%;
     object-fit: cover;
 }
+/* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
+#tela-perfil.tela.ativa {
+    align-self: flex-start; /* Alinha este item flex específico ao topo */
+    margin-top: 40px; /* Adiciona espaço entre o topo da janela e o cartão do perfil */
+    /* Pode ajustar 40px para o valor que preferir */
+}
 
 /* ---------- Estilos Comuns para Ícones (Engrenagem e Sair) ---------- */
 .icon-btn {
@@ -395,7 +401,7 @@ body::-webkit-scrollbar-track {
 /* ---------- O NOVO CARD DE PERFIL (Flutuante) ---------- */
 .perfil-card {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
     background: #FFFFFF; /* Fundo branco puro para o card flutuar */
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidade */
