@@ -104,6 +104,32 @@ input {
     fill: none;
 }
 
+/* Aplica a transição suave a TODOS os elementos que agem como botão no seu código */
+button,
+.icon-btn,
+.text-btn-edit-pic,
+.btn-salvar-dia,
+#btn-gerir-foto, /* Botão de gerir foto */
+.popup-opcoes .opcao-foto /* Itens do popup */
+{
+    transition: transform 0.1s ease-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    transform: none; /* Garante o estado normal por padrão */
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+/* Efeito de clique (active): Quando clicado, diminui ligeiramente */
+button:active,
+.icon-btn:active,
+.text-btn-edit-pic:active,
+.btn-salvar-dia:active,
+#btn-gerir-foto:active,
+.popup-opcoes .opcao-foto:active
+{
+    transform: scale(0.96); /* Diminui 4% para simular um clique pressionado */
+}
+/* ------------------------------------------------ */
+
 button {
     padding: 10px 15px;
     margin: 5px 0;
@@ -112,8 +138,7 @@ button {
     cursor: pointer;
     width: 100%;
     font-size: 16px;
-    transition: all 0.2s ease-in-out;
-    transform: none; /* Garante que não há escala por padrão */
+    /* As transições e transformações agora são geridas pela regra universal acima */
 }
 
 #btn-entrar, #btn-salvar-cadastro, #btn-gerar-csv, #btn-logout {
@@ -201,6 +226,7 @@ body::-webkit-scrollbar-track {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 5px;
+    /* transition e transform geridos pela regra universal acima */
 }
 
 /* ---------- Perfil Geral ---------- */
@@ -232,10 +258,9 @@ body::-webkit-scrollbar-track {
     position: relative;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #fff;
+    border: 0px solid #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
 .profile-pic {
      width: 100%;
     height: auto;
@@ -249,40 +274,54 @@ body::-webkit-scrollbar-track {
     /* Pode ajustar 40px para o valor que preferir */
 }
 
-/* ---------- Estilos Comuns para Ícones (Engrenagem e Sair) ---------- */
+/* Seu código base, ligeiramente ajustado */
 .icon-btn {
     position: absolute;
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: white;
     padding: 0;
     border-radius: 5px;
-    font-size: 1.2rem;
+
+    /* Aumentei ligeiramente o tamanho da fonte para o novo ícone */
+    font-size: 1.4rem;
     transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
-    /* Estes botões estão sempre visíveis */
     opacity: 1;
     pointer-events: auto;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
 .icon-btn:hover {
-    color: #4CAF50; /* Mantém a cor, se quiser */
-    /* Reduz a escala de 1.2 para 1.05 (pequeno brilho) */
+    color: #4CAF50; /* A cor verde que você escolheu no hover */
     transform: scale(1.05);
 }
 
 .icon-btn:active {
-    /* Reduz a escala de 0.9 para 0.98 */
-    transform: scale(0.98);
+    transform: scale(0.96);
 }
-
 /* Posição Topo Direita (Configurações) */
 .top-right {
-    top: 1px; /* Distância do topo */
-    right: -150px; /* Distância da direita */
+    /* PROPRIEDADE ESSENCIAL: Define o contexto de posicionamento */
+    position: absolute;
 
-    color: #555; /* Exemplo de cor para o ícone */
+    /* Distância do topo e da direita */
+    top: 10px;
+    right: 10px;
+
+    /* Ajustes de estilo para melhor visualização */
+    color: #007bff !important;
+    width: 10px; */ /* width muito pequeno, remova ou ajuste para o conteúdo */
+    padding: 9px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra menor (blur de 5px) e meio transparente (0.3 de opacidade) */
+
+    /* align-icon não é uma propriedade CSS válida, use flexbox ou text-align para alinhamento */
+    /* Exemplo para centralizar conteúdo dentro deste elemento: */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 
 /* Posição Rodapé Direita (Logout) */
 .bottom-right {
@@ -292,67 +331,53 @@ body::-webkit-scrollbar-track {
     font-size: 0.9rem;
     color: blue; /* Cor que definiu */
 }
-/* ---------- Estilos para os Botões da Foto (Lápis e X) ---------- */
-.edit-btn {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.3);
+/* Estilo básico para os botões de texto Editar/Remover */
+.text-btn-edit-pic {
+    background-color: transparent;
     border: none;
-    color: white;
-    font-size: 1.2rem;
+    color: #007bff; /* Cor de link moderna */
+    padding: 5px 10px;
     cursor: pointer;
-    padding: 0;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
-
-    /* ESCONDE O BOTÃO POR PADRÃO (Lápis e X) */
-    opacity: 0;
-    pointer-events: none; /* Permite clicar através dele quando invisível */
+    font-size: 0.9em;
+    margin-top: 10px;
+    display: inline-block; /* Ficam um ao lado do outro */
+    text-decoration: underline;
+    width: auto; /* Remove a largura de 100% que a regra 'button' geral aplica */
 }
 
+.text-btn-edit-pic:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+/* Garante algum espaçamento entre eles */
+#edit-pic-btn {
+    margin-right: 10px;
+}
+
+#remove-pic-btn {
+    color: #dc3545; /* Cor de perigo (vermelho) para remover */
+}
+
+#remove-pic-btn:hover {
+    color: #a71d2a;
+}
+
+
+/* Outros ajustes necessários do seu código original que não devem ser removidos */
+
+/* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
+#tela-perfil.tela.ativa {
+    align-self: flex-start; /* Alinha este item flex específico ao topo */
+    margin-top: 40px; /* Adiciona espaço entre o topo da janela e o cartão do perfil */
+}
 /* MOSTRA O LÁPIS E O X QUANDO O MOUSE ESTÁ SOBRE O contentor pai (.foto-container) */
 .foto-container:hover .edit-btn {
     opacity: 1; /* Torna o botão visível */
     pointer-events: auto; /* Permite clicar nele quando visível */
 }
 
-/* Posição do Lápis (inferior direito) */
-#edit-pic-btn {
-    bottom: 5px;
-    right: 58px;
-}
 
-/* Posição e estilo do botão Remover (superior direito da foto) */
-#remove-pic-btn {
-    top: 5px;
-    right: 58px;
-    bottom: auto;
-    background-color: rgba(100, 100, 100, 0.6) !important; /* Força a cor cinzenta */
-    color: white !important;
-}
-
-#remove-pic-btn:hover {
-    background-color: rgba(80, 80, 80, 0.8) !important;
-    /* Reduz a escala de 1.1 para 1.03 (muito subtil) */
-    transform: scale(1.03);
-}
-
-.icon-btn:hover {
-    color: #4CAF50;
-    /* Efeito de escala subtil (cresce 5%) */
-    transform: scale(1.05);
-}
-
-.icon-btn:active {
-     /* Efeito de escala subtil (diminui 2%) */
-    transform: scale(0.98);
-    /* Remove qualquer sombra ao clicar */
-    box-shadow: none;
-}
 /* ---------- Estilos Base Comuns para Ícones (Engrenagem e Sair) ---------- */
 .icon-btn {
     position: absolute;
@@ -512,6 +537,7 @@ body {
     color: white;
     box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.2);
     border-radius: 50px;
+
 }
 
 /* 5. Ajustar o título H2 (MANTIDO) */
@@ -531,10 +557,90 @@ body {
     width: auto;       /* Faz o botão ocupar apenas o espaço do texto */
     margin-top: 0px; /* Espaço entre a foto e o texto */
     margin-bottom: 40px;
+
 }
 
 /* Opcional: Efeito hover */
 .text-btn-edit-pic:hover {
     text-decoration: none;
     opacity: 0.8;
+
+}
+
+/* Estilo para o contentor que gere a posição relativa do pop-up */
+/* Estilo para o contentor que gere a posição relativa do pop-up */
+.menu-foto-container {
+    position: relative;
+    width: 100%;
+}
+
+/* 1. ESTILO DO BOTÃO PRINCIPAL "Gerir Foto de Perfil" (Com efeito de clique) */
+#btn-gerir-foto {
+    background: #2196f3;
+    color: white;
+    width: auto !important;
+    font-size: 0.7em !important;
+    padding: 5px 10px !important;
+    margin: 15px 0;
+    display: relative;
+
+    /* Adiciona uma transição suave para o efeito de escala */
+    transition: transform 0.1s ease;
+}
+
+#btn-gerir-foto:hover {
+    background: #0d8aee;
+}
+
+/* Efeito de clique: Quando o botão é clicado (active), ele aumenta ligeiramente */
+#btn-gerir-foto:active {
+    transform: scale(1.05); /* Aumenta 5% do tamanho original */
+}
+
+
+/* 2. ESTILO PARA O POP-UP DE OPÇÕES (Transparente e Mais Pequeno) */
+.popup-opcoes {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    width: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 10;
+    overflow: hidden;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Garante que os botões dentro do pop-up têm o estilo correto */
+.popup-opcoes .opcao-foto {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    background: none;
+    cursor: pointer;
+    font-size: 0.7em;
+    color: #333;
+
+    /* Adiciona transição também para os itens do popup */
+    transition: transform 0.1s ease;
+}
+
+.popup-opcoes .opcao-foto:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Efeito de clique para os itens do popup: Quando clicado, aumenta ligeiramente */
+.popup-opcoes .opcao-foto:active {
+    transform: scale(0.95); /* Dá uma sensação de "pressionar para dentro" */
+}
+
+.popup-opcoes .opcao-foto.remover {
+    color: #dc3545;
+    border-bottom: none;
 }
