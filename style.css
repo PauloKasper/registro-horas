@@ -445,4 +445,62 @@ body::-webkit-scrollbar-track {
     max-width: 350px;
     margin-top: 20px; /* Espaço entre o card e o botão */
 }
+/* --- Estilos para o Efeito Glassmorphism (Tela de Login Cinzenta Clara) --- */
 
+/* 1. Definir o fundo COM O GRADIENTE Cinzento, Azul e Laranja */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    width: 100vw;
+    height: -webkit-fill-available;
+    color: #000;
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    min-height: 100vh;
+
+    /* >>> GRADIENTE APLICADO AQUI <<< */
+    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
+}
+
+/* 2. Estilo para o cartão de login mais claro e transparente (MANTIDO) */
+#tela-login.tela.ativa {
+    /* Aumentamos a opacidade do branco (0.4 = 40%) */
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px); /* Desfoque subtil */
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Borda mais visível */
+    padding: 40px 30px;
+    max-width: 350px;
+    color: #333; /* Texto cinza escuro para contraste */
+}
+
+/* 3. Ajustar Inputs para o novo estilo (MANTIDO) */
+#tela-login input {
+    background-color: rgba(255, 255, 255, 0.6); /* Inputs mais opacos */
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    color: #333; /* Texto digitado cinza escuro */
+}
+
+/* Placeholder (texto dentro do input) (MANTIDO) */
+#tela-login input::placeholder {
+    color: rgba(51, 51, 51, 0.7);
+}
+
+/* 4. Ajustar o botão de Entrar (MANTIDO) */
+#btn-entrar {
+    /* Botão azul claro para um pop de cor */
+    background: linear-gradient(90deg, #607D8B 0%, #455A64 100%);
+    color: white;
+    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 50px;
+}
+
+/* 5. Ajustar o título H2 (MANTIDO) */
+#tela-login h2 {
+    color: #333; /* Título cinza escuro */
+}
