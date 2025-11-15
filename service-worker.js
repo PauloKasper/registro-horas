@@ -21,14 +21,16 @@ self.addEventListener('fetch', e => {
 });
 
 
+// --- Início do ficheiro: script.js ---
+
 document.addEventListener("DOMContentLoaded", () => {
     let usuario_atual = null, registros = {};
 
-    // Registro do Service Worker (Mantido no script.js se sw.js não for usado)
+    // REGISTRO DO SERVICE WORKER (Mantido no script.js para inicializar o sw.js)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js')
-        .then(() => console.log('Service Worker registrado'))
-        .catch(err => console.error('Erro SW:', err));
+        .then(() => console.log('Service Worker registrado com sucesso'))
+        .catch(err => console.error('Erro ao registrar SW:', err));
     }
 
     // Função para trocar de tela
@@ -51,41 +53,46 @@ document.addEventListener("DOMContentLoaded", () => {
     function carregarLS(c) { return JSON.parse(localStorage.getItem(c) || "{}"); }
 
     // LOGIN
-    document.getElementById("btn-entrar").onclick = () => {
-        const u = document.getElementById("usuario").value.trim().toLowerCase();
-        const s = document.getElementById("senha").value.trim();
-        const us = carregarLS("usuarios");
-        const erro = document.getElementById("erro-login");
-        erro.innerText = "";
-        if (u in us && us[u].numero === s) {
-            usuario_atual = u;
-            const usuarioLogadoEl = document.getElementById("usuario-logado");
-            if (usuarioLogadoEl) {
-                usuarioLogadoEl.innerText = "Usuário: " + us[u].display_name;
-            }
-            iniciarRegistro();
-            mostrar("tela-perfil");
-        } else {
-            erro.innerText = "Usuário ou senha incorretos.";
-        }
-    };
-    document.getElementById("btn-abrir-cadastro").onclick = () => mostrar("tela-cadastro");
-    document.getElementById("btn-voltar-login").onclick = () => mostrar("tela-login");
+    if (document.getElementById("btn-entrar")) { // Verificação adicionada
+      document.getElementById("btn-entrar").onclick = () => {
+          const u = document.getElementById("usuario").value.trim().toLowerCase();
+          const s = document.getElementById("senha").value.trim();
+          const us = carregarLS("usuarios");
+          const erro = document.getElementById("erro-login");
+          erro.innerText = "";
+          if (u in us && us[u].numero === s) {
+              usuario_atual = u;
+              const usuarioLogadoEl = document.getElementById("usuario-logado");
+              if (usuarioLogadoEl) {
+                  usuarioLogadoEl.innerText = "Usuário: " + us[u].display_name;
+              }
+              iniciarRegistro();
+              mostrar("tela-perfil");
+          } else {
+              erro.innerText = "Usuário ou senha incorretos.";
+          }
+      };
+    }
+
+    if (document.getElementById("btn-abrir-cadastro")) document.getElementById("btn-abrir-cadastro").onclick = () => mostrar("tela-cadastro");
+    if (document.getElementById("btn-voltar-login")) document.getElementById("btn-voltar-login").onclick = () => mostrar("tela-login");
 
     // CADASTRO
-    document.getElementById("btn-salvar-cadastro").onclick = () => {
-        const u = document.getElementById("cad-colaborador").value.trim().toLowerCase();
-        const n = document.getElementById("cad-numero").value.trim();
-        const erro = document.getElementById("erro-cadastro");
-        erro.innerText = "";
-        if (!u || !n) { erro.innerText = "Preencha todos os campos"; return; }
-        const us = carregarLS("usuarios");
-        us[u] = { display_name: u, numero: n };
-        salvarLS("usuarios", us);
-        document.getElementById("usuario").value = u;
-        document.getElementById("senha").value = n;
-        mostrar("tela-login");
-    };
+    if (document.getElementById("btn-salvar-cadastro")) { // Verificação adicionada
+      document.getElementById("btn-salvar-cadastro").onclick = () => {
+          const u = document.getElementById("cad-colaborador").value.trim().toLowerCase();
+          const n = document.getElementById("cad-numero").value.trim();
+          const erro = document.getElementById("erro-cadastro");
+          erro.innerText = "";
+          if (!u || !n) { erro.innerText = "Preencha todos os campos"; return; }
+          const us = carregarLS("usuarios");
+          us[u] = { display_name: u, numero: n };
+          salvarLS("usuarios", us);
+          document.getElementById("usuario").value = u;
+          document.getElementById("senha").value = n;
+          mostrar("tela-login");
+      };
+    }
 
     // REGISTRO
     function gerarPeriodo() {
@@ -156,165 +163,105 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // CSV
-    document.getElementById("btn-gerar-csv").onclick = () => {
-        let linhas = ["Data,Entrada,Saída Almoço,Retorno,Saída Final"];
-        for (const d in registros) { const r = registros[d]; linhas.push(`${d},${r.entrada},${r.saida_alm},${r.retorno},${r.saida_final}`); }
-        const blob = new Blob([linhas.join("\n")], { type: "text/csv" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `horas_${usuario_atual}.csv`;
-        a.click();
-    };
-
-  // --- Perfil e Upload de Foto (Lógica Consolidada) ---
-    const editPicBtn = document.getElementById('edit-pic-btn'); // O novo botão de texto
-    const fileInput = document.getElementById('file-input');
-    const profileImageDisplay = document.getElementById('profile-image-display');
-    // removePicBtn original foi removido do HTML, mas a lógica está aqui
-
-    if (editPicBtn && fileInput && profileImageDisplay) {
-
-        // Função para carregar a foto armazenada ao iniciar
-        function loadProfilePic() {
-            const savedPic = localStorage.getItem(`profile_pic_${usuario_atual}`);
-            if (savedPic) {
-                profileImageDisplay.src = savedPic;
-            } else {
-                // Define uma imagem padrão se não houver foto salva
-                profileImageDisplay.src = 'URL_DA_SUA_FOTO_PADRAO.jpg';
-            }
-        }
-
-        // Lógica para o botão "Editar Foto"
-        editPicBtn.addEventListener('click', (event) => {
-            const hasPicture = profileImageDisplay.src && !profileImageDisplay.src.includes('URL_DA_SUA_FOTO_PADRAO.jpg');
-
-            // Se o utilizador carregar com a tecla Shift premida E já houver uma foto, remove a foto
-            if (event.shiftKey && hasPicture) {
-                event.preventDefault(); // Impede o comportamento padrão (abrir seletor de arquivo)
-                // Lógica de remover foto (anteriormente no removePicBtn)
-                localStorage.removeItem(`profile_pic_${usuario_atual}`);
-                loadProfilePic(); // Carrega a imagem padrão
-                alert("Foto de perfil removida.");
-            } else {
-                // Comportamento padrão: abre o seletor de ficheiros
-                fileInput.click();
-            }
-        });
-
-        // Lógica de upload de nova foto
-        fileInput.addEventListener('change', (event) => {
-            const files = event.target.files;
-            if (files.length > 0) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const dataUrl = e.target.result;
-                    profileImageDisplay.src = dataUrl;
-                    // Salva a imagem no localStorage para persistência
-                    localStorage.setItem(`profile_pic_${usuario_atual}`, dataUrl);
-                };
-                reader.readAsDataURL(files);
-            }
-        });
-
-
-        // Lógica para o botão "X" (Remover Foto)
-        removePicBtn.addEventListener('click', () => {
-            profileImageDisplay.src = "URL_DA_SUA_FOTO.jpg";
-            // localStorage.removeItem('userProfilePic');
-        });
+    if (document.getElementById("btn-gerar-csv")) { // Verificação adicionada
+      document.getElementById("btn-gerar-csv").onclick = () => {
+          let linhas = ["Data,Entrada,Saída Almoço,Retorno,Saída Final"];
+          for (const d in registros) { const r = registros[d]; linhas.push(`${d},${r.entrada},${r.saida_alm},${r.retorno},${r.saida_final}`); }
+          const blob = new Blob([linhas.join("\n")], { type: "text/csv" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = `horas_${usuario_atual}.csv`;
+          a.click();
+      };
     }
 
-    // Carregar imagem salva (dentro do DOMContentLoaded)
-    const savedPic = localStorage.getItem('userProfilePic');
-    if (savedPic && profileImageDisplay) {
-        profileImageDisplay.src = savedPic;
-    }
-
-
-    // --- Navegação entre Telas (Continução) ---
-
-    // Configuracao do botao da engrenagem está agora na função mostrar()
+    // --- AQUI ESTÁ O CÓDIGO DOS BOTÕES QUE ESTAVAM A FALHAR ---
+    // Agora que estamos dentro do DOMContentLoaded, eles devem funcionar:
     if(document.getElementById("btn-configurações-voltar")) document.getElementById("btn-configurações-voltar").onclick = () => mostrar("tela-perfil");
     if(document.getElementById("btn-registrar-hora")) document.getElementById("btn-registrar-hora").onclick = () => mostrar("tela-registro");
-
-    // LOGOUT e Voltar do Registro
     if(document.getElementById("btn-registro-voltar")) document.getElementById("btn-registro-voltar").onclick = () => mostrar("tela-perfil");
     if(document.getElementById("btn-logout-perfil")) document.getElementById("btn-logout-perfil").onclick = () => mostrar("tela-login");
+    // FIM DO CÓDIGO DOS BOTÕES
 
+    // ... dentro do document.addEventListener("DOMContentLoaded", () => { ...
 
-    // --- OLHO SENHA e Máscaras ---
+    // --- Perfil e Upload de Foto (Lógica Consolidada) ---
+    const btnGerirFoto = document.getElementById('btn-gerir-foto');
+    const popupOpcoesFoto = document.getElementById('popup-opcoes-foto');
+    const btnAdicionarNovaFoto = document.getElementById('btn-adicionar-nova-foto');
+    const btnRemoverFoto = document.getElementById('btn-remover-foto');
+    const fileInput = document.getElementById('file-input');
+    const profileImageDisplay = document.getElementById('profile-image-display');
+    const defaultProfilePicUrl = 'URL_DA_SUA_FOTO_PADRAO.jpg';
 
-    let show = false;
-    const toggleSenhaEl = document.getElementById("toggle-senha");
-    const senhaInputEl = document.getElementById("senha");
-    const iconEyeEl = document.getElementById("icon-eye");
+    if (btnGerirFoto && popupOpcoesFoto && btnAdicionarNovaFoto && btnRemoverFoto && fileInput && profileImageDisplay) {
 
-    if(toggleSenhaEl && senhaInputEl && iconEyeEl) {
-        toggleSenhaEl.onclick = () => {
-            show = !show;
-            senhaInputEl.type = show ? "text" : "password";
-            iconEyeEl.innerHTML = show
-                ? `<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>`
-                : `<path d="M1 12c3-5 8-8 11-8s8 3 11 8"/><path d="M1 1l22 22"/>`;
+        // Função para alternar a visibilidade do pop-up
+        btnGerirFoto.onclick = (e) => {
+            e.stopPropagation(); // Impede que o clique feche imediatamente
+            popupOpcoesFoto.style.display = (popupOpcoesFoto.style.display === 'block') ? 'none' : 'block';
         };
-    }
 
-    // Funções de máscara de hora (mantidas)
-    function aplicarMascaraHora(input){
-      const campo = input.closest(".campo");
-      const erroDiv = campo?.querySelector(".erro-hora");
+        // Fechar o pop-up se clicar em qualquer outro lugar do documento
+        document.addEventListener('click', () => {
+            popupOpcoesFoto.style.display = 'none';
+        });
 
-      input.addEventListener("input", function(){
-        let v = this.value.replace(/\D/g,"");
-        if(v.length > 4) v = v.slice(0,4);
-        if(v.length >= 3) v = v.slice(0,2) + ":" + v.slice(2);
-        this.value = v;
-        limparErro();
-      });
+        // Impedir que cliques dentro do pop-up o fechem imediatamente
+        popupOpcoesFoto.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
 
-      input.addEventListener("keypress", function(e){
-        if(!/[0-9]/.test(e.key)){
-          e.preventDefault();
-          if(erroDiv) erroDiv.innerText = "Só são permitidos números";
-          input.style.border = "2px solid red";
+
+        // 1. Ação Adicionar/Mudar Foto (abre o input de arquivo)
+        btnAdicionarNovaFoto.onclick = () => {
+            fileInput.value = ''; // Limpa o input para garantir que o evento 'change' dispara sempre
+            fileInput.click();
+        };
+
+        // 2. Ação Remover Foto
+        btnRemoverFoto.onclick = () => {
+            if (usuario_atual) {
+                localStorage.removeItem(`profile_pic_${usuario_atual}`);
+                profileImageDisplay.src = defaultProfilePicUrl;
+                fileInput.value = ''; // Limpa o input
+                alert("Foto de perfil removida.");
+            }
+        };
+
+        // 3. Listener para quando um arquivo é selecionado
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0]; // Pega o primeiro arquivo
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImageDisplay.src = e.target.result;
+                    if (usuario_atual) {
+                       localStorage.setItem(`profile_pic_${usuario_atual}`, e.target.result);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Função loadProfilePic (o seu código existente) ...
+        function loadProfilePic() {
+            if (usuario_atual) {
+                const savedPic = localStorage.getItem(`profile_pic_${usuario_atual}`);
+                if (savedPic) {
+                    profileImageDisplay.src = savedPic;
+                } else {
+                    profileImageDisplay.src = defaultProfilePicUrl;
+                }
+            } else {
+                 profileImageDisplay.src = defaultProfilePicUrl;
+            }
         }
-      });
 
-      input.addEventListener("blur", function(){
-        if(this.value === "") return;
-        const partes = this.value.split(":");
-        if(partes.length !== 2) return marcarErro("Formato inválido HH:MM");
-
-        let h = parseInt(partes[0],10);
-        let m = parseInt(partes[1],10);
-        if(h>23 || m>59) marcarErro("Hora inválida 00:00-23:59");
-        else limparErro();
-      });
-
-      function marcarErro(msg){
-        input.style.border = "2px solid red";
-        if(erroDiv) erroDiv.innerText = msg;
-      }
-
-      function limparErro(){
-        input.style.border = "1px solid #ccc";
-        if(erroDiv) erroDiv.innerText = "";
-      }
+        // Pode chamar loadProfilePic() aqui para carregar a padrão ao iniciar
+        loadProfilePic();
     }
 
-    document.querySelector(".btn-editar")?.addEventListener("click", () => {
-      alert("Função de edição ainda não implementada!");
-    });
+    // ... (restante do seu código) ...
 
-
-    // Observer para inputs dinâmicos
-    const observer = new MutationObserver(() => {
-        document.querySelectorAll("#lista-dias input").forEach(inp => aplicarMascaraHora(inp));
-    });
-
-    const listaDiasEl = document.getElementById("lista-dias");
-    if(listaDiasEl) {
-        observer.observe(listaDiasEl, {childList:true,subtree:true});
-    }
 });
