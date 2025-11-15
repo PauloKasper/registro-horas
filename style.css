@@ -1,25 +1,30 @@
-/* ---------- Body ---------- */
+/* Aplica padding seguro a todos os elementos principais da UI, se necessário */
+.app-container-inner, .tela, .perfil-app {
+    /* Estas regras já estão OK, mas serão ajustadas em .tela.ativa para maior precisão */
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    height: 100dvh; /* Dynamic Viewport Height (moderno) */
+    width: 100vw;
+    max-height: auto;
+    color: #000;
+    display: flex;
+    justify-content: center; /* Mantém a centralização horizontal */
+    align-items: center; /* Alinha o conteúdo ao TOPO */
+    min-height: 100vh;
 
+    /* >>> GRADIENTE APLICADO AQUI <<< */
+    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
+    background-attachment: fixed; /* Mantém o gradiente fixo ao rolar */
+
+    /* Padding seguro para iPhones e outros dispositivos */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
-
-    height: 100vh;
-    height: 100dvh;
-    width: 100vw;
-    min-height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    color: #000;
-    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
 }
 
 /* ---------- Telas em Geral ---------- */
@@ -32,21 +37,24 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 15px;
-    background-color: transparent;
 }
 
 .tela.ativa {
     display: flex;
-    background-color: transparent;
+    background-color: transparent !important; /* Transparente para mostrar o gradiente */
 }
 
-/* ---------- Cabeçalhos ---------- */
+/* Força a tela de perfil a alinhar-se ao topo */
+#tela-perfil.tela.ativa {
+    align-self: flex-start;
+    margin-top: calc(env(safe-area-inset-top, 20px) + 20px);
+}
+
 h2 {
     margin-top: 0;
     text-align: center;
 }
 
-/* ---------- Inputs ---------- */
 input {
     width: 100%;
     padding: 10px;
@@ -56,11 +64,6 @@ input {
     font-size: 16px;
     box-sizing: border-box;
     color: #000;
-    background-color: rgba(255,255,255,0.6);
-}
-
-input::placeholder {
-    color: rgba(51,51,51,0.7);
 }
 
 .input-wrap {
@@ -72,7 +75,36 @@ input::placeholder {
     padding-right: 44px;
 }
 
-/* ---------- Botões e interações ---------- */
+.eye-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.eye-btn:hover {
+    background: rgba(0,0,0,0.05);
+    border-radius: 5px;
+}
+
+.eye-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #222;
+    fill: none;
+}
+
+/* Transição para todos os botões */
 button,
 .icon-btn,
 .text-btn-edit-pic,
@@ -104,32 +136,25 @@ button {
     font-size: 16px;
 }
 
-/* ---------- Botões específicos ---------- */
-#btn-entrar,
-#btn-salvar-cadastro,
-#btn-gerar-csv,
-#btn-logout,
-#btn-registrar-hora,
-#btn-gerir-foto {
+#btn-entrar, #btn-salvar-cadastro, #btn-gerar-csv, #btn-logout {
     background: #2196f3;
     color: white;
 }
 
-#btn-abrir-cadastro,
-#btn-voltar-login {
+#btn-abrir-cadastro, #btn-voltar-login {
     background: #e0e0e0;
 }
 
-/* ---------- Mensagens de erro ---------- */
-.erro,
-.erro-hora {
-    color: red;
-    font-size: 0.9em;
-    text-align: center;
-    margin-bottom: 10px;
+button:hover {
 }
 
-/* ---------- Lista de dias ---------- */
+.erro {
+    color: red;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
 #lista-dias {
     max-height: 72vh;
     overflow-y: auto;
@@ -140,13 +165,12 @@ button {
     margin-top: 40px;
 }
 
-.usuario-h2 {
+.usuario-h2{
     display: none;
 }
 
-/* ---------- Cards ---------- */
 .card-dia {
-    background: rgba(255,255,255,0.9);
+    background: #f9f9f9;
     padding: 25px;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -162,11 +186,10 @@ button {
     border-radius: 4px;
 }
 
-/* ---------- Campos ---------- */
 .campo {
     display: flex;
-    flex-direction: column;
     height: 40px;
+    flex-direction: column;
     margin-bottom: 17px;
 }
 
@@ -181,21 +204,36 @@ button {
     border: 1px solid #ccc;
 }
 
-/* ---------- Perfil ---------- */
+.erro-hora {
+    font-size: 12px;
+    color: red;
+    min-height: 14px;
+}
+
+.btn-salvar-dia {
+    background: #2196f3;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+/* ---------- Perfil Geral ---------- */
 .perfil-app {
     width: 320px;
     overflow: hidden;
     position: relative;
     color: white;
-    background-color: transparent;
 }
 
+/* Topo do Perfil (Foto) */
 .perfil-topo {
     display: flex;
+    justify-content: center;
     padding-top: 20px;
     padding-bottom: 20px;
     position: relative;
-    justify-content: center;
 }
 
 .foto-container {
@@ -207,7 +245,6 @@ button {
     overflow: hidden;
     border: 0px solid #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: transparent;
 }
 
 .profile-pic {
@@ -217,7 +254,6 @@ button {
     object-fit: cover;
 }
 
-/* ---------- Ícones e botões flutuantes ---------- */
 .icon-btn {
     position: absolute;
     background-color: transparent;
@@ -227,6 +263,10 @@ button {
     border-radius: 5px;
     font-size: 1.4rem;
     transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+    opacity: 1;
+    pointer-events: auto;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
 .icon-btn:hover {
@@ -238,7 +278,7 @@ button {
     transform: scale(0.96);
 }
 
-/* ---------- Botões topo direito / rodapé direito ---------- */
+/* Topo Direito Configurações */
 .top-right {
     position: absolute;
     top: calc(env(safe-area-inset-top, 10px) + 10px);
@@ -246,30 +286,46 @@ button {
     color: #007bff !important;
     width: auto;
     padding: 9px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 20%;
 }
 
+/* Rodapé Direito Logout */
 .bottom-right {
     position: absolute;
     bottom: env(safe-area-inset-bottom, 15px);
-    right: center;
+    right: 10px;
     padding: 25px;
     font-size: 0.9rem;
     color: blue;
 }
 
-/* ---------- Cards de perfil ---------- */
+/* Botão Configurações */
+#btn-configuracoes-perfil {
+    color: white;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+#btn-configuracoes-perfil:hover {
+    color: #4CAF50;
+    transform: scale(1.2);
+}
+
+#btn-configuracoes-perfil:active {
+    transform: scale(0.9);
+}
+
+/* Card de Perfil Flutuante */
 .perfil-card {
     text-align: center;
     padding: 15px;
-    background: rgba(255,255,255,0.9);
+    background: #FFFFFF;
     border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 350px;
 }
@@ -278,13 +334,19 @@ button {
 .perfil-card .cargo { font-size: 14px; margin: 5px 0; opacity: 0.8; }
 .perfil-card .descricao { font-size: 14px; margin: 15px 0; }
 
+.perfil-topo {
+    padding-bottom: 15px;
+}
+
 .perfil-info button {
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
     color: white;
 }
 
 .perfil-info button:hover {
-    background-color: rgba(255,255,255,0.4);
+    background-color: rgba(255, 255, 255, 0.4);
+    color: white;
+    transform: none;
 }
 
 .perfil-info-text h2 {
@@ -300,32 +362,43 @@ button {
     color: #555;
 }
 
-/* ---------- Tela de login ---------- */
+#btn-registrar-hora {
+    background-color: #2196f3;
+    color: white;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 20px;
+}
+
 #tela-login.tela.ativa {
-    background-color: rgba(255,255,255,0.4);
+    background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(12px);
     border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     padding: 40px 30px;
     max-width: 350px;
     color: #333;
 }
 
 #tela-login input {
-    background-color: rgba(255,255,255,0.6);
+    background-color: rgba(255, 255, 255, 0.6);
     border: none;
-    border-bottom: 1px solid rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     color: #333;
+}
+
+#tela-login input::placeholder {
+    color: rgba(51, 51, 51, 0.7);
 }
 
 #btn-entrar {
     background: linear-gradient(90deg, #607D8B 0%, #455A64 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.2);
     border-radius: 50px;
 }
 
-/* ---------- Botão editar foto ---------- */
 .text-btn-edit-pic {
     background: none;
     border: none;
@@ -344,7 +417,6 @@ button {
     opacity: 0.8;
 }
 
-/* ---------- Pop-ups ---------- */
 .menu-foto-container {
     position: relative;
     width: 100%;
@@ -376,7 +448,7 @@ button {
     width: 150px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(255,255,255,0.7);
+    background-color: rgba(255, 255, 255, 0.7);
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     border-radius: 8px;
     z-index: 10;
@@ -399,7 +471,7 @@ button {
 }
 
 .popup-opcoes .opcao-foto:hover {
-    background-color: rgba(0,0,0,0.05);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .popup-opcoes .opcao-foto:active {
