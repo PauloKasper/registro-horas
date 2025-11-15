@@ -3,6 +3,16 @@
 .app-container-inner, .tela, .perfil-app {
     /* Estas regras já estão OK, mas serão ajustadas em .tela.ativa para maior precisão */
 }
+header, .tela, .conteudo-topo {
+  padding-top: env(safe-area-inset-top);
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #ff0000; /* cor vermelha do seu app */
+  height: 100%;
+  width: 100%;
+}
 
 body {
   padding-top: env(safe-area-inset-top);
@@ -583,3 +593,4 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
+
