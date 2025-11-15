@@ -41,26 +41,37 @@
   <button id="btn-voltar-login">Voltar</button>
 </div>
 
-<!-- PERFIL -->
-<!-- PERFIL -->
-<div id="tela-perfil" class="tela">
-
-
 
     <!-- O NOVO CARD DE PERFIL -->
+    <!-- PERFIL (Secção Corrigida) -->
+<div id="tela-perfil" class="tela">
+
+    <!-- O CARD DE PERFIL Principal -->
     <div class="perfil-card">
-        <!-- Topo do Perfil com Foto e Lápis -->
+
+        <!-- Topo do Perfil com Foto e Lápis (ESTE DIV TERMINA AQUI) -->
         <div class="perfil-topo">
-            <!-- Botão de Configurações (mantido no topo) -->
-    <button id="btn-configuracoes-perfil" class="icon-btn top-right" aria-label="Configurações">
-        ⚙️
-    </button>
+            <!-- Botão de Configurações -->
+<button id="btn-configuracoes-perfil" class="btn-icon modern-icon top-right" aria-label="Menu de Perfil">
+  ≡
+</button>
             <div class="foto-container">
+                <!-- Certifique-se de usar a URL_DA_SUA_FOTO_PADRAO.jpg aqui -->
                 <img src="URL_DA_SUA_FOTO.jpg" alt="" class="profile-pic" id="profile-image-display">
                 <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
             </div>
+
         </div>
-  <button id="edit-pic-btn" class="text-btn-edit-pic">Editar foto</button>
+         <div class="menu-foto-container">
+        <button id="btn-gerir-foto" class="btn-perfil-acao">Editar</button>
+
+        <!-- O pop-up/menu que estará oculto por padrão (Posicionado absolutamente DENTRO deste container) -->
+        <div id="popup-opcoes-foto" class="popup-opcoes">
+            <button id="btn-adicionar-nova-foto" class="opcao-foto">Adicionar/Mudar Foto</button>
+            <button id="btn-remover-foto" class="opcao-foto remover">Remover Foto</button>
+        </div>
+    </div>
+
         <!-- Informações (Nome e Cargo) -->
         <div class="perfil-info-text">
             <h2 id="nome-usuario-perfil">Paulo Silva</h2>
@@ -69,16 +80,20 @@
     </div>
     <!-- FIM DO CARD DE PERFIL -->
 
-    <!-- BOTÃO REGISTRAR HORAS (FORA DO CARD, ABAIXO DELE) -->
+    <!-- NOVO CONTAINER PRINCIPAL PARA GERIR A FOTO (Fora do perfil-card) -->
+
+
+    <!-- BOTÃO REGISTRAR HORAS (FORA DO CARD, ABAIXO DO container de gerir foto) -->
     <button id="btn-registrar-hora" class="btn-perfil-acao">Registrar Horas</button>
 
 
-    <!-- BOTÃO DE LOGOUT (FORA DO CARD, POSICIONADO NO RODAPÉ VIA CSS) -->
+    <!-- BOTÃO DE LOGOUT -->
     <button id="btn-logout-perfil" class="icon-btn bottom-right" aria-label="Logout">
         Sair
     </button>
 
 </div>
+
 
 <!-- AJUSTES -->
 <div id="tela-configurações" class="tela">
