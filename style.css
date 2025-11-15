@@ -5,6 +5,9 @@
 }
 header, .tela, .conteudo-topo {
   padding-top: env(safe-area-inset-top);
+  background-color: transparent !important;
+  min-height: 100vh;
+  padding-top: env(safe-area-inset-top);
 }
 html, body {
   margin: 0;
@@ -609,6 +612,7 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
+
 
 
 
