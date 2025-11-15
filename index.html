@@ -2,11 +2,19 @@
 <html lang="pt-BR">
 <head>
   <!-- ... (seus links de head) ... -->
+<!-- PWA: Apple iOS Support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="MeuApp">
+<meta name="apple-mobile-web-app-title" content="Registro">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- iOS Icons -->
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
+
+<!-- Optional but STRONGLY recommended for fullscreen reliability -->
+<link rel="apple-touch-startup-image" href="/splash.png">
+
 <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="/manifest.json">
   <title>Registro de Horas</title>
@@ -111,7 +119,5 @@
   <button id="btn-registro-voltar">Voltar</button>
 </div>
 
-<script src="script.js"></script>
-<script src="service-worker.js"></script>
 </body>
 </html>
