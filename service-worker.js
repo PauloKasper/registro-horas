@@ -166,28 +166,57 @@ document.addEventListener("DOMContentLoaded", () => {
         a.click();
     };
 
-    // --- Perfil e Upload de Foto ---
-    const editPicBtn = document.getElementById('edit-pic-btn');
+  // --- Perfil e Upload de Foto (Lógica Consolidada) ---
+    const editPicBtn = document.getElementById('edit-pic-btn'); // O novo botão de texto
     const fileInput = document.getElementById('file-input');
     const profileImageDisplay = document.getElementById('profile-image-display');
-    const removePicBtn = document.getElementById('remove-pic-btn');
+    // removePicBtn original foi removido do HTML, mas a lógica está aqui
 
-    if (editPicBtn && fileInput && profileImageDisplay && removePicBtn) {
-        editPicBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
+    if (editPicBtn && fileInput && profileImageDisplay) {
 
-        fileInput.addEventListener('change', (event) => {
-            const files = event.target.files;
-            if (files.length > 0 && files[0].type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    profileImageDisplay.src = e.target.result;
-                    // localStorage.setItem('userProfilePic', e.target.result);
-                };
-                reader.readAsDataURL(files[0]);
+        // Função para carregar a foto armazenada ao iniciar
+        function loadProfilePic() {
+            const savedPic = localStorage.getItem(`profile_pic_${usuario_atual}`);
+            if (savedPic) {
+                profileImageDisplay.src = savedPic;
+            } else {
+                // Define uma imagem padrão se não houver foto salva
+                profileImageDisplay.src = 'URL_DA_SUA_FOTO_PADRAO.jpg';
+            }
+        }
+
+        // Lógica para o botão "Editar Foto"
+        editPicBtn.addEventListener('click', (event) => {
+            const hasPicture = profileImageDisplay.src && !profileImageDisplay.src.includes('URL_DA_SUA_FOTO_PADRAO.jpg');
+
+            // Se o utilizador carregar com a tecla Shift premida E já houver uma foto, remove a foto
+            if (event.shiftKey && hasPicture) {
+                event.preventDefault(); // Impede o comportamento padrão (abrir seletor de arquivo)
+                // Lógica de remover foto (anteriormente no removePicBtn)
+                localStorage.removeItem(`profile_pic_${usuario_atual}`);
+                loadProfilePic(); // Carrega a imagem padrão
+                alert("Foto de perfil removida.");
+            } else {
+                // Comportamento padrão: abre o seletor de ficheiros
+                fileInput.click();
             }
         });
+
+        // Lógica de upload de nova foto
+        fileInput.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    profileImageDisplay.src = dataUrl;
+                    // Salva a imagem no localStorage para persistência
+                    localStorage.setItem(`profile_pic_${usuario_atual}`, dataUrl);
+                };
+                reader.readAsDataURL(files);
+            }
+        });
+
 
         // Lógica para o botão "X" (Remover Foto)
         removePicBtn.addEventListener('click', () => {
