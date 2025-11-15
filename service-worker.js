@@ -27,11 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let usuario_atual = null, registros = {};
 
     // REGISTRO DO SERVICE WORKER (Mantido no script.js para inicializar o sw.js)
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js')
-        .then(() => console.log('Service Worker registrado com sucesso'))
-        .catch(err => console.error('Erro ao registrar SW:', err));
-    }
+    if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js")
+    .then(() => console.log("Service Worker registrado"))
+    .catch(err => console.error("Erro ao registrar Service Worker:", err));
+}
+
 
     // Função para trocar de tela
     function mostrar(tela) {
