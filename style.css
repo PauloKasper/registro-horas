@@ -1,10 +1,5 @@
 
-body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-}
+
 
 /* ---------- BODY ---------- */
 body {
@@ -51,7 +46,7 @@ body {
 
 /* Centralização vertical apenas para telas de login */
 #tela-login.tela.ativa {
-  justify-content: center;
+  justify-content: top;
   height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   margin-top: 0;
 }
@@ -95,4 +90,5 @@ body::before {
   display: block;
   height: env(safe-area-inset-top);
 }
+
 
