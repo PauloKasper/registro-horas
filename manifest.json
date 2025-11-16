@@ -2,11 +2,10 @@
   "name": "Registro de Horas",
   "short_name": "Horas",
   "description": "Registro de horas trabalhadas",
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#007bff",
+    "start_url": "/home",
+    "display": "standalone",
+    "theme_color": "#000",
+    "background_color": "#000",
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -25,3 +24,4 @@
     }
   ]
 }
+
