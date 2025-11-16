@@ -22,18 +22,6 @@
 
 <link rel="stylesheet" href="style.css">
   <title>Registro de Horas</title>
-    <!-- NavigationBar.vue -->
-<div class="sticky top-0">
-    <div
-        class="h-safe-area-inset-top"
-        :class="{
-            'bg-black': !transparent
-                        || (transparent && scrollTop > 0)
-        }"
-    ></div>
-</div>
-
-
 
 <script>
 export default {
@@ -66,6 +54,7 @@ export default {
 .h-safe-area-inset-top { height: env(safe-area-inset-top); }
 .bg-black { background-color: #444; }
 </style>
+
 
 <!-- LOGIN -->
 <div id="tela-login" class="tela ativa">
@@ -166,4 +155,3 @@ export default {
 <script src="script.js"></script>
 </body>
 </html>
-
