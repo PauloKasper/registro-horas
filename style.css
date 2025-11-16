@@ -1,60 +1,66 @@
-/* Aplica padding seguro a todos os elementos principais da UI, se necessário */
-/* Exemplo aplicado à classe .app-container-inner ou similar */
-.app-container-inner, .tela, .perfil-app {
-    /* Estas regras já estão OK, mas serão ajustadas em .tela.ativa para maior precisão */
-}
+/* ==========================================================
+   BASE GERAL
+========================================================== */
 
-
-body {
+/* --- BODY: Container geral --- */
+html, body {
     margin: 0;
     padding: 0;
-    padding-top: env(safe-area-inset-top);   /* <-- ESTA LINHA !!! */
     font-family: Arial, sans-serif;
-    height: 100vh;
     width: 100vw;
-    height: -webkit-fill-available;
+    height: 100vh;
+    min-height: 100vh;
     color: #000;
+
+    /* Padding seguro topo/rodapé para iOS */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+
+    /* Fundo com gradiente */
+    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
+
+    /* Flex container: centraliza horizontalmente, não verticalmente */
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-
-    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
+    align-items: flex-start;
 }
 
-/* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
-#tela-perfil.tela.ativa {
-    align-self: flex-start; /* Alinha este item flex específico ao topo */
-}
-
-
-/* ---------- Telas em Geral ---------- */
-.tela {
-    /* As telas agora são contentores flex que ocupam a largura total do body centralizado */
-    width: 100vw;
-    max-width: 400px; /* Limite a largura da interface em ecrãs muito grandes */
-    padding: 20px;
+/* --- Aplica padding seguro a elementos principais --- */
+.app-container-inner,
+.tela,
+.perfil-app {
     box-sizing: border-box;
-    /* ... (outros estilos display none, flex-direction column, gap) ... */
+}
+
+/* ==========================================================
+   TELAS
+========================================================== */
+.tela {
+    width: 100vw;
+    max-width: 400px;  /* Limite em telas grandes */
+    min-height: 100vh; /* Ocupa toda a altura */
+    padding: 20px;
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 15px; /* Aumentei o espaço entre os elementos */
+    gap: 15px;
 }
 
 .tela.ativa {
     display: flex;
     background-color: transparent;
-    /* NOVO / ALTERADO: Padding seguro para o topo e rodapé do iPhone */
-    /* Agora o padding vem do body para não interferir com a posição absolute do botão */
-    /* Remova estes paddings daqui: */
-    /* padding-top: env(safe-area-inset-top, 20px); */
-    /* padding-bottom: env(safe-area-inset-bottom, 20px); */
-
-    /* Em vez disso, adicione padding ao body para que o conteúdo não fique por baixo da Dynamic Island/Home Indicator */
-    /* (veja a secção BODY acima, se já não o fez) */
 }
 
+/* Telas específicas */
+#tela-perfil.tela.ativa,
+#tela-registro.tela.ativa {
+    align-self: flex-start;
+    margin-top: calc(env(safe-area-inset-top, 20px));
+}
+
+/* ==========================================================
+   TIPOGRAFIA E INPUTS
+========================================================== */
 h2 {
     margin-top: 0;
     text-align: center;
@@ -67,7 +73,6 @@ input {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 16px;
-    box-sizing: border-box;
     color: #000;
 }
 
@@ -80,60 +85,29 @@ input {
     padding-right: 44px;
 }
 
-.eye-btn {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
-}
-
-.eye-btn:hover {
-    background: rgba(0,0,0,0.05);
-    border-radius: 5px;
-}
-
-.eye-btn svg {
-    width: 20px;
-    height: 20px;
-    stroke: #222;
-    fill: none;
-}
-
-/* Aplica a transição suave a TODOS os elementos que agem como botão no seu código */
+/* ==========================================================
+   BOTÕES, ÍCONES E TRANSIÇÕES
+========================================================== */
 button,
 .icon-btn,
 .text-btn-edit-pic,
 .btn-salvar-dia,
-#btn-gerir-foto, /* Botão de gerir foto */
-.popup-opcoes .opcao-foto /* Itens do popup */
-{
+#btn-gerir-foto,
+.popup-opcoes .opcao-foto {
     transition: transform 0.1s ease-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-    transform: none; /* Garante o estado normal por padrão */
+    transform: none;
     transform-style: preserve-3d;
     backface-visibility: hidden;
 }
 
-/* Efeito de clique (active): Quando clicado, diminui ligeiramente */
 button:active,
 .icon-btn:active,
 .text-btn-edit-pic:active,
 .btn-salvar-dia:active,
 #btn-gerir-foto:active,
-.popup-opcoes .opcao-foto:active
-{
-    transform: scale(0.96); /* Diminui 4% para simular um clique pressionado */
+.popup-opcoes .opcao-foto:active {
+    transform: scale(0.96);
 }
-/* ------------------------------------------------ */
 
 button {
     padding: 10px 15px;
@@ -143,22 +117,24 @@ button {
     cursor: pointer;
     width: 100%;
     font-size: 16px;
-    /* As transições e transformações agora são geridas pela regra universal acima */
 }
 
-#btn-entrar, #btn-salvar-cadastro, #btn-gerar-csv, #btn-logout {
+#btn-entrar,
+#btn-salvar-cadastro,
+#btn-gerar-csv,
+#btn-logout {
     background: #2196f3;
     color: white;
 }
 
-#btn-abrir-cadastro, #btn-voltar-login {
+#btn-abrir-cadastro,
+#btn-voltar-login {
     background: #e0e0e0;
 }
 
-/* Remove hover global problemático */
-button:hover {
-}
-
+/* ==========================================================
+   ERROS
+========================================================== */
 .erro {
     color: red;
     margin-bottom: 10px;
@@ -166,24 +142,26 @@ button:hover {
     font-size: 0.9em;
 }
 
-/* ---------- Lista de Dias ---------- */
+.erro-hora {
+    font-size: 12px;
+    color: red;
+    min-height: 14px;
+}
+
+/* ==========================================================
+   LISTA DE DIAS
+========================================================== */
 #lista-dias {
     max-height: 72vh;
     overflow-y: auto;
 }
-#tela-registro.tela.ativa {
-    align-self: flex-start; /* Alinha este item flex específico ao topo */
-    margin-top: 40px;
-}
-body::-webkit-scrollbar-track {
-}
-.usuario-h2{
+
+.usuario-h2 {
     display: none;
 }
 
 .card-dia {
     background: #f9f9f9;
-
     padding: 25px;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -193,7 +171,6 @@ body::-webkit-scrollbar-track {
 
 .card-dia .destaque {
     font-weight: bold;
-
     text-align: center;
     margin-bottom: 5px;
     padding: 50px;
@@ -202,8 +179,8 @@ body::-webkit-scrollbar-track {
 
 .campo {
     display: flex;
-      height: 40px;
     flex-direction: column;
+    height: 40px;
     margin-bottom: 17px;
 }
 
@@ -218,68 +195,41 @@ body::-webkit-scrollbar-track {
     border: 1px solid #ccc;
 }
 
-.erro-hora {
-    font-size: 12px;
-    color: red;
-    min-height: 14px;
-}
-
-.btn-salvar-dia {
-    background: #2196f3;
-    color: white;
-    padding: 5px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 5px;
-    /* transition e transform geridos pela regra universal acima */
-}
-
-/* ---------- Perfil Geral ---------- */
+/* ==========================================================
+   PERFIL
+========================================================== */
 .perfil-app {
     width: 320px;
-    /* height: 600px; Remova esta altura fixa se quiser que ocupe a tela toda */
     overflow: hidden;
     position: relative;
     color: white;
-    /* Remova min-height: 100vh; daqui */
 }
 
-/* ---------- Topo do Perfil (Foto) ---------- */
 .perfil-topo {
     display: flex;
     justify-content: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
     position: relative;
-
-
 }
 
 .foto-container {
-    width: 120px; /* Diminuí ligeiramente o tamanho da foto */
+    width: 120px;
     height: 120px;
-    margin: 0 auto; /* Centraliza a foto dentro do perfil-topo */
-    /* ... (mantenha os estilos de border-radius, border, overflow hidden) ... */
+    margin: 0 auto;
     position: relative;
     border-radius: 50%;
     overflow: hidden;
-    border: 0px solid #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
+
 .profile-pic {
-     width: 100%;
+    width: 100%;
     height: auto;
     display: block;
     object-fit: cover;
 }
-/* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
-#tela-perfil.tela.ativa {
-    align-self: flex-start; /* Alinha este item flex específico ao topo */
-    /* margin-top: 40px; Remova este margin-top ou ajuste para usar env() */
-    margin-top: calc(env(safe-area-inset-top, 20px) + 20px);
-}
 
-/* Seu código base, ligeiramente ajustado */
+/* Ícones e botões flutuantes */
 .icon-btn {
     position: absolute;
     background-color: transparent;
@@ -287,18 +237,14 @@ body::-webkit-scrollbar-track {
     cursor: pointer;
     padding: 0;
     border-radius: 5px;
-
-    /* Aumentei ligeiramente o tamanho da fonte para o novo ícone */
     font-size: 1.4rem;
     transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
     opacity: 1;
     pointer-events: auto;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
 }
 
 .icon-btn:hover {
-    color: #4CAF50; /* A cor verde que você escolheu no hover */
+    color: #4CAF50;
     transform: scale(1.05);
 }
 
@@ -306,70 +252,41 @@ body::-webkit-scrollbar-track {
     transform: scale(0.96);
 }
 
-/* Posição Topo Direita (Configurações) */
+/* Top-right */
 .top-right {
-    /* PROPRIEDADE ESSENCIAL: Define o contexto de posicionamento */
     position: absolute;
-
-    /* NOVO / ALTERADO: top dinâmico para respeitar a Dynamic Island */
     top: calc(env(safe-area-inset-top, 10px) + 10px);
     right: 10px;
-
-    /* Ajustes de estilo para melhor visualização */
-    color: #007bff !important; /* Mantém o !important para garantir o azul */
-    /* width: 10px; <-- Isto é um comentário, mas a propriedade width abaixo estava incompleta */
-    width: auto; /* Melhor usar auto para o ícone */
+    color: #007bff !important;
+    width: auto;
     padding: 9px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra menor (blur de 5px) e meio transparente (0.3 de opacidade) */
-
-    /* align-icon não é uma propriedade CSS válida, use flexbox ou text-align para alinhamento */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     display: flex;
     justify-content: center;
     align-items: center;
-
-    /* NOVO: Adiciona um background para garantir que a área da Dynamic Island não o torne ilegível */
-    background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semi-transparente */
-    border-radius: 20%; /* Faz o botão de menu parecer um círculo */
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 20%;
 }
 
-
-/* Posição Rodapé Direita (Logout) */
+/* Bottom-right */
 .bottom-right {
-    position: absolute; /* Certifica-se de que está absoluta */
-    /* NOVO / ALTERADO: bottom dinâmico para respeitar o Home Indicator inferior */
-    bottom: env(safe-area-inset-bottom, 15px); /* Fixa no rodapé seguro */
-    right: center; /* Distância da borda direita */
+    position: absolute;
+    bottom: env(safe-area-inset-bottom, 15px);
+    right: 10px;
     padding: 25px;
     font-size: 0.9rem;
-    color: blue; /* Cor que defini */
+    color: blue;
 }
 
-
-
-/* ---------- Estilos ESPECÍFICOS para a Engrenagem (usando ID) ---------- */
-#btn-configuracoes-perfil {
-    color: white;
-    /* Adicionamos a transição e a cor aqui */
-    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
-}
-
-#btn-configuracoes-perfil:hover {
-    color: #4CAF50;
-    transform: scale(1.2);
-}
-
-#btn-configuracoes-perfil:active {
-    transform: scale(0.9);
-}
-
-
-/* ---------- O NOVO CARD DE PERFIL (Flutuante) ---------- */
+/* ==========================================================
+   PERFIL CARD
+========================================================== */
 .perfil-card {
     text-align: center;
     padding: 15px;
-    background: #FFFFFF; /* Fundo branco puro para o card flutuar */
+    background: #fff;
     border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidade */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 350px;
 }
@@ -378,135 +295,71 @@ body::-webkit-scrollbar-track {
 .perfil-card .cargo { font-size: 14px; margin: 5px 0; opacity: 0.8; }
 .perfil-card .descricao { font-size: 14px; margin: 15px 0; }
 
-/* ---------- Topo do Perfil (Foto) ---------- */
-.perfil-topo {
-    /* Removi justify-content: center; padding, pois o flexbox do card centraliza */
-    padding-bottom: 15px; /* Espaço entre a foto e o texto */
-}
+.perfil-info-text h2 { margin:0; font-size: 22px; color:#333; }
+.perfil-info-text .cargo { font-size:14px; margin:5px 0 0 0; opacity:0.7; color:#555; }
 
-/* Estilos para o botão "Registrar Horas" */
-.perfil-info button {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.perfil-info button:hover {
-    background-color: rgba(255, 255, 255, 0.4);
-    color: white;
-    transform: none;
-}
-
-.perfil-info-text h2 {
-    margin: 0;
-    font-size: 22px;
-    color: #333; /* Cor escura para o texto no card branco */
-}
-.perfil-info-text .cargo {
-    font-size: 14px;
-    margin: 5px 0 0 0;
-    opacity: 0.7;
-    color: #555;
-}
-
-/* Estilos para o botão "Registrar Horas" (fora do card, abaixo dele) */
 #btn-registrar-hora {
-    background-color: #2196f3; /* Cor primária azul */
+    background-color: #2196f3;
     color: white;
     width: 100%;
     max-width: 350px;
-    margin-top: 20px; /* Espaço entre o card e o botão */
-}
-/* --- Estilos para o Efeito Glassmorphism (Tela de Login Cinzenta Clara) --- */
-
-/* 1. Definir o fundo COM O GRADIENTE Cinzento, Azul e Laranja */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    width: 100vw;
-    height: -webkit-fill-available;
-    color: #000;
-    display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    min-height: 100vh;
-
-    /* >>> GRADIENTE APLICADO AQUI <<< */
-    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
+    margin-top: 20px;
 }
 
-/* 2. Estilo para o cartão de login mais claro e transparente (MANTIDO) */
+/* ==========================================================
+   LOGIN GLASSMORPHISM
+========================================================== */
 #tela-login.tela.ativa {
-    /* Aumentamos a opacidade do branco (0.4 = 40%) */
-    background-color: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(12px); /* Desfoque subtil */
+    background-color: rgba(255,255,255,0.4);
+    backdrop-filter: blur(12px);
     border-radius: 20px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* Sombra mais suave */
-    border: 1px solid rgba(255, 255, 255, 0.5); /* Borda mais visível */
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.5);
     padding: 40px 30px;
     max-width: 350px;
-    color: #333; /* Texto cinza escuro para contraste */
+    color: #333;
 }
 
-/* 3. Ajustar Inputs para o novo estilo (MANTIDO) */
 #tela-login input {
-    background-color: rgba(255, 255, 255, 0.6); /* Inputs mais opacos */
+    background-color: rgba(255,255,255,0.6);
     border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    color: #333; /* Texto digitado cinza escuro */
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    color: #333;
 }
 
-/* Placeholder (texto dentro do input) (MANTIDO) */
 #tela-login input::placeholder {
-    color: rgba(51, 51, 51, 0.7);
+    color: rgba(51,51,51,0.7);
 }
 
-/* 4. Ajustar o botão de Entrar (MANTIDO) */
 #btn-entrar {
-    /* Botão azul claro para um pop de cor */
     background: linear-gradient(90deg, #607D8B 0%, #455A64 100%);
     color: white;
-    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     border-radius: 50px;
-
 }
 
-/* 5. Ajustar o título H2 (MANTIDO) */
-#tela-login h2 {
-    color: #333; /* Título cinza escuro */
-}
+#tela-login h2 { color: #333; }
 
-/* Estilo para o novo botão de texto "Editar foto" */
+/* ==========================================================
+   POPUPS E BOTÕES SECUNDÁRIOS
+========================================================== */
 .text-btn-edit-pic {
-    background: none; /* Sem fundo */
-    border: none;      /* Sem borda */
-    color: #2196f3;  /* Cor azul para o texto (use a cor que preferir) */
-    cursor: pointer;   /* Torna clicável */
-    padding: 5px 10px; /* Preenchimento leve */
-    font-size: 0.7em;  /* Tamanho de fonte pequeno */
-    text-decoration: underline; /* Sublinhado para parecer um link */
-    width: auto;       /* Faz o botão ocupar apenas o espaço do texto */
-    margin-top: 0px; /* Espaço entre a foto e o texto */
+    background: none;
+    border: none;
+    color: #2196f3;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 0.7em;
+    text-decoration: underline;
+    width: auto;
+    margin-top: 0;
     margin-bottom: 40px;
-
 }
 
-/* Opcional: Efeito hover */
-.text-btn-edit-pic:hover {
-    text-decoration: none;
-    opacity: 0.8;
+.text-btn-edit-pic:hover { text-decoration:none; opacity:0.8; }
 
-}
+.menu-foto-container { position: relative; width: 100%; }
 
-/* Estilo para o contentor que gere a posição relativa do pop-up */
-/* Estilo para o contentor que gere a posição relativa do pop-up */
-.menu-foto-container {
-    position: relative;
-    width: 100%;
-}
-
-/* 1. ESTILO DO BOTÃO PRINCIPAL "Gerir Foto de Perfil" (Com efeito de clique) */
 #btn-gerir-foto {
     background: #2196f3;
     color: white;
@@ -515,22 +368,12 @@ body {
     padding: 5px 10px !important;
     margin: 15px 0;
     display: relative;
-
-    /* Adiciona uma transição suave para o efeito de escala */
     transition: transform 0.1s ease;
 }
 
-#btn-gerir-foto:hover {
-    background: #0d8aee;
-}
+#btn-gerir-foto:hover { background: #0d8aee; }
+#btn-gerir-foto:active { transform: scale(1.05); }
 
-/* Efeito de clique: Quando o botão é clicado (active), ele aumenta ligeiramente */
-#btn-gerir-foto:active {
-    transform: scale(1.05); /* Aumenta 5% do tamanho original */
-}
-
-
-/* 2. ESTILO PARA O POP-UP DE OPÇÕES (Transparente e Mais Pequeno) */
 .popup-opcoes {
     display: none;
     position: absolute;
@@ -538,7 +381,7 @@ body {
     width: 150px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255,255,255,0.7);
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     border-radius: 8px;
     z-index: 10;
@@ -547,7 +390,6 @@ body {
     border: 1px solid #ddd;
 }
 
-/* Garante que os botões dentro do pop-up têm o estilo correto */
 .popup-opcoes .opcao-foto {
     display: block;
     width: 100%;
@@ -558,31 +400,16 @@ body {
     cursor: pointer;
     font-size: 0.7em;
     color: #333;
-
-    /* Adiciona transição também para os itens do popup */
     transition: transform 0.1s ease;
 }
 
-.popup-opcoes .opcao-foto:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
+.popup-opcoes .opcao-foto:hover { background-color: rgba(0,0,0,0.05); }
+.popup-opcoes .opcao-foto:active { transform: scale(0.95); }
+.popup-opcoes .opcao-foto.remover { color: #dc3545; border-bottom: none; }
 
-/* Efeito de clique para os itens do popup: Quando clicado, aumenta ligeiramente */
-.popup-opcoes .opcao-foto:active {
-    transform: scale(0.95); /* Dá uma sensação de "pressionar para dentro" */
-}
-
-.popup-opcoes .opcao-foto.remover {
-    color: #dc3545;
-    border-bottom: none;
-}
-
-/* ---------------------------
-  Fix iOS status-bar overlay
-  (não remove componentes; apenas torna transparente o que estiver sobrepondo)
-   ---------------------------*/
-
-/* Elementos que costumam ficar no topo (templates Vue/Tailwind/etc) */
+/* ==========================================================
+   FIX IOS STATUS BAR
+========================================================== */
 .h-safe-area-inset-top,
 .sticky,
 .sticky.top-0,
@@ -592,10 +419,9 @@ div.h-safe-area-inset-top {
   background-image: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  pointer-events: none !important; /* evita bloquear toques na área */
+  pointer-events: none !important;
 }
 
-/* Força que qualquer elemento fixo/absoluto no topo não tape a status bar */
 *[style*="top: 0"],
 [style*="top:0"],
 [style*="position:fixed"][style*="top"],
@@ -605,23 +431,34 @@ div.h-safe-area-inset-top {
   pointer-events: auto !important;
 }
 
-/* Se houver um botón/icone com fundo forte no canto superior, mantenha ele visível
-   mas não deixe que cubra toda a altura do safe area. */
 .top-right,
 .icon-btn,
 .topbar,
 .header {
-  /* se quiser manter a cor do ícone/botão, mantenha as outras propriedades */
   background-clip: padding-box;
 }
-
-/* Garante que o body deixe espaço físico para a status bar nativa */
-html, body {
-  /* já tem padding-top, reforçar sem quebrar */
-  padding-top: env(safe-area-inset-top) !important;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
+.eye-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 36px;  /* tamanho fixo do botão */
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
-
-/* DEBUG (remova após os testes) */
-/* body { background: linear-gradient(90deg, #ff0000 0%, #ff8800 100%) !important; } */
+.eye-btn svg {
+    width: 24px;   /* ajuste para o tamanho desejado */
+    height: 24px;
+    max-width: 100%;
+    max-height: 100%;
+    stroke: #222;
+    fill: none;
+    display: block;
+    object-fit: contain; /* garante que não estique */
+}
