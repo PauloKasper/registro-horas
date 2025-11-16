@@ -3,32 +3,25 @@
 .app-container-inner, .tela, .perfil-app {
     /* Estas regras já estão OK, mas serão ajustadas em .tela.ativa para maior precisão */
 }
-/* Força a barra superior a ser completamente transparente no iOS */
-.h-safe-area-inset-top {
-    background-color: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-}
 
-/* ---------- Body ---------- */
+
 body {
-    overscroll-behavior-y: contain;
     margin: 0;
     padding: 0;
+    padding-top: env(safe-area-inset-top);   /* <-- ESTA LINHA !!! */
     font-family: Arial, sans-serif;
-    /* NOVO / ALTERADO: Garantir 100% da área visível em todos os browsers móveis */
-    height: 100vh; /* Fallback */
-    height: 100dvh; /* Dynamic Viewport Height (moderno) */
-    max-height: 150vh;
-    width: auto;
-    /* height: -webkit-fill-available; <-- Remova esta linha, dvh é melhor */
-    background-color: #F5F5F5;
+    height: 100vh;
+    width: 100vw;
+    height: -webkit-fill-available;
     color: #000;
     display: flex;
-    justify-content: center; /* Mantém a centralização horizontal */
-    align-items: center; /* Alinha o conteúdo ao TOPO (porque alterámos abaixo) */
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
+
+    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
 }
+
 /* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
 #tela-perfil.tela.ativa {
     align-self: flex-start; /* Alinha este item flex específico ao topo */
@@ -583,5 +576,3 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
-
-
