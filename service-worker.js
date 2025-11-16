@@ -1,3 +1,11 @@
+// on iOS Safari
+window.navigator.standalone
+
+// on Android Chrome
+window.matchMedia(
+  '(display-mode: standalone)'
+).matches
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("script.js carregado!");
 
