@@ -21,6 +21,7 @@ body {
 
 /* ---------- Body ---------- */
 body {
+    overscroll-behavior-y: contain;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -36,8 +37,6 @@ body {
     justify-content: center; /* Mantém a centralização horizontal */
     align-items: center; /* Alinha o conteúdo ao TOPO (porque alterámos abaixo) */
     min-height: 100vh;
-    overscroll-behavior-y: contain;
-
 }
 /* Força a tela de perfil a alinhar-se ao topo, anulando a regra 'body' */
 #tela-perfil.tela.ativa {
@@ -593,4 +592,3 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
-
