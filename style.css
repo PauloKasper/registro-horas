@@ -37,7 +37,7 @@ html, body {
 ========================================================== */
 .tela {
     width: 100vw;
-    max-width: 400px;  /* Limite em telas grandes */
+    max-width: 100vw;  /* Limite em telas grandes */
     min-height: 50vh; /* Ocupa toda a altura */
     margin: 100px;
     padding: 20px;
@@ -463,5 +463,6 @@ div.h-safe-area-inset-top {
     display: block;
     object-fit: contain; /* garante que não estique */
 }
+
 
 
