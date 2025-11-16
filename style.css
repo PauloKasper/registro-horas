@@ -304,6 +304,8 @@ button {
     position: sticky; /* Mude para sticky */
     top: 20px;        /* Adicione uma posição para grudar */
     z-index: 10;     /* fica acima do botão */
+    left: 50%;          /* centraliza horizontalmente */
+    transform: translateX(center); /* ajusta o centro */
     text-align: center;
     padding: 15px;
     background: #fff;
@@ -504,3 +506,4 @@ div.h-safe-area-inset-top {
     display: block;
     object-fit: contain; /* garante que não estique */
 }
+
