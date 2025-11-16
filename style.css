@@ -203,8 +203,9 @@ button {
 .perfil-app {
     width: 320px;
     overflow: hidden;
-    position: relative;
+    position: fixed;
     color: white;
+    z-index: 1000;
 }
 
 .perfil-topo {
@@ -464,6 +465,7 @@ div.h-safe-area-inset-top {
     display: block;
     object-fit: contain; /* garante que não estique */
 }
+
 
 
 
