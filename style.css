@@ -60,10 +60,67 @@ html, body {
     background-color: transparent;
 
 }
+/* Tela de cadastro deve ser referência para o card absoluto */
+#tela-cadastro {
+    position: relative; /* isso faz o card absoluto se posicionar dentro da tela */
+    width: 100%;
+    height: 100vh; /* altura total da tela */
+}
+
+/* Card centralizado dentro da tela */
+.cadastro-card {
+    background-color: rgba(255,255,255,0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 40px 30px;
+    max-width: 350px;
+    width: 90%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 2; /* garante que fique acima do fundo da tela */
+}
+
+
+/* Inputs e botões */
+.cadastro-card input {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 360px;
+}
+
+.cadastro-card button {
+
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: #2196f3;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.cadastro-card button:hover {
+    background-color: #1976d2;
+    transform: translateY(-2px);
+}
+
+
+
 
 /* Telas específicas */
-#tela-perfil.tela.ativa,
-#tela-registro.tela.ativa {
+#tela-perfil.tela.ativa{
     align-self: flex-start;
     margin-top: calc(env(safe-area-inset-top, 20px));
 }
@@ -114,6 +171,9 @@ button,
 ========================================================== */
 .btn-salvar-dia{
     color: white;
+    width: 345px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     background-color: #2196f3;
 }
 
@@ -136,21 +196,30 @@ button {
     font-size: 16px;
 }
 
+#btn-salvar-cadastro{
+    color: white;
+    width: 360px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    background-color: #2196f3;
+}
 #btn-entrar,
-#btn-salvar-cadastro,
 #btn-logout {
     background: #2196f3;
     color: white;
 }
-
+#btn-voltar-login{
+    width: 360px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
 #btn-gerar-csv{
     width: 385px;
     color: white;
     background-color: #2196f3
 }
 
-#btn-abrir-cadastro,
-#btn-voltar-login{
+#btn-abrir-cadastro{
     background: #e0e0e0;
 }
 
@@ -174,9 +243,10 @@ button {
    LISTA DE DIAS
 ========================================================== */
 #lista-dias {
-    max-height: 72vh;
+    max-height: 75vh;
     overflow-y: auto;
-}
+     margin-top: -125px;
+    }
 
 .usuario-h2 {
     display: none;
@@ -372,6 +442,9 @@ button {
     margin: 0 auto; /* Centralize o wrapper */
 
 }
+
+
+
 
 /* ==========================================================
    LOGIN GLASSMORPHISM
