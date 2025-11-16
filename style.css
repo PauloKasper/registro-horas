@@ -39,7 +39,7 @@ html, body {
     width: 90%; /* ou use max-width: 400px */
     max-width: 400px;
     min-height: 50vh;
-    margin: 50px auto; /* centraliza e reduz a margem */
+    margin: 125px auto; /* centraliza e reduz a margem */
     padding: 20px;
     display: none;
     flex-direction: column;
@@ -464,6 +464,7 @@ div.h-safe-area-inset-top {
     display: block;
     object-fit: contain; /* garante que não estique */
 }
+
 
 
 
