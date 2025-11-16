@@ -47,10 +47,10 @@ html, body {
     gap: 15px;
 }
 
-
 .tela.ativa {
     display: flex;
     background-color: transparent;
+
 }
 
 /* Telas específicas */
@@ -202,10 +202,10 @@ button {
 ========================================================== */
 .perfil-app {
     width: 320px;
-    overflow: hidden;
-    position: fixed;
+    margin: 0 auto;
+    overflow: visible;
+    position: relative;
     color: white;
-    z-index: 1000;
 }
 
 .perfil-topo {
@@ -213,6 +213,8 @@ button {
     justify-content: center;
     padding-bottom: 15px;
     position: relative;
+
+
 }
 
 .foto-container {
@@ -223,6 +225,10 @@ button {
     border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+       /* garante que fique acima de outros elementos */
+
+
+
 }
 
 .profile-pic {
@@ -230,6 +236,7 @@ button {
     height: auto;
     display: block;
     object-fit: cover;
+
 }
 
 /* Ícones e botões flutuantes */
@@ -285,6 +292,9 @@ button {
    PERFIL CARD
 ========================================================== */
 .perfil-card {
+     position: sticky; /* Mude para sticky */
+    top: 10px;        /* Adicione uma posição para grudar */
+    z-index: 10;     /* fica acima do botão */
     text-align: center;
     padding: 15px;
     background: #fff;
@@ -302,12 +312,49 @@ button {
 .perfil-info-text .cargo { font-size:14px; margin:5px 0 0 0; opacity:0.7; color:#555; }
 
 #btn-registrar-hora {
-    background-color: #2196f3;
-    color: white;
+    display: block;
     width: 100%;
     max-width: 350px;
-    margin-top: 20px;
+    margin-top: 20px; /* aproxima do card para passar por baixo */
+    padding: 10px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1; /* abaixo do card */
 }
+#btn-registrar-hora {
+    display: block;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 20px; /* aproxima do card para passar por baixo */
+    padding: 10px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1; /* abaixo do card */
+}
+#btn-registrar-hora {
+    display: block;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 20px; /* aproxima do card para passar por baixo */
+    padding: 10px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1; /* abaixo do card */
+}
+
+
 
 /* ==========================================================
    LOGIN GLASSMORPHISM
@@ -465,9 +512,3 @@ div.h-safe-area-inset-top {
     display: block;
     object-fit: contain; /* garante que não estique */
 }
-
-
-
-
-
-
