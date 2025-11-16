@@ -101,13 +101,20 @@ input {
 button,
 .icon-btn,
 .text-btn-edit-pic,
-.btn-salvar-dia,
 #btn-gerir-foto,
 .popup-opcoes .opcao-foto {
     transition: transform 0.1s ease-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
     transform: none;
     transform-style: preserve-3d;
     backface-visibility: hidden;
+}
+
+/* ==========================================================
+   BOTÕES, LISTA
+========================================================== */
+.btn-salvar-dia{
+    color: white;
+    background-color: #2196f3;
 }
 
 button:active,
@@ -125,20 +132,25 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
+    width: 107%;
     font-size: 16px;
 }
 
 #btn-entrar,
 #btn-salvar-cadastro,
-#btn-gerar-csv,
 #btn-logout {
     background: #2196f3;
     color: white;
 }
 
+#btn-gerar-csv{
+    width: 385px;
+    color: white;
+    background-color: #2196f3
+}
+
 #btn-abrir-cadastro,
-#btn-voltar-login {
+#btn-voltar-login{
     background: #e0e0e0;
 }
 
@@ -172,8 +184,8 @@ button {
 
 .card-dia {
     background: #f9f9f9;
-    padding: 25px;
-    border-radius: 10px;
+    padding: 10px;
+    border-radius: 20px;
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     color: #000;
@@ -192,6 +204,7 @@ button {
     flex-direction: column;
     height: 40px;
     margin-bottom: 17px;
+    width: 345px;
 }
 
 .campo label {
