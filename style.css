@@ -576,3 +576,52 @@ body {
     color: #dc3545;
     border-bottom: none;
 }
+
+/* ---------------------------
+  Fix iOS status-bar overlay
+  (não remove componentes; apenas torna transparente o que estiver sobrepondo)
+   ---------------------------*/
+
+/* Elementos que costumam ficar no topo (templates Vue/Tailwind/etc) */
+.h-safe-area-inset-top,
+.sticky,
+.sticky.top-0,
+.sticky > .h-safe-area-inset-top,
+div.h-safe-area-inset-top {
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  pointer-events: none !important; /* evita bloquear toques na área */
+}
+
+/* Força que qualquer elemento fixo/absoluto no topo não tape a status bar */
+*[style*="top: 0"],
+[style*="top:0"],
+[style*="position:fixed"][style*="top"],
+[style*="position:sticky"][style*="top"] {
+  background-color: transparent !important;
+  background-image: none !important;
+  pointer-events: auto !important;
+}
+
+/* Se houver um botón/icone com fundo forte no canto superior, mantenha ele visível
+   mas não deixe que cubra toda a altura do safe area. */
+.top-right,
+.icon-btn,
+.topbar,
+.header {
+  /* se quiser manter a cor do ícone/botão, mantenha as outras propriedades */
+  background-clip: padding-box;
+}
+
+/* Garante que o body deixe espaço físico para a status bar nativa */
+html, body {
+  /* já tem padding-top, reforçar sem quebrar */
+  padding-top: env(safe-area-inset-top) !important;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* DEBUG (remova após os testes) */
+/* body { background: linear-gradient(90deg, #ff0000 0%, #ff8800 100%) !important; } */
