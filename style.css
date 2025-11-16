@@ -23,6 +23,14 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+      /* Substitua pelos seus valores de gradiente específicos */
+    background: linear-gradient(to bottom, #algumacorclara, #algumacorescura);
+
+    /* CRÍTICO: Fixa o background na janela de visualização */
+    background-attachment: fixed;
+
+    /* Opcional: Garante que ele cobre 100% da janela */
+    background-size: cover;
 }
 
 /* --- Aplica padding seguro a elementos principais --- */
@@ -280,7 +288,8 @@ button {
 
 /* Bottom-right */
 .bottom-right {
-    position: absolute;
+    position: relative; /* Use relative (ou remova a propriedade position) */
+    z-index: 1;
     bottom: env(safe-area-inset-bottom, 15px);
     right: 10px;
     padding: 25px;
@@ -292,8 +301,8 @@ button {
    PERFIL CARD
 ========================================================== */
 .perfil-card {
-     position: sticky; /* Mude para sticky */
-    top: 10px;        /* Adicione uma posição para grudar */
+    position: sticky; /* Mude para sticky */
+    top: 20px;        /* Adicione uma posição para grudar */
     z-index: 10;     /* fica acima do botão */
     text-align: center;
     padding: 15px;
@@ -311,50 +320,33 @@ button {
 .perfil-info-text h2 { margin:0; font-size: 22px; color:#333; }
 .perfil-info-text .cargo { font-size:14px; margin:5px 0 0 0; opacity:0.7; color:#555; }
 
+/* Mantenha o botão no fluxo normal, apenas com z-index baixo */
 #btn-registrar-hora {
     display: block;
     width: 100%;
     max-width: 350px;
-    margin-top: 20px; /* aproxima do card para passar por baixo */
+    margin-top: 20px;
     padding: 10px;
     background-color: #2196f3;
     color: white;
+    left: 15px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    position: relative;
-    z-index: 1; /* abaixo do card */
-}
-#btn-registrar-hora {
-    display: block;
-    width: 100%;
-    max-width: 350px;
-    margin-top: 20px; /* aproxima do card para passar por baixo */
-    padding: 10px;
-    background-color: #2196f3;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    position: relative;
-    z-index: 1; /* abaixo do card */
-}
-#btn-registrar-hora {
-    display: block;
-    width: 100%;
-    max-width: 350px;
-    margin-top: 20px; /* aproxima do card para passar por baixo */
-    padding: 10px;
-    background-color: #2196f3;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    position: relative;
-    z-index: 1; /* abaixo do card */
+    position: relative; /* Use relative (ou remova a propriedade position) */
+    z-index: 1;         /* Garante que fique abaixo do card (z-index 10) */
 }
 
 
+.sticky-wrapper {
+    position: sticky;
+    top: 20px; /* Vão os dois grudar a 10px do topo da tela */
+    z-index: 5; /* Z-index para o wrapper, abaixo do card mas acima do conteúdo normal */
+    /* Garanta que o wrapper tenha a largura correta, se precisar */
+    width: 100%;
+    max-width: 350px; /* Mantenha a largura máxima consistente */
+    margin: 0 auto; /* Centralize o wrapper */
+}
 
 /* ==========================================================
    LOGIN GLASSMORPHISM
