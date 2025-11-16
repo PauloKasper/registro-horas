@@ -209,11 +209,13 @@ button {
    PERFIL
 ========================================================== */
 .perfil-app {
-    width: 320px;
+    width: 300px;
     margin: 0 auto;
     overflow: visible;
     position: relative;
     color: white;
+
+
 }
 
 .perfil-topo {
@@ -234,6 +236,7 @@ button {
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
        /* garante que fique acima de outros elementos */
+
 
 
 
@@ -304,16 +307,16 @@ button {
     position: sticky; /* Mude para sticky */
     top: 20px;        /* Adicione uma posição para grudar */
     z-index: 10;     /* fica acima do botão */
-    left: 50%;          /* centraliza horizontalmente */
-    transform: translateX(center); /* ajusta o centro */
+
+    transform: translateX(-15px); /* ajusta o centro */
     text-align: center;
     padding: 15px;
     background: #fff;
-    border-radius: 15px;
+    border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 350px;
-}
+    }
 
 .perfil-card h2 { margin: 0; font-size: 22px; color: inherit; }
 .perfil-card .cargo { font-size: 14px; margin: 5px 0; opacity: 0.8; }
@@ -331,7 +334,7 @@ button {
     padding: 10px;
     background-color: #2196f3;
     color: white;
-    left: 15px;
+    left: 1px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -348,6 +351,7 @@ button {
     width: 100%;
     max-width: 350px; /* Mantenha a largura máxima consistente */
     margin: 0 auto; /* Centralize o wrapper */
+
 }
 
 /* ==========================================================
@@ -506,4 +510,3 @@ div.h-safe-area-inset-top {
     display: block;
     object-fit: contain; /* garante que não estique */
 }
-
