@@ -223,8 +223,6 @@ button {
     justify-content: center;
     padding-bottom: 15px;
     position: relative;
-
-
 }
 
 .foto-container {
@@ -236,10 +234,6 @@ button {
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
        /* garante que fique acima de outros elementos */
-
-
-
-
 }
 
 .profile-pic {
@@ -247,7 +241,6 @@ button {
     height: auto;
     display: block;
     object-fit: cover;
-
 }
 
 /* Ícones e botões flutuantes */
@@ -289,15 +282,28 @@ button {
     border-radius: 20%;
 }
 
-/* Bottom-right */
 .bottom-right {
-    position: relative; /* Use relative (ou remova a propriedade position) */
-    z-index: 1;
-    bottom: env(safe-area-inset-bottom, 15px);
-    right: 10px;
-    padding: 25px;
+    width: 55px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 8px 14px;
     font-size: 0.9rem;
-    color: blue;
+    color: #fff;
+    background-color: #2196f3;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.2s ease-in-out;
+}
+
+.bottom-right:hover {
+    background-color: #1976d2; /* azul mais escuro */
+    color: #fff;               /* garante texto branco no hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
 
 /* ==========================================================
