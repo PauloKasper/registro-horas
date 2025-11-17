@@ -1,34 +1,26 @@
 <head>
   <meta charset="UTF-8">
-
   <!-- PWA + iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
   <!-- O Safari usa ESTE theme-color -->
   <meta name="theme-color" content="#007bff">
-
   <link rel="manifest" href="./assets/manifest.json">
-
   <!-- Icons -->
   <link rel="apple-touch-icon" href="/icons/icon-192.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
   <link rel="apple-touch-startup-image" href="/splash.png">
-
   <link rel="stylesheet" href="style.css">
-
   <title>Registro de Horas</title>
 </head>
-
-
 <body>
+
 <style>
 .h-safe-area-inset-top { height: env(safe-area-inset-top); }
 .bg-black { background-color: #444; }
 </style>
-
 
 <!-- LOGIN -->
 <div id="tela-login" class="tela ativa">
@@ -49,25 +41,16 @@
 </div>
 
 <div id="tela-cadastro" class="tela">
-
     <div class="cadastro-card">
-
         <h2>Cadastro Inicial</h2>
-
         <input id="cad-colaborador" placeholder="Colaborador">
         <input id="cad-numero" placeholder="Número do Colaborador">
-
         <div id="erro-cadastro" class="erro"></div>
-
         <button id="btn-salvar-cadastro">Salvar e Continuar</button>
         <button id="btn-voltar-login">Voltar</button>
-
     </div>
 
 </div>
-
-
-
     <!-- O NOVO CARD DE PERFIL -->
     <!-- PERFIL (Secção Corrigida) -->
 <div id="tela-perfil" class="tela">
@@ -75,13 +58,12 @@
     <div class="sticky-wrapper">
     <!-- O CARD DE PERFIL Principal -->
     <div class="perfil-card">
-
         <!-- Topo do Perfil com Foto e Lápis (ESTE DIV TERMINA AQUI) -->
         <div class="perfil-topo">
             <!-- Botão de Configurações -->
-<button id="btn-configuracoes-perfil" class="btn-icon modern-icon top-right" aria-label="Menu de Perfil">
-  ≡
-</button>
+            <button id="btn-configuracoes-perfil" class="btn-icon modern-icon top-right" aria-label="Menu de Perfil">
+              ≡
+            </button>
             <div class="foto-container">
                 <!-- Certifique-se de usar a URL_DA_SUA_FOTO_PADRAO.jpg aqui -->
                 <img src="URL_DA_SUA_FOTO.jpg" alt="" class="profile-pic" id="profile-image-display">
@@ -98,20 +80,12 @@
             <button id="btn-remover-foto" class="opcao-foto remover">Remover Foto</button>
         </div>
     </div>
-
         <!-- Informações (Nome e Cargo) -->
         <div class="perfil-info-text">
             <h2 id="nome-usuario-perfil">Paulo Silva</h2>
             <p class="cargo" id="cargo-usuario-perfil">cargo</p>
         </div>
     </div>
-    <!-- FIM DO CARD DE PERFIL -->
-
-    <!-- NOVO CONTAINER PRINCIPAL PARA GERIR A FOTO (Fora do perfil-card) -->
-
-
-    <!-- BOTÃO REGISTRAR HORAS (FORA DO CARD, ABAIXO DO container de gerir foto) -->
-
     <button id="btn-registrar-hora" class="btn-perfil-acao">Registrar Horas</button>
 <div class="cards-container">
     <div class="card">
@@ -130,8 +104,6 @@
         </div>
     </div>
 </div>
-
-
         <!-- BOTÃO DE LOGOUT -->
     <button id="btn-logout-perfil" class="icon-btn bottom-right" aria-label="Logout">
         Sair
@@ -139,40 +111,16 @@
 </div>
 
 <div class="area-conteudo-extra">
-
-
-
-
-    </div>
-        <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
-    <p>z~ç,cvx~cv,zd</p>
 </div>
-
-
+    
 </div>
-
-
+</div>
 <!-- AJUSTES -->
 <div id="tela-configurações" class="tela">
   <h2>Ajustes</h2>
   <button id="btn-configurações-voltar">Voltar</button>
   <button id="btn-excluir-usuario">EXCLUIR USUARIO</button>
 </div>
-
 <!-- REGISTRO -->
 <div id="tela-registro" class="tela">
 
@@ -180,8 +128,6 @@
      <button id="btn-gerar-csv">Registrar</button>
      <button id="btn-registro-voltar">Voltar</button>
   <h2 id="usuario-logado" class="usuario-h2"></h2>
-
-
 </div>
 <script src="script.js"></script>
 </body>
