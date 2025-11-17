@@ -18,20 +18,15 @@ html, body {
 
     /* Fundo com gradiente */
     background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
+    background-attachment: fixed;
+    background-size: cover;
 
-    /* Flex container: centraliza horizontalmente, não verticalmente */
+    /* Flex container */
     display: flex;
     justify-content: center;
     align-items: flex-start;
-      /* Substitua pelos seus valores de gradiente específicos */
-    background: linear-gradient(to bottom, #algumacorclara, #algumacorescura);
-
-    /* CRÍTICO: Fixa o background na janela de visualização */
-    background-attachment: fixed;
-
-    /* Opcional: Garante que ele cobre 100% da janela */
-    background-size: cover;
 }
+
 
 /* --- Aplica padding seguro a elementos principais --- */
 .app-container-inner,
