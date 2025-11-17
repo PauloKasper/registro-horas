@@ -113,21 +113,24 @@
     <!-- BOTÃO REGISTRAR HORAS (FORA DO CARD, ABAIXO DO container de gerir foto) -->
 
     <button id="btn-registrar-hora" class="btn-perfil-acao">Registrar Horas</button>
-    <div class="cards-container">
+<div class="cards-container">
     <div class="card">
         <div class="flip">
-            <div class="face front">Total Dias</div>
-            <div class="face back">Total Horas</div>
+            <!-- IDs adicionados aqui -->
+            <div id="dias-front" class="face front">Total Dias</div>
+            <div id="horas-back" class="face back">Total Horas</div>
         </div>
     </div>
 
     <div class="card">
         <div class="flip">
-            <div class="face front">Refeição Total</div>
-            <div class="face back">Estimativa</div>
+            <!-- IDs adicionados aqui -->
+            <div id="refeicao-front" class="face front">Refeição Total</div>
+            <div id="estimativa-back" class="face back">Estimativa</div>
         </div>
     </div>
-    </div>
+</div>
+
 
         <!-- BOTÃO DE LOGOUT -->
     <button id="btn-logout-perfil" class="icon-btn bottom-right" aria-label="Logout">
