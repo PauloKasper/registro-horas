@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
+// on iOS Safari
+window.navigator.standalone
+
+// on Android Chrome
+window.matchMedia(
+  '(display-mode: standalone)'
+).matches
+
     let usuario_atual = null, registros = {};
 
     // --- REGISTRO DO SERVICE WORKER ---
@@ -197,10 +205,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-// on iOS Safari
-window.navigator.standalone
+const cards = document.querySelectorAll('.card');
 
-// on Android Chrome
-window.matchMedia(
-  '(display-mode: standalone)'
-).matches
+cards.forEach(card => {
+    card.addEventListener('click', () => {
+        const flip = card.querySelector('.flip');
+        flip.style.transform = flip.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
+    });
+});
+
+
