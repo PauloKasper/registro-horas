@@ -339,4 +339,16 @@ cards.forEach(card => {
         const flip = card.querySelector('.flip');
         flip.style.transform = flip.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
     });
+
+  // Calcula a altura real da viewport e salva em uma variável CSS
+function ajustarAlturaViewport() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+// Executa na carga da página
+window.addEventListener('load', ajustarAlturaViewport);
+
+// Recalcula se o usuário rotacionar o celular ou redimensionar a tela
+window.addEventListener('resize', ajustarAlturaViewport);
 });
