@@ -491,9 +491,6 @@ button {
 
 }
 
-
-
-
 /* ==========================================================
    LOGIN GLASSMORPHISM
 ========================================================== */
@@ -659,6 +656,7 @@ div.h-safe-area-inset-top {
     display: flex;
     gap: 10px;           /* espaço entre os cards */
     justify-content: center; /* centraliza os cards no container */
+
 }
 
 .card {
@@ -714,4 +712,15 @@ div.h-safe-area-inset-top {
         font-size: 16px;
     }
 }
+.erro-hora { color: red; font-size: 0.8em; display: block; margin-top: 2px; }
+.input-erro { border: 2px solid red; }
 
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+.shake { animation: shake 0.5s; }
