@@ -98,8 +98,6 @@ window.matchMedia(
       <strong style="font-size: 1.2em;">${placar.totalHoras.toFixed(2)}h</strong>
     `;
 }
-
-
         // Atualiza o segundo card (Refeição/Estimativa)
         const elRefeicaoFront = document.getElementById('refeicao-front');
         const elEstimativaBack = document.getElementById('estimativa-back');
@@ -127,8 +125,6 @@ window.matchMedia(
 }
 
     }
-
-
     // Ouvir o evento personalizado para atualizações em tempo real entre telas/abas
     window.addEventListener('dadosPWAHorasAtualizados', atualizarCardsPerfil);
     // --- FUNÇÃO PARA TROCAR TELAS (SUBSTITUIR EXISTENTE) ---
@@ -182,7 +178,6 @@ window.matchMedia(
             mostrar("tela-login");
         };
     }
-
     // --- REGISTRO ---
     function gerarPeriodo() {
         const hoje = new Date();
@@ -209,60 +204,131 @@ window.matchMedia(
     function isHoliday(date, holidays) { return holidays.some(h => h.toDateString() === date.toDateString()); }
 
     // --- INICIAR REGISTRO (SUBSTITUIR EXISTENTE) ---
-    async function iniciarRegistro() {
-        registros = carregarLS("horas_" + usuario_atual) || {};
-        const lista = document.getElementById("lista-dias");
-        if (!lista) return;
-        lista.innerHTML = "";
-        const [inicio, fim] = gerarPeriodo();
-        const feriados = await buscarFeriados(inicio.getFullYear());
+// Função auxiliar para formatar hora corretamente
+function formatarHora(valor) {
+    if (!valor) return '';
 
-        for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
-            const ds = d.toLocaleDateString("pt-PT");
-            const r = registros[ds] || { entrada: "", saida_alm: "", retorno: "", saida_final: "" };
-            const div = document.createElement("div"); div.className = "card-dia";
-            const weekend = isWeekend(d);
-            const holiday = isHoliday(d, feriados);
-            if (weekend && holiday) div.style.backgroundColor = "#fcf8e3";
-            else if (weekend) div.style.backgroundColor = "#f2dede";
-            else if (holiday) div.style.backgroundColor = "#d9edf7";
-            let destaqueTexto = "";
-            if (weekend) destaqueTexto += "Final de Semana";
-            if (holiday) destaqueTexto += (destaqueTexto ? " / " : "") + "Feriado";
-            let destaqueHTML = destaqueTexto ? `<div class="destaque">${destaqueTexto}</div>` : "";
-            div.innerHTML = `${destaqueHTML}<strong>${ds}</strong>
-                <div class="campo"><label>Entrada</label><input id="e_${ds}" value="${r.entrada}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Saída Almoço</label><input id="s_${ds}" value="${r.saida_alm}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Retorno</label><input id="r_${ds}" value="${r.retorno}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Saída Final</label><input id="f_${ds}" value="${r.saida_final}"><div class="erro-hora"></div></div>
-                <button class="btn-salvar-dia" onclick="salvarDia('${ds}')">Salvar</button>`;
-            lista.appendChild(div);
-        }
-        // Adicionado: Carrega os dados do perfil após carregar a lista de registro
-        atualizarCardsPerfil();
+    // mantém apenas números
+    valor = String(valor).replace(/\D/g, '');
+
+    if (valor.length === 0) return '';
+
+    let horas = '00';
+    let minutos = '00';
+
+    if (valor.length <= 2) {
+        horas = valor.padStart(2, '0');
+        minutos = '00';
+    } else {
+        minutos = valor.slice(-2);
+        horas = valor.slice(0, -2).padStart(2, '0');
     }
-    // --- SALVAR DIA (SUBSTITUIR EXISTENTE) ---
-    window.salvarDia = (d) => {
-        // 1. Captura os valores dos inputs
-        const entrada = document.getElementById("e_" + d).value.trim();
-        const saida_alm = document.getElementById("s_" + d).value.trim();
-        const retorno = document.getElementById("r_" + d).value.trim();
-        const saida_final = document.getElementById("f_" + d).value.trim();
 
-        // 2. Atualiza o objeto 'registros' global
-        registros[d] = { entrada, saida_alm, retorno, saida_final };
+    let h = parseInt(horas, 10);
+    let m = parseInt(minutos, 10);
 
-        // 3. Salva TUDO no LocalStorage
-        salvarLS("horas_" + usuario_atual, registros);
+    // caso especial: "2400" → "00:00"
+    if (h === 24 && m === 0) {
+        return "00:00";
+    }
 
-        // 4. ATUALIZA OS CARDS DO PERFIL EM TEMPO REAL
-        atualizarCardsPerfil();
+    if (h > 23) h = 23;
+    if (m > 59) m = 59;
 
-        // 5. Dispara um evento para comunicar a outra tela (se estiver aberta em outra aba)
-        window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
 
-        alert("Salvo! O placar do perfil foi atualizado.");
-    };
+
+// --- NOVA FUNÇÃO DE VALIDAÇÃO VISUAL ---
+function validarHoraInput(input) {
+    const erroDiv = input.parentElement.querySelector(".erro-hora");
+    const valor = input.value;
+
+    if (/[^0-9]/.test(valor)) {
+        erroDiv.textContent = "Apenas números são permitidos!";
+        erroDiv.style.color = "red";
+        input.style.border = "2px solid red";
+        return false;
+    }
+
+    erroDiv.textContent = "";
+    input.style.border = "";
+    return true;
+}
+
+
+async function iniciarRegistro() {
+    registros = carregarLS("horas_" + usuario_atual) || {};
+    const lista = document.getElementById("lista-dias");
+    if (!lista) return;
+    lista.innerHTML = "";
+    const [inicio, fim] = gerarPeriodo();
+    const feriados = await buscarFeriados(inicio.getFullYear());
+
+    for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
+        const ds = d.toLocaleDateString("pt-PT");
+        const r = registros[ds] || { entrada: "", saida_alm: "", retorno: "", saida_final: "" };
+        const div = document.createElement("div");
+        div.className = "card-dia";
+
+        const weekend = isWeekend(d);
+        const holiday = isHoliday(d, feriados);
+        if (weekend && holiday) div.style.backgroundColor = "#fcf8e3";
+        else if (weekend) div.style.backgroundColor = "#f2dede";
+        else if (holiday) div.style.backgroundColor = "#d9edf7";
+
+        let destaqueTexto = "";
+        if (weekend) destaqueTexto += "Final de Semana";
+        if (holiday) destaqueTexto += (destaqueTexto ? " / " : "") + "Feriado";
+        let destaqueHTML = destaqueTexto ? `<div class="destaque">${destaqueTexto}</div>` : "";
+
+        div.innerHTML = `
+            ${destaqueHTML}<strong>${ds}</strong>
+            <div class="campo"><label>Entrada</label><input id="e_${ds}" value="${r.entrada}"><div class="erro-hora"></div></div>
+            <div class="campo"><label>Saída Almoço</label><input id="s_${ds}" value="${r.saida_alm}"><div class="erro-hora"></div></div>
+            <div class="campo"><label>Retorno</label><input id="r_${ds}" value="${r.retorno}"><div class="erro-hora"></div></div>
+            <div class="campo"><label>Saída Final</label><input id="f_${ds}" value="${r.saida_final}"><div class="erro-hora"></div></div>
+            <button class="btn-salvar-dia" onclick="salvarDia('${ds}')">Salvar</button>
+        `;
+        lista.appendChild(div);
+
+        // --- Validação + Formatação ---
+        ["e", "s", "r", "f"].forEach(prefixo => {
+            const input = document.getElementById(`${prefixo}_${ds}`);
+            if (!input) return;
+
+            // validar enquanto digita
+            input.addEventListener("input", () => {
+                validarHoraInput(input);
+            });
+
+            // formatar ao sair do campo SE estiver válido
+            input.addEventListener("blur", () => {
+                if (!validarHoraInput(input)) return;
+                input.value = formatarHora(input.value);
+            });
+        });
+    }
+
+    atualizarCardsPerfil();
+}
+
+
+window.salvarDia = (d) => {
+    const entrada = document.getElementById("e_" + d).value.trim();
+    const saida_alm = document.getElementById("s_" + d).value.trim();
+    const retorno = document.getElementById("r_" + d).value.trim();
+    const saida_final = document.getElementById("f_" + d).value.trim();
+
+    registros[d] = { entrada, saida_alm, retorno, saida_final };
+    salvarLS("horas_" + usuario_atual, registros);
+    atualizarCardsPerfil();
+    window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
+
+    alert("Salvo! O placar do perfil foi atualizado.");
+};
+
+
 
     // --- GERAR CSV ---
     if (document.getElementById("btn-gerar-csv")) {
