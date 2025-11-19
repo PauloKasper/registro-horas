@@ -236,7 +236,81 @@ button {
     background-color: #1976d2;
     transform: translateY(-2px);
 }
+/* ==========================================================
+   BOTÕES LADO A LADO NA TELA DE REGISTRO
+========================================================== */
+/* Contêiner para botões lado a lado */
+.botoes-lado-a-lado {
+    display: flex;
+    justify-content: space-around;  /* distribui espaço entre os botões */
+    width: 100%;
+    max-width: 350px;               /* alinhado com os cards da lista */
+    margin: 15px auto;               /* centraliza abaixo da lista */
+    gap: 50px;                       /* aumenta espaço entre os botões */
+}
 
+/* Botões dentro do contêiner */
+.botoes-lado-a-lado button {
+    flex: 1;                         /* ambos ocupam largura igual */
+    max-width: 150px;                /* limite de largura */
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Botão azul principal (Registrar) */
+.botoes-lado-a-lado button#btn-gerar-csv {
+    background-color: #2196f3;
+    color: white;
+}
+
+.botoes-lado-a-lado button#btn-gerar-csv:hover {
+    background-color: #1976d2;
+}
+
+/* Botões cinza de voltar (registro e ajustes) */
+/* Botão principal azul */
+/* Botão principal azul */
+#btn-gerar-csv {
+    background-color: #2196f3;
+    color: white;
+    width: 150px;          /* mesma largura padrão */
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#btn-gerar-csv:hover {
+    background-color: #1976d2;
+}
+
+/* Todos os botões de voltar */
+.btn-voltar,
+#btn-registro-voltar,
+#btn-ajustes-voltar,
+#btn-voltar-login {
+    background-color: #b0b0b0;
+    color: white;
+    width: 150px;          /* mesma largura do botão azul */
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-voltar:hover,
+#btn-registro-voltar:hover,
+#btn-ajustes-voltar:hover,
+#btn-voltar-login:hover {
+    background-color: #999999;
+}
 
 /* ==========================================================
    ERROS
@@ -307,7 +381,28 @@ button {
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     color: #000;
+
+    /* Adicione estas linhas para centralizar o conteúdo */
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* centraliza horizontalmente os filhos */
 }
+
+.card-dia .btn-salvar-hora {
+    width: auto;          /* ajusta à largura do conteúdo */
+    min-width: 100px;     /* largura mínima, opcional */
+    max-width: 345px;     /* mantém limite máximo */
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #2196f3;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;     /* separação do restante do conteúdo */
+    transition: all 0.2s ease-in-out;
+    text-align: center;   /* centraliza o texto */
+}
+
 
 .card-dia .destaque {
     font-weight: bold;
@@ -525,6 +620,8 @@ button {
 
 #tela-login h2 { color: #333; }
 
+
+
 /* ==========================================================
    POPUPS E BOTÕES SECUNDÁRIOS
 ========================================================== */
@@ -679,22 +776,25 @@ div.h-safe-area-inset-top {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column; /* empilha os textos verticalmente */
+    justify-content: center; /* centra o conteúdo verticalmente */
     align-items: center;
-    justify-content: center;
+    text-align: center;
+
     font-size: 18px;
     font-weight: bold;
     border-radius: 12px;
-
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-
     backface-visibility: hidden;
 }
 
 .back {
     transform: rotateY(180deg);
 }
+
+
 
 /* Responsivo: quebra para uma coluna em telas muito estreitas */
 @media (max-width: 400px) {
