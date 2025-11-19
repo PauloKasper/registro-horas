@@ -499,33 +499,73 @@ function mostrarPopupCiclo(placar) {
     if(document.getElementById("btn-registro-voltar")) document.getElementById("btn-registro-voltar").onclick = () => mostrar("tela-perfil");
     if(document.getElementById("btn-logout-perfil")) document.getElementById("btn-logout-perfil").onclick = () => mostrar("tela-login");
 
-    // --- FOTO DE PERFIL ---
-    const btnGerirFoto = document.getElementById('btn-gerir-foto');
-    const popupOpcoesFoto = document.getElementById('popup-opcoes-foto');
-    const btnAdicionarNovaFoto = document.getElementById('btn-adicionar-nova-foto');
-    const btnRemoverFoto = document.getElementById('btn-remover-foto');
-    const fileInput = document.getElementById('file-input');
-    const profileImageDisplay = document.getElementById('profile-image-display');
-    const defaultProfilePicUrl = 'URL_DA_SUA_FOTO_PADRAO.jpg';
+// --- FOTO DE PERFIL ---
+const btnGerirFoto = document.getElementById('btn-gerir-foto');
+const popupOpcoesFoto = document.getElementById('popup-opcoes-foto');
+const btnAdicionarNovaFoto = document.getElementById('btn-adicionar-nova-foto');
+const btnRemoverFoto = document.getElementById('btn-remover-foto');
+const fileInput = document.getElementById('file-input');
+const profileImageDisplay = document.getElementById('profile-image-display');
+const fotoContainer = document.querySelector('.foto-container');
 
-    if(btnGerirFoto && popupOpcoesFoto && btnAdicionarNovaFoto && btnRemoverFoto && fileInput && profileImageDisplay){
-        btnGerirFoto.onclick = (e)=>{ e.stopPropagation(); popupOpcoesFoto.style.display=(popupOpcoesFoto.style.display==='block')?'none':'block'; };
-        document.addEventListener('click',()=>{popupOpcoesFoto.style.display='none';});
-        popupOpcoesFoto.addEventListener('click', e=>e.stopPropagation());
-        btnAdicionarNovaFoto.onclick=()=>{ fileInput.value=''; fileInput.click(); };
-        btnRemoverFoto.onclick=()=>{
-            if(usuario_atual){ localStorage.removeItem(`profile_pic_${usuario_atual}`); profileImageDisplay.src=defaultProfilePicUrl; fileInput.value=''; alert("Foto removida."); }
-        };
-        fileInput.addEventListener('change', function(){
-            const file = this.files[0];
-            if(file){ const reader = new FileReader(); reader.onload=function(e){ profileImageDisplay.src=e.target.result; if(usuario_atual)localStorage.setItem(`profile_pic_${usuario_atual}`, e.target.result); }; reader.readAsDataURL(file); }
-        });
-        function loadProfilePic(){
-            if(usuario_atual){ const savedPic=localStorage.getItem(`profile_pic_${usuario_atual}`); profileImageDisplay.src=savedPic||defaultProfilePicUrl; }
-            else profileImageDisplay.src=defaultProfilePicUrl;
+if (btnGerirFoto && popupOpcoesFoto && btnAdicionarNovaFoto && btnRemoverFoto && fileInput && profileImageDisplay && fotoContainer) {
+
+    // abre/fecha popup
+    btnGerirFoto.onclick = (e) => {
+        e.stopPropagation();
+        popupOpcoesFoto.style.display = (popupOpcoesFoto.style.display === 'block') ? 'none' : 'block';
+    };
+    document.addEventListener('click', () => { popupOpcoesFoto.style.display = 'none'; });
+    popupOpcoesFoto.addEventListener('click', e => e.stopPropagation());
+
+    // adicionar nova foto
+    btnAdicionarNovaFoto.onclick = () => { fileInput.value = ''; fileInput.click(); };
+
+    // remover foto
+    btnRemoverFoto.onclick = () => {
+        if (usuario_atual) {
+            localStorage.removeItem(`profile_pic_${usuario_atual}`);
+            profileImageDisplay.src = '';
+            fotoContainer.classList.add('no-photo');
+            fileInput.value = '';
+            alert("Foto removida.");
         }
-        loadProfilePic();
+    };
+
+    // quando seleciona um arquivo
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                profileImageDisplay.src = e.target.result;
+                if (usuario_atual) localStorage.setItem(`profile_pic_${usuario_atual}`, e.target.result);
+                fotoContainer.classList.remove('no-photo'); // remove silhueta
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // carregar foto ao iniciar
+    function loadProfilePic() {
+        if (usuario_atual) {
+            const savedPic = localStorage.getItem(`profile_pic_${usuario_atual}`);
+            if (savedPic) {
+                profileImageDisplay.src = savedPic;
+                fotoContainer.classList.remove('no-photo');
+            } else {
+                profileImageDisplay.src = '';
+                fotoContainer.classList.add('no-photo');
+            }
+        } else {
+            profileImageDisplay.src = '';
+            fotoContainer.classList.add('no-photo');
+        }
     }
+
+    loadProfilePic();
+}
+
 
     // --- FLIP DOS CARDS ---
     const cards = document.querySelectorAll('.card');
