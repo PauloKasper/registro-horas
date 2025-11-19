@@ -22,120 +22,123 @@
 .bg-black { background-color: #444; }
 </style>
 
-<!-- LOGIN -->
-<div id="tela-login" class="tela ativa">
-  <h2>Acesso ao Sistema</h2>
-  <input id="usuario" placeholder="Usuário (Nome)" autocomplete="username">
-  <div class="input-wrap">
-    <input id="senha" type="password" placeholder="Número do Colaborador" autocomplete="current-password">
-    <button id="toggle-senha" class="eye-btn" aria-label="Mostrar senha">
-      <svg id="icon-eye" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
-        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </svg>
-    </button>
-  </div>
-  <div id="erro-login" class="erro"></div>
-  <button id="btn-entrar">Entrar</button>
-  <button id="btn-abrir-cadastro">Não possui conta? Registrar-se</button>
-</div>
-
-<div id="tela-cadastro" class="tela">
-    <div class="cadastro-card">
-        <h2>Cadastro Inicial</h2>
-        <input id="cad-colaborador" placeholder="Colaborador">
-        <input id="cad-numero" placeholder="Número do Colaborador">
-        <div id="erro-cadastro" class="erro"></div>
-        <button id="btn-salvar-cadastro">Salvar e Continuar</button>
-        <button id="btn-voltar-login">Voltar</button>
-    </div>
-
-</div>
-    <!-- O NOVO CARD DE PERFIL -->
-    <!-- PERFIL (Secção Corrigida) -->
-<div id="tela-perfil" class="tela">
-
-    <div class="sticky-wrapper">
-    <!-- O CARD DE PERFIL Principal -->
-    <div class="perfil-card">
-        <!-- Topo do Perfil com Foto e Lápis (ESTE DIV TERMINA AQUI) -->
-        <div class="perfil-topo">
-            <!-- Botão de Configurações -->
-            <button id="btn-configuracoes-perfil" class="btn-icon modern-icon top-right" aria-label="Menu de Perfil">
-              ≡
+        <!-- LOGIN -->
+        <div id="tela-login" class="tela ativa">
+          <h2>Acesso ao Sistema</h2>
+          <input id="usuario" placeholder="Usuário (Nome)" autocomplete="username">
+          <div class="input-wrap">
+            <input id="senha" type="password" placeholder="Número do Colaborador" autocomplete="current-password">
+            <button id="toggle-senha" class="eye-btn" aria-label="Mostrar senha">
+              <svg id="icon-eye" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
             </button>
-            <div class="foto-container">
-                <!-- Certifique-se de usar a URL_DA_SUA_FOTO_PADRAO.jpg aqui -->
-                <img src="URL_DA_SUA_FOTO.jpg" alt="" class="profile-pic" id="profile-image-display">
-                <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
+          </div>
+          <div id="erro-login" class="erro"></div>
+          <button id="btn-entrar">Entrar</button>
+          <button id="btn-abrir-cadastro">Não possui conta? Registrar-se</button>
+        </div>
+
+        <div id="tela-cadastro" class="tela">
+            <div class="cadastro-card">
+                <h2>Cadastro Inicial</h2>
+                <input id="cad-colaborador" placeholder="Colaborador">
+                <input id="cad-numero" placeholder="Número do Colaborador">
+                <div id="erro-cadastro" class="erro"></div>
+                <div class="botoes-lado-a-lado">
+                <button id="btn-salvar-cadastro">Salvar e Continuar</button>
+                <button id="btn-voltar-login">Voltar</button>
+                </div>
             </div>
 
         </div>
-         <div class="menu-foto-container">
-        <button id="btn-gerir-foto" class="btn-perfil-acao">Editar</button>
+            <!-- O NOVO CARD DE PERFIL -->
+            <!-- PERFIL (Secção Corrigida) -->
+        <div id="tela-perfil" class="tela">
 
-        <!-- O pop-up/menu que estará oculto por padrão (Posicionado absolutamente DENTRO deste container) -->
-        <div id="popup-opcoes-foto" class="popup-opcoes">
-            <button id="btn-adicionar-nova-foto" class="opcao-foto">Adicionar/Mudar Foto</button>
-            <button id="btn-remover-foto" class="opcao-foto remover">Remover Foto</button>
+        <div class="sticky-wrapper">
+        <!-- O CARD DE PERFIL Principal -->
+            <div class="perfil-card">
+                <!-- Topo do Perfil com Foto e Lápis (ESTE DIV TERMINA AQUI) -->
+                <div class="perfil-topo">
+                    <!-- Botão de Configurações -->
+                    <button id="btn-configuracoes-perfil" class="btn-icon modern-icon top-right" aria-label="Menu de Perfil">
+                      ≡
+                    </button>
+                    <div class="foto-container">
+                        <!-- Certifique-se de usar a URL_DA_SUA_FOTO_PADRAO.jpg aqui -->
+                        <img src="URL_DA_SUA_FOTO.jpg" alt="" class="profile-pic" id="profile-image-display">
+                        <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
+                    </div>
+
+                </div>
+                 <div class="menu-foto-container">
+                    <button id="btn-gerir-foto" class="btn-perfil-acao">Editar</button>
+
+                <!-- O pop-up/menu que estará oculto por padrão (Posicionado absolutamente DENTRO deste container) -->
+                <div id="popup-opcoes-foto" class="popup-opcoes">
+                    <button id="btn-adicionar-nova-foto" class="opcao-foto">Adicionar/Mudar Foto</button>
+                    <button id="btn-remover-foto" class="opcao-foto remover">Remover Foto</button>
+                </div>
+            </div>
+            <!-- Informações (Nome e Cargo) -->
+            <div class="perfil-info-text">
+                <h2 id="nome-usuario-perfil">Paulo Silva</h2>
+                <p class="cargo" id="cargo-usuario-perfil">cargo</p>
+            </div>
         </div>
-    </div>
-        <!-- Informações (Nome e Cargo) -->
-        <div class="perfil-info-text">
-            <h2 id="nome-usuario-perfil">Paulo Silva</h2>
-            <p class="cargo" id="cargo-usuario-perfil">cargo</p>
+        <button id="btn-registrar-hora" class="btn-perfil-acao">Registrar Horas</button>
+        <div class="cards-container">
+            <div class="card">
+                <div class="flip">
+                    <!-- IDs adicionados aqui -->
+                    <div id="dias-front" class="face front">Total Dias</div>
+                    <div id="horas-back" class="face back">Total Horas</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="flip">
+                    <!-- IDs adicionados aqui -->
+                    <div id="refeicao-front" class="face front">Refeição Total</div>
+                    <div id="estimativa-back" class="face back">Estimativa</div>
+                </div>
+            </div>
         </div>
-    </div>
-    <button id="btn-registrar-hora" class="btn-perfil-acao">Registrar Horas</button>
-<div class="cards-container">
-    <div class="card">
-        <div class="flip">
-            <!-- IDs adicionados aqui -->
-            <div id="dias-front" class="face front">Total Dias</div>
-            <div id="horas-back" class="face back">Total Horas</div>
+         <!-- BOTÃO DE LOGOUT -->
         </div>
-    </div>
-
-    <div class="card">
-        <div class="flip">
-            <!-- IDs adicionados aqui -->
-            <div id="refeicao-front" class="face front">Refeição Total</div>
-            <div id="estimativa-back" class="face back">Estimativa</div>
+            <button id="btn-logout-perfil" class="icon-btn bottom-right" aria-label="Logout">
+                Sair
+            </button>
         </div>
-    </div>
-</div>
-        <!-- BOTÃO DE LOGOUT -->
-    <button id="btn-logout-perfil" class="icon-btn bottom-right" aria-label="Logout">
-        Sair
-    </button>
-</div>
 
-<div class="area-conteudo-extra">
-    <p></p>
-</div>
+        <div class="area-conteudo-extra">
+            <p></p>
+        </div>
 
-</div>
+        <div id="tela-configurações" class="tela">
+          <h2>Ajustes</h2>
+            <button id="btn-excluir-usuario">EXCLUIR USUARIO</button>
+            <button id="btn-configurações-voltar" class="btn-voltar">Voltar</button>
+        </div>
+            <!-- REGISTRO -->
+        <div id="tela-registro" class="tela">
+            <div id="lista-dias"></div>
+                <div class="botoes-lado-a-lado">
+                    <button id="btn-gerar-csv">Registrar</button>
+                    <button id="btn-registro-voltar" class="btn-voltar">Voltar</button>
+                </div>
 
-<div id="tela-configurações" class="tela">
-  <h2>Ajustes</h2>
-  <button id="btn-configurações-voltar">Voltar</button>
-  <button id="btn-excluir-usuario">EXCLUIR USUARIO</button>
-</div>
-<!-- REGISTRO -->
-<div id="tela-registro" class="tela">
-
-    <div id="lista-dias"></div>
-     <button id="btn-gerar-csv">Registrar</button>
-     <button id="btn-registro-voltar">Voltar</button>
-  <h2 id="usuario-logado" class="usuario-h2"></h2>
-</div>
-<div id="popup-ciclo" style="display:none;">
-    <div class="popup-conteudo">
-        <div id="popup-text"></div>
-        <button id="popup-fechar">OK</button>
-    </div>
-</div>
+            <h2 id="usuario-logado" class="usuario-h2"></h2>
+        </div>
+        <div id="popup-ciclo" style="display:none;">
+            <div class="popup-conteudo">
+                <div id="popup-text"></div>
+                <button id="popup-fechar">OK</button>
+            </div>
+        </div>
 
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
