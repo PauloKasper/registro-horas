@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     let usuario_atual = null, registros = {};
+    window.addEventListener('dadosPWAHorasAtualizados', atualizarCardsPerfil);
+
 
     // --- SERVICE WORKER ---
     if ("serviceWorker" in navigator) {
@@ -37,20 +38,40 @@ document.addEventListener("DOMContentLoaded", () => {
         return diasTrabalhados * valorPorDia;
     }
 
+    // ---------- Ajuste: contar apenas dias "salvos" no placar ----------
     function calcularPlacarTotal() {
-        let totalHoras = 0, diasTrabalhados = 0;
+        let totalHoras = 0;
+        let diasTrabalhados = 0;
+
         for (const data in registros) {
-            const horasNoDia = calcularHorasDoDia(registros[data]);
+            const r = registros[data];
+
+            // Conta só se o dia foi salvo manualmente
+            if (!r || !r.salvo) continue;
+
+            const horasNoDia = calcularHorasDoDia(r);
             if (horasNoDia > 0) {
                 totalHoras += horasNoDia;
                 diasTrabalhados++;
             }
         }
-        return { totalHoras, diasTrabalhados, estimativaVale: calcularValeRefeicao(diasTrabalhados) };
+
+        return {
+            totalHoras,
+            diasTrabalhados,
+            estimativaVale: calcularValeRefeicao(diasTrabalhados)
+        };
     }
 
     // --- ATUALIZAÇÃO DOS CARDS ---
     function atualizarCardsPerfil() {
+
+        // Apenas evita que o código tente resetar os cards indevidamente
+        const resetPendente = carregarLS("aguardar_reset_cards_" + usuario_atual);
+        if (resetPendente) {
+            console.log("Reset pendente — mas cards continuarão exibindo normalmente até o primeiro salvamento.");
+        }
+
         const placar = calcularPlacarTotal();
 
         // Dias / Horas
@@ -67,6 +88,39 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elRefeicaoFront && elEstimativaBack) {
             elRefeicaoFront.innerHTML = `<span>Refeição</span>`;
             elEstimativaBack.innerHTML = `<span>Estimativa:</span><strong>€ ${placar.estimativaVale.toFixed(2)}</strong>`;
+        }
+    }
+
+    function resetarCardsPerfilEInputs() {
+        // --- Reset dos cards visuais ---
+        resetarCardsPerfil(); // mantém a sua função atual
+
+        // --- Reset dos campos de entrada ---
+        const lista = document.getElementById("lista-dias");
+        if (!lista) return;
+
+        lista.querySelectorAll("input").forEach(input => {
+            input.value = ""; // limpa o valor
+            const erroDiv = input.parentElement.querySelector(".erro-hora");
+            if (erroDiv) erroDiv.textContent = ""; // limpa erros visuais
+            input.style.border = ""; // remove borda de erro
+        });
+    }
+
+    function resetarCardsPerfil() {
+        // Zerar dados usados no placar (visual)
+        const elDiasFront = document.getElementById('dias-front');
+        const elHorasBack = document.getElementById('horas-back');
+        if (elDiasFront && elHorasBack) {
+            elDiasFront.innerHTML = `<span>Dias:</span><strong>0</strong>`;
+            elHorasBack.innerHTML = `<span>Total:</span><strong>0h</strong>`;
+        }
+
+        const elRefeicaoFront = document.getElementById('refeicao-front');
+        const elEstimativaBack = document.getElementById('estimativa-back');
+        if (elRefeicaoFront && elEstimativaBack) {
+            elRefeicaoFront.innerHTML = `<span>Refeição</span>`;
+            elEstimativaBack.innerHTML = `<span>Estimativa:</span><strong>€ 0.00</strong>`;
         }
     }
 
@@ -132,15 +186,19 @@ document.addEventListener("DOMContentLoaded", () => {
     async function buscarFeriados(ano, pais = 'PT') {
         const cacheKey = `feriados_${pais}_${ano}`;
         const cache = localStorage.getItem(cacheKey);
-        if (cache) return JSON.parse(cache).map(d => new Date(d));
+        if (cache) return JSON.parse(cache); // já retorna array de { date, name }
+
         try {
             const resp = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${ano}/${pais}`);
             if (!resp.ok) return [];
             const feriadosData = await resp.json();
-            const datas = feriadosData.map(h => h.date);
+            const datas = feriadosData.map(h => ({ date: h.date, name: h.localName })); // nome local
             localStorage.setItem(cacheKey, JSON.stringify(datas));
-            return datas.map(d => new Date(d));
-        } catch (e) { console.error("Erro ao buscar feriados:", e); return []; }
+            return datas;
+        } catch (e) {
+            console.error("Erro ao buscar feriados:", e);
+            return [];
+        }
     }
 
     function isWeekend(date) { return date.getDay() === 0 || date.getDay() === 6; }
@@ -160,131 +218,235 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function validarHoraInput(input) {
-    const erroDiv = input.parentElement.querySelector(".erro-hora");
-    // Remove o caractere de dois pontos antes de validar, para simplificar.
-    let valor = input.value.trim().replace(":", "");
+        const erroDiv = input.parentElement.querySelector(".erro-hora");
+        // Remove o caractere de dois pontos antes de validar, para simplificar.
+        let valor = input.value.trim().replace(":", "");
 
-    // Se estiver vazio, não mostra erro
-    if (valor === "") {
-        if (erroDiv) erroDiv.textContent = "";
-        input.style.border = "";
-        return true; // campo vazio é permitido
-    }
-
-    // Se o valor já estiver no formato HH:mm, ele deve passar.
-    // Mas a lógica abaixo já trata isso se removermos os ":"
-
-    // Apenas números permitidos na entrada bruta
-   if (!/^\d{1,4}$/.test(valor)) { // permite 1 a 4 dígitos ou HHMM
-        if (erroDiv) {
-            erroDiv.textContent = "Formato inválido (ex: 1030 ou 10:30)!";
-            erroDiv.style.color = "red";
+        // Se estiver vazio, não mostra erro
+        if (valor === "") {
+            if (erroDiv) erroDiv.textContent = "";
+            input.style.border = "";
+            return true; // campo vazio é permitido
         }
-        input.style.border = "2px solid red";
-        return false;
-    }
 
-    // Lógica adicional para verificar se os valores de HH e MM são válidos
-    // (A sua função formatarHora já faz isto, mas é bom validar aqui também)
-    if (valor.length > 2) {
-        const horas = parseInt(valor.slice(0, -2), 10);
-        const minutos = parseInt(valor.slice(-2), 10);
-        if (horas > 23 || minutos > 59) {
-             if (erroDiv) {
-                erroDiv.textContent = "Hora inválida (máx 23:59)!";
+        // Apenas números permitidos na entrada bruta
+        if (!/^\d{1,4}$/.test(valor)) { // permite 1 a 4 dígitos ou HHMM
+            if (erroDiv) {
+                erroDiv.textContent = "Formato inválido (ex: 1030 ou 10:30)!";
                 erroDiv.style.color = "red";
             }
             input.style.border = "2px solid red";
             return false;
         }
+
+        // Lógica adicional para verificar se os valores de HH e MM são válidos
+        if (valor.length > 2) {
+            const horas = parseInt(valor.slice(0, -2), 10);
+            const minutos = parseInt(valor.slice(-2), 10);
+            if (horas > 23 || minutos > 59) {
+                if (erroDiv) {
+                    erroDiv.textContent = "Hora inválida (máx 23:59)!";
+                    erroDiv.style.color = "red";
+                }
+                input.style.border = "2px solid red";
+                return false;
+            }
+        }
+        // Se passou nos testes, limpa erro
+        if (erroDiv) erroDiv.textContent = "";
+        input.style.border = "";
+        return true;
     }
 
+    function isCycleComplete() {
+        const [inicio, fim] = gerarPeriodo();
+        let currentDate = new Date(inicio);
+        const feriados = carregarLS(`feriados_PT_${inicio.getFullYear()}`) || [];
 
-    // Se passou nos testes, limpa erro
-    if (erroDiv) erroDiv.textContent = "";
-    input.style.border = "";
-    return true;
-}
+        while (currentDate <= fim) {
+            const key = formatarDataParaKey(currentDate); // <-- usar a chave correta
+            const r = registros[key];
 
+            const weekend = isWeekend(currentDate);
+            const holiday = isHoliday(currentDate, feriados.map(d => new Date(d)));
 
+            if (!weekend && !holiday) {
+                if (!r || !r.entrada || !r.saida_alm || !r.retorno || !r.saida_final) {
+                    console.log(`DEBUG: Dia de trabalho incompleto: ${key}`);
+                    return false;
+                }
+            } else {
+                if (r && (!r.entrada || !r.saida_alm || !r.retorno || !r.saida_final)) {
+                    console.log(`DEBUG: Dia de fim de semana/feriado incompleto: ${key}`);
+                    return false;
+                }
+            }
 
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        console.log(`DEBUG: Todos os dias de trabalho no ciclo estão completos.`);
+        return true;
+    }
+
+    // --- Função utilitária para padronizar chaves de datas ---
+    function formatarDataParaKey(date) {
+        if (typeof date === "string") {
+            const parts = date.split('/');
+            return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`; // YYYY-MM-DD
+        }
+        return date.toISOString().split('T')[0]; // para objetos Date
+    }
+
+    // --- Função para resetar todos os registros ---
+    function resetAllHours() {
+        registros = {}; // limpa memória
+        salvarLS("horas_" + usuario_atual, registros); // limpa LS do usuário
+        iniciarRegistro(); // reconstrói a lista de dias
+    }
+
+    // --- Função para iniciar o registro e montar lista de dias ---
     async function iniciarRegistro() {
         registros = carregarLS("horas_" + usuario_atual) || {};
         const lista = document.getElementById("lista-dias");
         if (!lista) return;
         lista.innerHTML = "";
+
         const [inicio, fim] = gerarPeriodo();
         const feriados = await buscarFeriados(inicio.getFullYear());
 
         for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
-            const ds = d.toLocaleDateString("pt-PT");
-            const r = registros[ds] || { entrada: "", saida_alm: "", retorno: "", saida_final: "" };
+            const key = formatarDataParaKey(d); // chave padronizada
+            const r = registros[key] || { entrada: "", saida_alm: "", retorno: "", saida_final: "" };
+
             const div = document.createElement("div");
             div.className = "card-dia";
 
             const weekend = isWeekend(d);
-            const holiday = isHoliday(d, feriados);
-            if (weekend && holiday) div.style.backgroundColor = "#fcf8e3";
-            else if (weekend) div.style.backgroundColor = "#f2dede";
-            else if (holiday) div.style.backgroundColor = "#d9edf7";
+            const holiday = isHoliday(d, feriados.map(f => new Date(f)));
 
+            // Destaque visual
             let destaqueTexto = "";
-            if (weekend) destaqueTexto += "Final de Semana";
-            if (holiday) destaqueTexto += (destaqueTexto ? " / " : "") + "Feriado";
+            div.style.backgroundColor = ""; // cor padrão
+            if (weekend) {
+                destaqueTexto = "Fim de semana";
+                div.style.backgroundColor = "#f0f0f0"; // cinza claro
+            } else if (holiday) {
+                destaqueTexto = "Feriado";
+                div.style.backgroundColor = "#ffe0e0"; // rosa claro
+            } else {
+                div.style.backgroundColor = "#e0f7ff"; // azul claro para dias úteis
+            }
+
             let destaqueHTML = destaqueTexto ? `<div class="destaque">${destaqueTexto}</div>` : "";
 
             div.innerHTML = `
-                ${destaqueHTML}<strong>${ds}</strong>
-                <div class="campo"><label>Entrada</label><input id="e_${ds}" value="${r.entrada}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Saída Almoço</label><input id="s_${ds}" value="${r.saida_alm}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Retorno</label><input id="r_${ds}" value="${r.retorno}"><div class="erro-hora"></div></div>
-                <div class="campo"><label>Saída Final</label><input id="f_${ds}" value="${r.saida_final}"><div class="erro-hora"></div></div>
-                <button class="btn-salvar-dia" onclick="salvarDia('${ds}')">Salvar</button>
+                ${destaqueHTML}<strong>${d.toLocaleDateString("pt-PT")}</strong>
+                <div class="campo"><label>Entrada</label><input id="e_${key}" value="${r.entrada}"><div class="erro-hora"></div></div>
+                <div class="campo"><label>Saída Almoço</label><input id="s_${key}" value="${r.saida_alm}"><div class="erro-hora"></div></div>
+                <div class="campo"><label>Retorno</label><input id="r_${key}" value="${r.retorno}"><div class="erro-hora"></div></div>
+                <div class="campo"><label>Saída Final</label><input id="f_${key}" value="${r.saida_final}"><div class="erro-hora"></div></div>
+                <button class="btn-salvar-dia" onclick="salvarDia('${key}')">Salvar</button>
             `;
             lista.appendChild(div);
 
-
-
-    // formatar ao sair do campo (blur)
-   ["e","s","r","f"].forEach(prefixo => {
-    const input = document.getElementById(`${prefixo}_${ds}`);
-    if(!input) return;
-
-    // validar enquanto digita
-    input.addEventListener("input", () => {
-        // Apenas valida, não formata durante a digitação para evitar conflitos
-        validarHoraInput(input);
-    });
-
-    // formatar ao sair do campo (blur)
-    input.addEventListener("blur", () => {
-        // Verifica se a validação inicial é bem-sucedida ANTES de formatar
-        if (validarHoraInput(input) && input.value.trim() !== "") {
-            input.value = formatarHora(input.value);
-            // Revalida após formatar se necessário, para garantir
-            // que a formatação não introduziu um novo erro.
-            validarHoraInput(input);
+            ["e","s","r","f"].forEach(prefixo => {
+                const input = document.getElementById(`${prefixo}_${key}`);
+                if (!input) return;
+                input.addEventListener("input", () => validarHoraInput(input));
+                input.addEventListener("blur", () => {
+                    if (validarHoraInput(input) && input.value.trim() !== "") {
+                        input.value = formatarHora(input.value);
+                        validarHoraInput(input);
+                    }
+                });
+            });
         }
-        // Se a validação inicial falhar, a mensagem de erro deve permanecer visível.
-    });
-});
 
-        }
         atualizarCardsPerfil();
     }
 
-    window.salvarDia = (d) => {
-        const entrada = document.getElementById("e_" + d).value.trim();
-        const saida_alm = document.getElementById("s_" + d).value.trim();
-        const retorno = document.getElementById("r_" + d).value.trim();
-        const saida_final = document.getElementById("f_" + d).value.trim();
+    // --- Função para salvar um dia ---
+window.salvarDia = async (d) => {
+    const entrada = document.getElementById("e_" + d).value.trim();
+    const saida_alm = document.getElementById("s_" + d).value.trim();
+    const retorno = document.getElementById("r_" + d).value.trim();
+    const saida_final = document.getElementById("f_" + d).value.trim();
 
-        registros[d] = { entrada, saida_alm, retorno, saida_final };
+    if (!entrada || !saida_alm || !retorno || !saida_final) {
+        alert("Por favor, preencha todos os 4 campos de hora antes de salvar este dia.");
+        return;
+    }
+
+    // Detecta se é o primeiro registro do ciclo atual
+    const primeiroRegistro = Object.keys(registros).length === 0;
+
+    // Salva o dia atual como "salvo"
+    registros[d] = { entrada, saida_alm, retorno, saida_final, salvo: true };
+    salvarLS("horas_" + usuario_atual, registros);
+
+    // --- Auto-preenchimento dos demais dias úteis ---
+    if (primeiroRegistro) {
+        const [inicio, fim] = gerarPeriodo();
+        const feriados = await buscarFeriados(inicio.getFullYear());
+
+        for (let dt = new Date(inicio); dt <= fim; dt.setDate(dt.getDate() + 1)) {
+            const key = formatarDataParaKey(dt);
+            if (key === d) continue; // não sobrescreve o dia salvo
+
+            const weekend = isWeekend(dt);
+            const holiday = feriados.some(f => f.date === key);
+
+            if (!weekend && !holiday) {
+                const r = registros[key];
+                const vazio = !r || (!r.entrada && !r.saida_alm && !r.retorno && !r.saida_final);
+
+                if (vazio) {
+                    registros[key] = { entrada, saida_alm, retorno, saida_final, salvo: false };
+                }
+            }
+        }
         salvarLS("horas_" + usuario_atual, registros);
-        atualizarCardsPerfil();
-        window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
-        alert("Salvo! O placar do perfil foi atualizado.");
+        iniciarRegistro();
+    }
+
+    atualizarCardsPerfil();
+
+    // --- Detecta se este é o último dia do ciclo ---
+    const [inicio, fim] = gerarPeriodo();
+    let ultimoDia = null;
+    for (let dt = new Date(inicio); dt <= fim; dt.setDate(dt.getDate() + 1)) {
+        const key = formatarDataParaKey(dt);
+        const weekend = isWeekend(dt);
+        const holiday = (await buscarFeriados(dt.getFullYear())).some(f => f.date === key);
+        if (!weekend && !holiday) ultimoDia = key;
+    }
+
+    if (d === ultimoDia) {
+        const placar = calcularPlacarTotal();
+        mostrarPopupCiclo(placar);
+    }
+
+    window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
+};
+
+// --- Função do popup ---
+function mostrarPopupCiclo(placar) {
+    const popup = document.getElementById("popup-ciclo");
+    const texto = document.getElementById("popup-text");
+    texto.innerHTML = `Dias trabalhados: <strong>${placar.diasTrabalhados}</strong><br>
+                       Total de horas: <strong>${placar.totalHoras.toFixed(2)}h</strong><br>
+                       Estimativa de refeição: <strong>€ ${placar.estimativaVale.toFixed(2)}</strong>`;
+    popup.style.display = "flex";
+
+    document.getElementById("popup-fechar").onclick = () => {
+        popup.style.display = "none";
+        // Reset apenas após fechar popup do último dia
+        registros = {};
+        salvarLS("horas_" + usuario_atual, registros);
+        iniciarRegistro();
     };
+}
 
     // --- GERAR CSV ---
     if (document.getElementById("btn-gerar-csv")) {
