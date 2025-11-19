@@ -157,6 +157,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (document.getElementById("btn-abrir-cadastro")) document.getElementById("btn-abrir-cadastro").onclick = () => mostrar("tela-cadastro");
     if (document.getElementById("btn-voltar-login")) document.getElementById("btn-voltar-login").onclick = () => mostrar("tela-login");
+    // --- TOGGLE SENHA ---
+const senhaInput = document.getElementById("senha");
+const toggleSenhaBtn = document.getElementById("toggle-senha");
+
+if (senhaInput && toggleSenhaBtn) {
+    toggleSenhaBtn.addEventListener("click", () => {
+        if (senhaInput.type === "password") {
+            senhaInput.type = "text";
+            toggleSenhaBtn.setAttribute("aria-label", "Ocultar senha");
+            toggleSenhaBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            `; // olho aberto
+        } else {
+            senhaInput.type = "password";
+            toggleSenhaBtn.setAttribute("aria-label", "Mostrar senha");
+            toggleSenhaBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.64 21.64 0 015.45-5.45"/>
+                    <path d="M1 1l22 22"/>
+                </svg>
+            `; // olho fechado
+        }
+    });
+}
+
+
 
     // --- CADASTRO ---
     if (document.getElementById("btn-salvar-cadastro")) {
