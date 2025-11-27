@@ -550,71 +550,125 @@ cards.forEach(card => {
 
 
 
-    function ajustarAlturaViewport(){
-        const vh = window.innerHeight*0.01;
-        document.documentElement.style.setProperty('--vh',`${vh}px`);
-    }
-    window.addEventListener('load', ajustarAlturaViewport);
-    window.addEventListener('resize', ajustarAlturaViewport);
+    // Função para ajustar a altura do viewport (mantida)
+function ajustarAlturaViewport() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+window.addEventListener('load', ajustarAlturaViewport);
+window.addEventListener('resize', ajustarAlturaViewport);
 
-    if (document.getElementById("btn-gerar-csv")) {
-        document.getElementById("btn-gerar-csv").onclick = () => {
-            let linhas = ["Data,Entrada,Saída Almoço,Retorno,Saída Final"];
-            for(const d in window.registros){
-                const r = window.registros[d];
-                linhas.push(`${d},${r.entrada},${r.saida_alm},${r.retorno},${r.saida_final}`);
-            }
-            const blob = new Blob([linhas.join("\n")], { type: "text/csv" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = `horas_${window.usuario_atual}.csv`;
-            a.click();
-        };
-    }
-
-    const btnGerirFoto = document.getElementById('btn-gerir-foto');
-    const popupOpcoesFoto = document.getElementById('popup-opcoes-foto');
-    const btnAdicionarNovaFoto = document.getElementById('btn-adicionar-nova-foto');
-    const btnRemoverFoto = document.getElementById('btn-remover-foto');
-    const fileInput = document.getElementById('file-input');
-    const profileImageDisplay = document.getElementById('profile-image-display');
-    const fotoContainer = document.querySelector('.foto-container');
-
-    if (btnGerirFoto && popupOpcoesFoto && btnAdicionarNovaFoto && btnRemoverFoto && fileInput && profileImageDisplay && fotoContainer) {
-        btnGerirFoto.onclick = (e) => { e.stopPropagation(); popupOpcoesFoto.style.display = (popupOpcoesFoto.style.display === 'block') ? 'none' : 'block'; };
-        document.addEventListener('click', () => { popupOpcoesFoto.style.display = 'none'; });
-        popupOpcoesFoto.addEventListener('click', e => e.stopPropagation());
-        btnAdicionarNovaFoto.onclick = () => { fileInput.value = ''; fileInput.click(); };
-        btnRemoverFoto.onclick = () => {
-            if (window.usuario_atual) {
-                localStorage.removeItem(`profile_pic_${window.usuario_atual}`);
-                profileImageDisplay.src = '';
-                fotoContainer.classList.add('no-photo');
-                fileInput.value = '';
-                alert("Foto removida.");
-            }
-        };
-        fileInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profileImageDisplay.src = e.target.result;
-                    if (window.usuario_atual) localStorage.setItem(`profile_pic_${window.usuario_atual}`, e.target.result);
-                    fotoContainer.classList.remove('no-photo');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        function loadProfilePic() {
-            if (window.usuario_atual) {
-                const savedPic = localStorage.getItem(`profile_pic_${window.usuario_atual}`);
-                if (savedPic) { profileImageDisplay.src = savedPic; fotoContainer.classList.remove('no-photo'); }
-                else { profileImageDisplay.src = ''; fotoContainer.classList.add('no-photo'); }
-            } else { profileImageDisplay.src = ''; fotoContainer.classList.add('no-photo'); }
+// Função de geração de CSV (mantida)
+if (document.getElementById("btn-gerar-csv")) {
+    document.getElementById("btn-gerar-csv").onclick = () => {
+        let linhas = ["Data,Entrada,Saída Almoço,Retorno,Saída Final"];
+        for (const d in window.registros) {
+            const r = window.registros[d];
+            linhas.push(`${d},${r.entrada},${r.saida_alm},${r.retorno},${r.saida_final}`);
         }
-        loadProfilePic();
+        const blob = new Blob([linhas.join("\n")], { type: "text/csv" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `horas_${window.usuario_atual}.csv`;
+        a.click();
+    };
+}
+
+// Elementos da foto de perfil
+const btnGerirFoto = document.getElementById('btn-gerir-foto');
+const popupOpcoesFoto = document.getElementById('popup-opcoes-foto');
+const btnAdicionarNovaFoto = document.getElementById('btn-adicionar-nova-foto');
+const btnRemoverFoto = document.getElementById('btn-remover-foto');
+const fileInput = document.getElementById('file-input');
+const profileImageDisplay = document.getElementById('profile-image-display');
+const fotoContainer = document.querySelector('.foto-container');
+
+if (btnGerirFoto && popupOpcoesFoto && btnAdicionarNovaFoto && btnRemoverFoto && fileInput && profileImageDisplay && fotoContainer) {
+
+    // Abrir/fechar popup
+    btnGerirFoto.onclick = (e) => {
+        e.stopPropagation();
+        popupOpcoesFoto.style.display = (popupOpcoesFoto.style.display === 'block') ? 'none' : 'block';
+    };
+    document.addEventListener('click', () => { popupOpcoesFoto.style.display = 'none'; });
+    popupOpcoesFoto.addEventListener('click', e => e.stopPropagation());
+
+    // Adicionar nova foto
+    btnAdicionarNovaFoto.onclick = () => {
+        fileInput.value = '';
+        fileInput.click();
+    };
+
+    // Remover foto
+    btnRemoverFoto.onclick = () => {
+        if (!window.usuario_atual) {
+            alert("Usuário não definido. Não é possível remover a foto.");
+            return;
+        }
+        localStorage.removeItem(`profile_pic_${window.usuario_atual}`);
+        profileImageDisplay.src = '';
+        fotoContainer.classList.add('no-photo');
+        fileInput.value = '';
+        alert("Foto removida.");
+    };
+
+    // Upload de foto
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            profileImageDisplay.src = e.target.result;
+
+            if (!window.usuario_atual) {
+                alert("Usuário não definido. Foto não será salva.");
+                return;
+            }
+
+            try {
+                localStorage.setItem(`profile_pic_${window.usuario_atual}`, e.target.result);
+                fotoContainer.classList.remove('no-photo');
+                console.log("Foto salva com sucesso!");
+            } catch (err) {
+                console.error("Erro ao salvar foto no localStorage:", err);
+                alert("Erro ao salvar a foto. Talvez a imagem seja muito grande.");
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Função para carregar a foto
+    function loadProfilePic() {
+        if (!window.usuario_atual) {
+            profileImageDisplay.src = '';
+            fotoContainer.classList.add('no-photo');
+            console.warn("Usuário não definido. Foto não carregada.");
+            return;
+        }
+
+        const savedPic = localStorage.getItem(`profile_pic_${window.usuario_atual}`);
+        if (savedPic) {
+            profileImageDisplay.src = savedPic;
+            fotoContainer.classList.remove('no-photo');
+            console.log("Foto carregada do localStorage.");
+        } else {
+            profileImageDisplay.src = '';
+            fotoContainer.classList.add('no-photo');
+        }
     }
+
+    // Garantir que a função de load só rode depois que o usuário estiver definido
+    function waitForUserAndLoad() {
+        if (window.usuario_atual) {
+            loadProfilePic();
+        } else {
+            setTimeout(waitForUserAndLoad, 100); // tenta novamente em 100ms
+        }
+    }
+    waitForUserAndLoad();
+}
+
 
 document.querySelectorAll("#bottom-nav button").forEach(btn=>{
     btn.onclick = ()=>{
