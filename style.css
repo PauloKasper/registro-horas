@@ -11,6 +11,8 @@ html, body {
     height: 100vh;
     min-height: 100vh;
     color: #000;
+    overflow: hidden; /* Bloqueia rolagem global */
+
 
     /* Padding seguro topo/rodapé para iOS */
     padding-top: env(safe-area-inset-top);
@@ -962,3 +964,4 @@ div.h-safe-area-inset-top {
 .radio-inputs .radio .name:hover {
   background-color: #ddd;
 }
+
