@@ -55,12 +55,14 @@ html, body {
     display: flex;
     background-color: transparent;
 
+
 }
 /* Tela de cadastro deve ser referência para o card absoluto */
 #tela-cadastro {
     position: relative; /* isso faz o card absoluto se posicionar dentro da tela */
     width: 100%;
-    height: 100vh; /* altura total da tela */
+    height: 90vh; /* altura total da tela */
+
 }
 
 /* Card centralizado dentro da tela */
@@ -72,7 +74,7 @@ html, body {
     border: 1px solid rgba(255,255,255,0.5);
     padding: 40px 30px;
     max-width: 350px;
-    width: 90%;
+    width: 72%;
     color: white;
     display: flex;
     flex-direction: column;
@@ -90,21 +92,24 @@ html, body {
 
 /* Inputs e botões */
 .cadastro-card input {
-    padding: 10px 12px;
+    padding: 10px 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
-    width: 360px;
+    width: 265px;
+    margin: 10px;
+  
 }
 
 .cadastro-card button {
 
-    padding: 10px 15px;
+    padding: 55px 15px;
     border-radius: 10px;
     border: none;
     background-color: #2196f3;
     color: #fff;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+    margin: 10px;
 }
 
 .cadastro-card button:hover {
@@ -130,22 +135,24 @@ h2 {
 }
 
 input {
-    width: 100%;
+    width: 70%;
     padding: 10px;
-    margin: 10px 0;
+    margin: 2px 0;
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 16px;
     color: #000;
+
 }
 
 .input-wrap {
     position: relative;
     width: 100%;
+    right: 10px;
 }
 
 .input-wrap input {
-    padding-right: 44px;
+    padding-right: center;
 }
 
 /* ==========================================================
@@ -220,7 +227,7 @@ button {
 }
 /* Botão salvar dentro da lista de dias */
 .card-dia .btn-salvar-hora {
-    width: 100%;          /* ocupa toda a largura do input */
+    width: 900%;          /* ocupa toda a largura do input */
     max-width: 345px;
     padding: 8px 12px;
     border-radius: 8px;
@@ -246,7 +253,7 @@ button {
     width: 100%;
     max-width: 350px;               /* alinhado com os cards da lista */
     margin: 15px auto;               /* centraliza abaixo da lista */
-    gap: 50px;                       /* aumenta espaço entre os botões */
+    gap: 5px;                       /* aumenta espaço entre os botões */
 }
 
 /* Botões dentro do contêiner */
@@ -341,7 +348,7 @@ button {
 #tela-registro.tela.ativa {
     display: flex;
     flex-direction: column;
-    height: 98vh; /* ocupa toda a altura da tela */
+    height: 90vh; /* ocupa toda a altura da tela */
     margin: 0;     /* remove margem padrão das telas */
     padding-top: env(safe-area-inset-top, 10px);
     padding-bottom: env(safe-area-inset-bottom, 10px);
@@ -357,7 +364,7 @@ button {
 
 /* Botões ficam embaixo */
 #tela-registro.tela.ativa button {
-    margin-top: 10px;
+    margin-top: 5px;
     width: 90%;
     max-width: 350px;
     align-self: center;
@@ -379,6 +386,7 @@ button {
     padding: 10px;
     border-radius: 20px;
     margin-bottom: 10px;
+    margin-top: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     color: #000;
 
@@ -418,17 +426,22 @@ button {
     height: 40px;
     margin-bottom: 17px;
     width: 345px;
+    align-items: center;
+
 }
 
 .campo label {
     font-size: 12px;
     margin-bottom: 2px;
+
 }
 
 .campo input {
     padding: 5px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    text-align: center;
+
 }
 
 /* ==========================================================
@@ -545,7 +558,7 @@ button {
     border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 350px;
+    max-width: 420px;
     }
 
 .perfil-card h2 { margin: 0; font-size: 22px; color: inherit; }
@@ -596,6 +609,12 @@ button {
     padding: 40px 30px;
     max-width: 350px;
     color: #333;
+
+    /* centraliza os filhos */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centraliza horizontalmente */
+    gap: 15px;           /* espaço entre inputs e botões */
 }
 
 #tela-login input {
@@ -603,10 +622,16 @@ button {
     border: none;
     border-bottom: 1px solid rgba(0,0,0,0.2);
     color: #333;
+    width: 100%;       /* ocupa a largura máxima do card */
+    max-width: 280px;  /* largura máxima desejada */
+    padding: 8px 10px;
+    border-radius: 5px;
+    text-align: center; /* centraliza o texto digitado */
 }
 
 #tela-login input::placeholder {
     color: rgba(51,51,51,0.7);
+    text-align: center; /* centraliza o placeholder */
 }
 
 #btn-entrar {
@@ -719,8 +744,8 @@ div.h-safe-area-inset-top {
 }
 .eye-btn {
     position: absolute;
-    right: 8px;
-    top: 50%;
+    right: -8px;
+    top: 44%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
@@ -856,4 +881,83 @@ div.h-safe-area-inset-top {
     background-color: #007BFF;
     color: #fff;
     cursor: pointer;
+}
+.card-resumo {
+    background: rgba(0,0,0,0.3); /* leve transparência sobre o gradiente */
+    border-radius: 12px;
+    padding: 15px 20px;
+    color: white;
+    max-width: 300px;
+    margin: 20px auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    font-family: sans-serif;
+}
+
+.card-resumo h3 {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    color: #f1c40f; /* amarelo chamativo */
+}
+
+.resumo-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.resumo-item strong {
+    font-weight: bold;
+    color: #ecf0f1;
+}
+#bottom-nav.radio-inputs {
+  position: fixed;       /* fixa no rodapé */
+  bottom: 10px;          /* distância do fundo */
+  left: 50%;             /* centraliza horizontalmente */
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  width: 90%;            /* ocupa quase toda a tela */
+  max-width: 500px;
+  border-radius: 0.5rem;
+  background-color: #EEE;
+  padding: 0.25rem;
+  box-sizing: border-box;
+  font-size: 14px;
+  z-index: 1000;
+}
+
+#bottom-nav.radio-inputs.oculto {
+  display: none;         /* esconde completamente */
+}
+
+.radio-inputs .radio {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.radio-inputs .radio input {
+  display: none;
+}
+
+.radio-inputs .radio .name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  color: rgba(51,65,85,1);
+}
+
+.radio-inputs .radio input:checked + .name {
+  background-color: #fff;
+  font-weight: 600;
+}
+
+.radio-inputs .radio .name:hover {
+  background-color: #ddd;
 }
