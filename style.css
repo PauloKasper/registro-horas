@@ -943,6 +943,8 @@ div.h-safe-area-inset-top {
   display: none;
 }
 
+/* ... (código anterior) ... */
+
 .radio-inputs .radio .name {
   display: flex;
   align-items: center;
@@ -952,25 +954,28 @@ div.h-safe-area-inset-top {
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   color: rgba(51,65,85,1);
-  /* --- Adição de estilo para o foco --- */
-  outline: none; /* Remove o contorno retangular padrão */
+  /* Garante que o elemento seja focado */
+  outline: none;
 }
 
-/* Adiciona um efeito de sombra arredondado quando o utilizador navega com teclado (tab) ou clica */
+/* Adicione estas regras para garantir que o efeito de toque/foco seja arredondado */
 .radio-inputs .radio .name:focus,
-.radio-inputs .radio .name:focus-visible {
-    outline: none; /* Garante que o outline padrão foi removido */
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1); /* Sombra azul arredondada (cor do btn-salvar-hora) */
+.radio-inputs .radio .name:focus-visible,
+.radio-inputs .radio .name:active {
+    /* Remove a sombra retangular padrão do navegador */
+    outline: none !important;
+    /* Adiciona uma sombra personalizada que é redonda e imita o foco */
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.4);
 }
-
 
 .radio-inputs .radio input:checked + .name {
   background-color: #fff;
   font-weight: 600;
+  /* Opcional: Adicionar a sombra também ao estado checked para consistência visual */
+  box-shadow: 0 0 0 0px rgba(33, 150, 243, 0.4);
 }
 
+/* ... (código posterior, pode remover o :hover se quiser) ... */
 .radio-inputs .radio .name:hover {
   background-color: #ddd;
 }
-
-
