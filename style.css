@@ -960,7 +960,7 @@ div.h-safe-area-inset-top {
 .radio-inputs .radio .name:focus,
 .radio-inputs .radio .name:focus-visible {
     outline: none; /* Garante que o outline padrão foi removido */
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.4); /* Sombra azul arredondada (cor do btn-salvar-hora) */
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1); /* Sombra azul arredondada (cor do btn-salvar-hora) */
 }
 
 
@@ -972,4 +972,5 @@ div.h-safe-area-inset-top {
 .radio-inputs .radio .name:hover {
   background-color: #ddd;
 }
+
 
