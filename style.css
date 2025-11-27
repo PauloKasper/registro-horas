@@ -388,7 +388,7 @@ button {
     border-radius: 20px;
     margin-bottom: 10px;
     margin-top: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     color: #000;
 
     /* Adicione estas linhas para centralizar o conteúdo */
@@ -554,12 +554,12 @@ button {
 
     transform: translateX(-15px); /* ajusta o centro */
     text-align: center;
-    padding: 15px;
+    padding: 10px;
     background: #fff;
     border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     width: 100%;
-    max-width: 420px;
+    max-width: 100%;
     }
 
 .perfil-card h2 { margin: 0; font-size: 22px; color: inherit; }
