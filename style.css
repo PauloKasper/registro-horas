@@ -361,6 +361,7 @@ button {
     overflow-y: auto; /* permite rolar somente a lista */
     margin: 0;
     padding: 10px;
+
 }
 
 /* Botões ficam embaixo */
@@ -554,10 +555,10 @@ button {
 
     transform: translateX(-15px); /* ajusta o centro */
     text-align: center;
-    padding: 10px;
+    padding: 15px;
     background: #fff;
     border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     width: 100%;
     max-width: 100%;
     }
@@ -951,7 +952,17 @@ div.h-safe-area-inset-top {
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   color: rgba(51,65,85,1);
+  /* --- Adição de estilo para o foco --- */
+  outline: none; /* Remove o contorno retangular padrão */
 }
+
+/* Adiciona um efeito de sombra arredondado quando o utilizador navega com teclado (tab) ou clica */
+.radio-inputs .radio .name:focus,
+.radio-inputs .radio .name:focus-visible {
+    outline: none; /* Garante que o outline padrão foi removido */
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.4); /* Sombra azul arredondada (cor do btn-salvar-hora) */
+}
+
 
 .radio-inputs .radio input:checked + .name {
   background-color: #fff;
