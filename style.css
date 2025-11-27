@@ -349,7 +349,7 @@ button {
 #tela-registro.tela.ativa {
     display: flex;
     flex-direction: column;
-    height: 90%; /* ocupa toda a altura da tela */
+    height: 95%; /* ocupa toda a altura da tela */
     margin: 0;     /* remove margem padrão das telas */
     padding-top: env(safe-area-inset-top, 10px);
     padding-bottom: env(safe-area-inset-bottom, 10px);
@@ -961,3 +961,4 @@ div.h-safe-area-inset-top {
 .radio-inputs .radio .name:hover {
   background-color: #ddd;
 }
+
