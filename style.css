@@ -912,22 +912,23 @@ div.h-safe-area-inset-top {
     color: #ecf0f1;
 }
 #bottom-nav.radio-inputs {
-  position: fixed;       /* fixa no rodapé */
-  bottom: 10px;          /* distância do fundo */
-  left: 50%;             /* centraliza horizontalmente */
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
-  width: 90%;            /* ocupa quase toda a tela */
+  width: 90%;
   max-width: 500px;
-  border-radius: 0.5rem;
-  background-color: #EEE;
+  border-radius: 10rem;
+  background-color: rgba(238, 238, 238, 0.5); /* Fundo transparente parcial */
   padding: 0.25rem;
   box-sizing: border-box;
   font-size: 14px;
   z-index: 1000;
-}
+ }
+
 
 #bottom-nav.radio-inputs.oculto {
   display: none;         /* esconde completamente */
@@ -946,7 +947,7 @@ div.h-safe-area-inset-top {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;
+  border-radius: 10rem;
   padding: 0.75rem 0;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
