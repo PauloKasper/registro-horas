@@ -184,77 +184,79 @@ document.addEventListener("DOMContentLoaded", () => {
         return true;
     }
 
-    // --- CARDS / GRÁFICO ---
     function atualizarCardsPerfil() {
-        const placar = calcularPlacarTotal();
-        const { totalNormais, totalExtras } = calcularHorasNormaisExtras();
-        const totalHorasNegativas = Math.max(0, placar.diasTrabalhados * 8 - totalNormais);
+    const placar = calcularPlacarTotal();
+    const { totalNormais, totalExtras } = calcularHorasNormaisExtras();
+    const totalHorasNegativas = Math.max(0, placar.diasTrabalhados * 8 - totalNormais);
 
-        const elDiasFront = document.getElementById('dias-front');
-        const elHorasBack = document.getElementById('horas-back');
-        if (elDiasFront && elHorasBack) {
-            elDiasFront.innerHTML = `<span>Dias:</span><strong>${placar.diasTrabalhados}</strong>`;
-            elHorasBack.innerHTML = `<span>Total:</span><strong>${placar.totalHoras.toFixed(2)}h</strong>`;
-        }
-
-        const elRefeicaoFront = document.getElementById('refeicao-front');
-        const elEstimativaBack = document.getElementById('estimativa-back');
-        if (elRefeicaoFront && elEstimativaBack) {
-            elRefeicaoFront.innerHTML = `<span>Refeição</span>`;
-            elEstimativaBack.innerHTML = `<span>Estimativa:</span><strong>€ ${placar.estimativaVale.toFixed(2)}</strong>`;
-        }
-
-        const elExtrasFront = document.getElementById('extras-front');
-        const elExtrasBack = document.getElementById('extras-back');
-        if (elExtrasFront && elExtrasBack) {
-            elExtrasFront.innerHTML = `<span>Horas Extras</span><strong>${totalExtras.toFixed(2)}h</strong>`;
-            elExtrasBack.innerHTML = `<span>Horas Negativas</span><strong>${totalHorasNegativas.toFixed(2)}h</strong>`;
-        }
-
-        atualizarGraficoHoras();
+    // Atualiza cards de dias e total de horas
+    const elDiasFront = document.getElementById('dias-front');
+    const elHorasBack = document.getElementById('horas-back');
+    if (elDiasFront && elHorasBack) {
+        elDiasFront.innerHTML = `<span>Dias:</span><strong>${placar.diasTrabalhados}</strong>`;
+        elHorasBack.innerHTML = `<span>Total:</span><strong>${placar.totalHoras.toFixed(2)}h</strong>`;
     }
 
-    function atualizarGraficoHoras() {
-        const { totalNormais: horasNormais, totalExtras: horasExtras } = calcularHorasNormaisExtras();
-        const canvas = document.getElementById('grafico-horas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
+    // Atualiza cards de refeição
+    const elRefeicaoFront = document.getElementById('refeicao-front');
+    const elEstimativaBack = document.getElementById('estimativa-back');
+    if (elRefeicaoFront && elEstimativaBack) {
+        elRefeicaoFront.innerHTML = `<span>Refeição</span>`;
+        elEstimativaBack.innerHTML = `<span>Estimativa:</span><strong>€ ${placar.estimativaVale.toFixed(2)}</strong>`;
+    }
 
-        const data = {
-            labels: ['Horas Normais', 'Horas Extras'],
-            datasets: [{
-                data: [horasNormais, horasExtras],
-                backgroundColor: ['#3498db', '#e67e22'],
-                borderColor: ['#2980b9', '#d35400'],
-                borderWidth: 2
-            }]
-        };
+    // Atualiza cards de horas extras e horas negativas
+    const elExtrasFront = document.getElementById('extras-front');
+    const elExtrasBack = document.getElementById('extras-back');
+    if (elExtrasFront && elExtrasBack) {
+        elExtrasFront.innerHTML = `<span>Horas Extras</span><strong>${totalExtras.toFixed(2)}h</strong>`;
+        elExtrasBack.innerHTML = `<span>Horas Negativas</span><strong>${totalHorasNegativas.toFixed(2)}h</strong>`;
+    }
 
-        const options = {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: { color: 'white', font: { size: 14 } }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.label + ': ' + context.raw.toFixed(2) + 'h';
-                        }
+    atualizarGraficoHoras();
+}
+
+function atualizarGraficoHoras() {
+    const { totalNormais, totalExtras } = calcularHorasNormaisExtras();
+    const canvas = document.getElementById('grafico-horas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const data = {
+        labels: ['Horas Normais', 'Horas Extras'],
+        datasets: [{
+            data: [totalNormais, totalExtras],
+            backgroundColor: ['#3498db', '#e67e22'],
+            borderColor: ['#2980b9', '#d35400'],
+            borderWidth: 2
+        }]
+    };
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { color: 'white', font: { size: 14 } }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ': ' + context.raw.toFixed(2) + 'h';
                     }
                 }
             }
-        };
-
-        if (chartHoras) {
-            chartHoras.data = data;
-            chartHoras.options = options;
-            chartHoras.update();
-        } else {
-            chartHoras = new Chart(ctx, { type: 'doughnut', data: data, options: options });
         }
+    };
+
+    if (chartHoras) {
+        chartHoras.data = data;
+        chartHoras.options = options;
+        chartHoras.update();
+    } else {
+        chartHoras = new Chart(ctx, { type: 'doughnut', data: data, options: options });
     }
+}
 
     function resetarCardsPerfil() {
         const elDiasFront = document.getElementById('dias-front');
@@ -305,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
             div.className = "card-dia";
 
             const weekend = isWeekend(d);
-            const holiday = isHoliday(d, feriados.map(f => new Date(f)));
+            const hol00iday = isHoliday(d, feriados.map(f => new Date(f)));
             let destaqueTexto = "";
             div.style.backgroundColor = "";
             if (weekend) { destaqueTexto = "Fim de semana"; div.style.backgroundColor = "#f0f0f0"; }
@@ -435,8 +437,6 @@ function mostrar(tela) {
         case "tela-login": radios[3].checked = true; break;
     }
 }
-
-
 // =======================
 // LOGIN
 // =======================
@@ -533,9 +533,6 @@ bottomRadios.forEach((radio, index) => {
     });
 });
 
-
-
-
 // =======================
 // CARDS FLIP
 // =======================
@@ -547,8 +544,6 @@ cards.forEach(card => {
             flip.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
     });
 });
-
-
 
     // Função para ajustar a altura do viewport (mantida)
 function ajustarAlturaViewport() {
@@ -668,7 +663,6 @@ if (btnGerirFoto && popupOpcoesFoto && btnAdicionarNovaFoto && btnRemoverFoto &&
     }
     waitForUserAndLoad();
 }
-
 
 document.querySelectorAll("#bottom-nav button").forEach(btn=>{
     btn.onclick = ()=>{
