@@ -307,7 +307,7 @@ function atualizarGraficoHoras() {
             div.className = "card-dia";
 
             const weekend = isWeekend(d);
-            const hol00iday = isHoliday(d, feriados.map(f => new Date(f)));
+            const holiday = isHoliday(d, feriados.map(f => new Date(f)));
             let destaqueTexto = "";
             div.style.backgroundColor = "";
             if (weekend) { destaqueTexto = "Fim de semana"; div.style.backgroundColor = "#f0f0f0"; }
