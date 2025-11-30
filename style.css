@@ -450,17 +450,21 @@ button {
    PERFIL
 ========================================================== */
 .foto-container {
+
     width: 120px;
     height: 120px;
     margin: 0 auto;
     position: relative;
     border-radius: 50%;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    background-color: #ccc; /* fundo neutro */
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* Contorno circular ao redor da foto */
+    border: 4px solid rgba(255, 255, 255, 0.8); /* cor branca semi-transparente */
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);        /* sombra leve para destacar */
+    background-color: #ccc;
 }
 
 .foto-container.no-photo {
@@ -468,6 +472,7 @@ button {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60%;
+
 }
 
 .profile-pic {
@@ -475,10 +480,13 @@ button {
     height: 100%;
     object-fit: cover;
     display: block;
+
 }
 
 .foto-container.no-photo .profile-pic {
     display: none; /* esconde a imagem quando não existe */
+
+
 }
 
 
@@ -548,28 +556,106 @@ button {
 /* ==========================================================
    PERFIL CARD
 ========================================================== */
+/* PERFIL CARD COM FUNDO E HIGHLIGHT CENTRALIZADO */
 .perfil-card {
-    position: sticky; /* Mude para sticky */
-    top: 20px;        /* Adicione uma posição para grudar */
-    z-index: 10;     /* fica acima do botão */
-
-    transform: translateX(-15px); /* ajusta o centro */
+    position: relative;
+    top: 50%;                /* centraliza verticalmente */
+    left: 50%;               /* centraliza horizontalmente */
+    transform: translate(-50%, -0%); /* ajusta para centralização exata */
+    z-index: 10;
     text-align: center;
-    padding: 15px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border-radius: 25px;
+    padding: 10px;
     width: 100%;
-    max-width: 100%;
-    }
+    max-width: 350px;        /* mantém card dentro de limites */
+    background: rgba(255, 255, 255, 0.2); /* fundo branco gelo semi-transparente */
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    overflow: hidden;
 
-.perfil-card h2 { margin: 0; font-size: 22px; color: inherit; }
-.perfil-card .cargo { font-size: 14px; margin: 5px 0; opacity: 0.8; }
-.perfil-card .descricao { font-size: 14px; margin: 15px 0; }
+    /* flex para alinhar conteúdo internamente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
 
-.perfil-info-text h2 { margin:0; font-size: 22px; color:#333; }
-.perfil-info-text .cargo { font-size:14px; margin:5px 0 0 0; opacity:0.7; color:#555; }
+/* Pseudo-elemento para semi-background azul claro atrás da foto */
+.perfil-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 85px; /* altura do semi-background azul */
+    background-color: #ADD8E6; /* azul claro */
+    z-index: 0; /* atrás do conteúdo do card */
+}
 
+/* Foto do perfil */
+.foto-container {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    background-color: transparent; /* transparente para mostrar pseudo-background do card */
+    z-index: 1; /* acima do pseudo-background */
+}
+
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.foto-container.no-photo {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 24 24'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60%;
+}
+
+.foto-container.no-photo .profile-pic {
+    display: none; /* esconde a imagem quando não existe */
+}
+
+/* Texto dentro do perfil */
+.perfil-card h2 {
+    margin: 0;
+    font-size: 22px;
+    color: inherit;
+}
+
+.perfil-card .cargo {
+    font-size: 14px;
+    margin: 5px 0;
+    opacity: 0.8;
+}
+
+.perfil-card .descricao {
+    font-size: 14px;
+    margin: 15px 0;
+}
+
+.perfil-info-text h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #333;
+}
+
+.perfil-info-text .cargo {
+    font-size: 14px;
+    margin: 5px 0 0 0;
+    opacity: 0.7;
+    color: #555;
+}
 /* Mantenha o botão no fluxo normal, apenas com z-index baixo */
 #btn-registrar-hora {
     display: block;
@@ -837,7 +923,6 @@ div.h-safe-area-inset-top {
 }
 .erro-hora { color: red; font-size: 0.8em; display: block; margin-top: 2px; }
 .input-erro { border: 2px solid red; }
-
 @keyframes shake {
   0% { transform: translateX(0); }
   20% { transform: translateX(-5px); }
@@ -857,9 +942,10 @@ div.h-safe-area-inset-top {
     height: 100%;
     background: rgba(0,0,0,0.5);
     z-index: 9999;
+
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* centraliza horizontalmente */
+    align-items: center;     /* centraliza verticalmente */
 }
 
 .popup-conteudo {
@@ -869,6 +955,7 @@ div.h-safe-area-inset-top {
     text-align: center;
     max-width: 320px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    margin: auto; /* garante centralização mesmo em mobile */
 }
 
 .popup-conteudo button {
@@ -882,22 +969,39 @@ div.h-safe-area-inset-top {
     color: #fff;
     cursor: pointer;
 }
+
+/* Centraliza o card-resumo na tela */
+.card-resumo-wrapper {
+    position: fixed;       /* fixa em relação à tela */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;           /* flex para centralizar */
+    justify-content: center; /* centraliza horizontalmente */
+    align-items: center;     /* centraliza verticalmente */
+    background: rgba(0,0,0,0.5);
+    z-index: 10000;          /* acima de tudo */
+}
+
 .card-resumo {
-    background: rgba(0,0,0,0.3); /* leve transparência sobre o gradiente */
+    background: rgba(255, 255, 255, 0.4); /* fundo claro semi-transparente */
     border-radius: 12px;
     padding: 15px 20px;
-    color: white;
+    color: #000;                 /* texto escuro para contraste */
     max-width: 300px;
-    margin: 20px auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    width: 90%;                   /* responsivo */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     font-family: sans-serif;
+    text-align: center;
+    margin: auto; /* centraliza em caso de overflow */
 }
 
 .card-resumo h3 {
     text-align: center;
     margin-bottom: 12px;
     font-size: 1.2rem;
-    color: #f1c40f; /* amarelo chamativo */
+    color:  #333333; /* amarelo chamativo */
 }
 
 .resumo-item {
@@ -911,6 +1015,7 @@ div.h-safe-area-inset-top {
     font-weight: bold;
     color: #ecf0f1;
 }
+
 #bottom-nav.radio-inputs {
   position: fixed;
   bottom: 30px;
