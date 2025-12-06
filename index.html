@@ -103,12 +103,46 @@
   </div>
 </div>
 
-<!-- REGISTRO -->
+<!-- REGISTRO (CALENDÁRIO) -->
 <div id="tela-registro" class="tela">
-  <div id="lista-dias"></div>
+      <div id="calendar-header">
+    <div>Dom</div>
+    <div>Seg</div>
+    <div>Ter</div>
+    <div>Qua</div>
+    <div>Qui</div>
+    <div>Sex</div>
+    <div>Sab</div>
+    <span id="month-year"></span>
+  </div>
 
-  <div class="botoes-lado-a-lado">
-    <button id="btn-gerar-csv">Registrar</button>
+  <div id="calendar"></div>
+    <!-- Modal -->
+  <div id="modal-horas" class="modal" aria-hidden="true">
+      <div class="modal-content">
+          <h2 id="modal-data"></h2>
+
+          <label for="entrada">Entrada</label>
+          <input id="entrada" type="time">
+
+          <label for="saidaAlmoco">Saída Almoço</label>
+          <input id="saidaAlmoco" type="time">
+
+          <label for="retornoAlmoco">Retorno Almoço</label>
+          <input id="retornoAlmoco" type="time">
+
+          <label for="saidaFinal">Saída Final</label>
+          <input id="saidaFinal" type="time">
+
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+            <button id="salvar-horas">Salvar</button>
+            <button id="fechar-modal" class="close-btn">Fechar</button>
+          </div>
+      </div>
+  </div>
+
+  <div class="botoes-lado-a-lado" style="margin-top:12px;">
+    <button id="btn-gerar-csv">Exportar CSV</button>
   </div>
 
   <h2 id="usuario-logado" class="usuario-h2"></h2>
@@ -117,13 +151,11 @@
 <!-- CONFIGURAÇÕES -->
 <div id="tela-configurações" class="tela">
   <h2>Ajustes</h2>
-
   <div class="radio-inputs">
     <label class="radio">
       <input type="radio" name="config-option" checked>
       <span class="name">EXCLUIR USUÁRIO</span>
     </label>
-
   </div>
 </div>
 
@@ -146,7 +178,6 @@
     <span class="name">Sair</span>
   </label>
 </div>
-
 
 <!-- POPUP -->
 <div id="popup-ciclo" style="display:none;">
