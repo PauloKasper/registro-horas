@@ -18,7 +18,7 @@ html, body {
     padding-bottom: env(safe-area-inset-bottom);
 
     /* Fundo com gradiente */
-    height: calc(var(--vh, 1%) * 200);
+    height: calc(var(--vh, 1%) * 100);
     background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
     background-size: cover;
     background-repeat: no-repeat;
@@ -1087,4 +1087,5 @@ div.h-safe-area-inset-top {
 .radio-inputs .radio .name:hover {
   background-color: #ddd;
 }
+
 
