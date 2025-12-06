@@ -864,6 +864,8 @@ div.h-safe-area-inset-top {
     display: flex;
     gap: 10px;           /* espaço entre os cards */
     justify-content: center; /* centraliza os cards no container */
+    margin-top: 30px;
+    margin-bottom: 30px;
 
 }
 
@@ -972,6 +974,7 @@ div.h-safe-area-inset-top {
 
 /* Centraliza o card-resumo na tela */
 .card-resumo-wrapper {
+    margin-top: 10px;
     position: fixed;       /* fixa em relação à tela */
     top: 0;
     left: 0;
@@ -987,7 +990,7 @@ div.h-safe-area-inset-top {
 .card-resumo {
     background: rgba(255, 255, 255, 0.4); /* fundo claro semi-transparente */
     border-radius: 12px;
-    padding: 15px 20px;
+    padding: 15px 7px;
     color: #000;                 /* texto escuro para contraste */
     max-width: 300px;
     width: 90%;                   /* responsivo */
