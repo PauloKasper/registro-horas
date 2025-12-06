@@ -149,31 +149,48 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    function gerarPeriodo() {
-        const hoje = new Date();
-        let ano = hoje.getFullYear();
-        let mes = hoje.getMonth();
+  let mesAtualExibido = null; // Objeto {ano, mes} usado para navegação
 
-        let inicio, fim;
+function gerarPeriodo(mesAno = null) {
+    // Se não passar mês/ano, pega o atual
+    const hoje = new Date();
+    const ano = mesAno?.ano ?? hoje.getFullYear();
+    const mes = mesAno?.mes ?? hoje.getMonth();
 
-        if (hoje.getDate() < 20) {
-            const mesPassado = mes - 1;
-            const anoAjustado = mesPassado < 0 ? ano - 1 : ano;
-            const mesCorrigido = (mesPassado + 12) % 12;
+    // Início: primeiro dia do mês
+    const inicio = new Date(ano, mes, 1);
+    // Fim: último dia do mês
+    const fim = new Date(ano, mes + 1, 0);
 
-            inicio = new Date(anoAjustado, mesCorrigido, 20);
-            fim = new Date(ano, mes, 19);
+    // Guarda o mês exibido
+    mesAtualExibido = { ano, mes };
 
-        } else {
-            inicio = new Date(ano, mes, 20);
-            const mesProximo = mes + 1;
-            const anoProx = mesProximo > 11 ? ano + 1 : ano;
-            const mesProxCorrigido = mesProximo % 12;
-            fim = new Date(anoProx, mesProxCorrigido, 19);
-        }
+    return [inicio, fim];
+}
 
-        return [inicio, fim];
+// Função para ir para o mês anterior
+function mesAnterior() {
+    if (!mesAtualExibido) gerarPeriodo(); // garante que a variável esteja inicializada
+    let { ano, mes } = mesAtualExibido;
+    mes--;
+    if (mes < 0) {
+        mes = 11;
+        ano--;
     }
+    gerarCalendarioPeriodo({ ano, mes });
+}
+
+// Função para ir para o próximo mês
+function proximoMes() {
+    if (!mesAtualExibido) gerarPeriodo();
+    let { ano, mes } = mesAtualExibido;
+    mes++;
+    if (mes > 11) {
+        mes = 0;
+        ano++;
+    }
+    gerarCalendarioPeriodo({ ano, mes });
+}
 
     async function buscarFeriados(ano, pais = 'PT') {
         const cacheKey = `feriados_${pais}_${ano}`;
@@ -308,13 +325,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    async function gerarCalendarioPeriodo() {
+     async function gerarCalendarioPeriodo(mesAno = null) {
         const container = document.getElementById(calendarElId);
         if (!container) return;
         container.innerHTML = "";
 
-        const [inicio, fim] = gerarPeriodo();
+        const [inicio, fim] = gerarPeriodo(mesAno);
 
+        // busca feriados
         const years = new Set();
         for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) years.add(d.getFullYear());
         let feriados = [];
@@ -323,18 +341,13 @@ document.addEventListener("DOMContentLoaded", () => {
             feriados = feriados.concat(f);
         }
 
+        // título mês
         const monthYear = document.getElementById("month-year");
         const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
                        "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-        const hoje = new Date();
-        let mesParaExibir = hoje.getMonth();
-        let anoParaExibir = hoje.getFullYear();
-        if (hoje < inicio || hoje > fim) {
-            mesParaExibir = inicio.getMonth();
-            anoParaExibir = inicio.getFullYear();
-        }
-        if(monthYear) monthYear.textContent = `${meses[mesParaExibir]} ${anoParaExibir}`;
+        if (monthYear) monthYear.textContent = `${meses[inicio.getMonth()]} ${inicio.getFullYear()}`;
 
+        // dias vazios antes do 1º dia
         const startWeekday = inicio.getDay();
         for (let i = 0; i < startWeekday; i++) {
             const empty = document.createElement("div");
@@ -342,6 +355,7 @@ document.addEventListener("DOMContentLoaded", () => {
             container.appendChild(empty);
         }
 
+        const hoje = new Date();
         for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
             const key = formatarDataParaKey(d);
             const dayEl = document.createElement("div");
@@ -376,7 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         salvo: true
                     };
                     salvarRegistrosUsuario();
-                    await gerarCalendarioPeriodo();
+                    await gerarCalendarioPeriodo(mesAtualExibido);
                     atualizarCardsPerfil();
                     return;
                 }
@@ -389,7 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const novoSalvar = () => {
                     salvarHorasDoDia(key);
                     modalHoras.style.display = "none";
-                    setTimeout(() => gerarCalendarioPeriodo(), 50);
+                    setTimeout(() => gerarCalendarioPeriodo(mesAtualExibido), 50);
                     atualizarCardsPerfil();
                     salvarHorasBtn.removeEventListener("click", novoSalvar);
                 };
@@ -402,6 +416,11 @@ document.addEventListener("DOMContentLoaded", () => {
         atualizarCardsPerfil();
     }
 
+    // --- BOTOES DE NAVEGACAO ---
+    const btnMesAnterior = document.getElementById("btn-mes-anterior");
+    const btnProximoMes = document.getElementById("btn-proximo-mes");
+    if (btnMesAnterior) btnMesAnterior.onclick = mesAnterior;
+    if (btnProximoMes) btnProximoMes.onclick = proximoMes;
     if (modalAvailable) {
         fecharModalBtn.onclick = () => modalHoras.style.display = "none";
         modalHoras.addEventListener("click", (ev) => {
