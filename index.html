@@ -105,7 +105,15 @@
 
 <!-- REGISTRO (CALENDÁRIO) -->
 <div id="tela-registro" class="tela">
-      <div id="calendar-header">
+    <!-- CABEÇALHO: MÊS + BOTÕES -->
+  <div id="calendar-header">
+    <button id="btn-mes-anterior">&lt;</button>
+    <span id="month-year">Dezembro 2025</span>
+    <button id="btn-proximo-mes">&gt;</button>
+  </div>
+
+  <!-- DIAS DA SEMANA -->
+  <div id="weekdays">
     <div>Dom</div>
     <div>Seg</div>
     <div>Ter</div>
@@ -113,7 +121,6 @@
     <div>Qui</div>
     <div>Sex</div>
     <div>Sab</div>
-    <span id="month-year"></span>
   </div>
 
   <div id="calendar"></div>
