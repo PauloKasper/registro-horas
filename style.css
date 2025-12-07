@@ -1139,7 +1139,7 @@ div.h-safe-area-inset-top {
   font-weight: bold;
   font-size: 16px;
   box-sizing: border-box; /* importante */
-  padding: 0; /* garante tamanho fixo */
+  padding: 25px; /* garante tamanho fixo */
   transform: none; /* bloqueia qualquer escala */
   transition: background-color 0.2s ease; /* só muda cor no hover */
 }
@@ -1318,3 +1318,4 @@ div.h-safe-area-inset-top {
     gap: 10px;           /* espaço entre inputs e botões */
 
 }
+
