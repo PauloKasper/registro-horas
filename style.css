@@ -1090,6 +1090,7 @@ div.h-safe-area-inset-top {
 
 ---------------------
 
+
 /* CONTAINER DO CALENDÁRIO */
 #calendar-container {
   width: 100%;
@@ -1107,9 +1108,9 @@ div.h-safe-area-inset-top {
   display: flex;
   justify-content: space-between; /* botões nas extremidades */
   align-items: center;
-  gap: 100px; /* diminui o espaço entre botões e título */
+  gap: 50px; /* diminui o espaço entre botões e título */
   margin-bottom: 10px; /* espaço entre header e dias */
-  padding: 5px 10px; /* opcional: mais próximo das bordas */
+  padding: 1px 1px; /* opcional: mais próximo das bordas */
   border-radius: 10px 10px 0 0;
 }
 
@@ -1120,7 +1121,7 @@ div.h-safe-area-inset-top {
   color: #2f4f4f;
   text-align: center;
   flex: 1; /* ocupa espaço entre os botões */
-  margin: 0 10px; /* espaçamento entre botões */
+  margin: 0 1px; /* espaçamento entre botões */
 }
 
 /* BOTÕES SIMPLES DE NAVEGAÇÃO DO MÊS */
@@ -1164,7 +1165,7 @@ div.h-safe-area-inset-top {
   color: #2f4f4f;
   margin-bottom: 5px;
   padding: 0 5px;
-  gap: 24px;
+  gap: 14px;
 }
 
 /* GRADE DOS DIAS */
@@ -1177,8 +1178,8 @@ div.h-safe-area-inset-top {
 
 /* CÉLULAS DOS DIAS */
 .day {
-  height: 50px;
-  width: 50px;
+  height: 45px;
+  width: 45px;
   border-radius: 10px;
   background: #ffffff50; /* branco com 50% de opacidade */
   display: flex;
@@ -1306,7 +1307,7 @@ div.h-safe-area-inset-top {
     border: 1px solid rgba(255,255,255,0.5);
     padding: 100px 45px;
     margin-top: 15px;
-    height: 85%;
+    height: 80%;
     max-width: 500px;
     color: #fff;
 
@@ -1318,4 +1319,5 @@ div.h-safe-area-inset-top {
     gap: 10px;           /* espaço entre inputs e botões */
 
 }
+
 
