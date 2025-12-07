@@ -1090,7 +1090,6 @@ div.h-safe-area-inset-top {
 
 ---------------------
 
-
 /* CONTAINER DO CALENDÁRIO */
 #calendar-container {
   width: 100%;
@@ -1247,7 +1246,7 @@ div.h-safe-area-inset-top {
 
 /* Inputs do modal */
 .modal-content input {
-  width: 100%;
+  width: 95%;
   padding: 8px 10px;
   font-size: 15px;
   border-radius: 5px;
@@ -1306,8 +1305,8 @@ div.h-safe-area-inset-top {
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     border: 1px solid rgba(255,255,255,0.5);
     padding: 100px 45px;
-    margin-top: 20px;
-    height: 70%;
+    margin-top: 50px;
+    height: 75%;
     max-width: 500px;
     color: #fff;
 
@@ -1319,6 +1318,3 @@ div.h-safe-area-inset-top {
     gap: 10px;           /* espaço entre inputs e botões */
 
 }
-
-
-
