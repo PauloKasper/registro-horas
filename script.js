@@ -84,50 +84,32 @@ document.addEventListener("DOMContentLoaded", () => {
         return { totalNormais, totalExtras };
     }
 
-    // --- FORMATAÇÃO / VALIDAÇÃO ---
     function formatarHora(valor) {
-        if (!valor) return '';
-        valor = String(valor).replace(/\D/g, '');
-        if (valor.length === 0) return '';
-        let horas = '00', minutos = '00';
-        if (valor.length <= 2) { horas = valor.padStart(2, '0'); minutos = '00'; }
-        else { minutos = valor.slice(-2); horas = valor.slice(0, -2).padStart(2, '0'); }
-        let h = parseInt(horas, 10), m = parseInt(minutos, 10);
-        if (h === 24 && m === 0) return "00:00";
-        if (h > 23) h = 23; if (m > 59) m = 59;
-        return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+    if (!valor) return '';
+
+    valor = String(valor).replace(/\D/g, '');
+
+    if (valor.length === 0) return '';
+
+    // Se só tiver horas → completar com :00
+    if (valor.length <= 2) {
+        const h = Math.min(parseInt(valor, 10), 23);
+        return String(h).padStart(2, '0') + ":00";
     }
 
-    function validarHoraInput(input) {
-        const erroDiv = input.parentElement ? input.parentElement.querySelector(".erro-hora") : null;
-        let valor = input.value.trim().replace(":", "");
+    // Se tiver horas e minutos (ex: 830 → 8 e 30)
+    let horas = valor.slice(0, valor.length - 2);
+    let minutos = valor.slice(-2);
 
-        if (valor === "") {
-            if (erroDiv) erroDiv.textContent = "";
-            input.style.border = "";
-            return true;
-        }
+    let h = Math.min(parseInt(horas, 10), 23);
+    let m = Math.min(parseInt(minutos, 10), 59);
 
-        if (!/^\d{1,4}$/.test(valor)) {
-            if (erroDiv) { erroDiv.textContent = "Formato inválido (ex: 1030 ou 10:30)!"; erroDiv.style.color = "red"; }
-            input.style.border = "2px solid red";
-            return false;
-        }
+    // Se for 24:00 → virar 00:00 (mantive sua lógica)
+    if (h === 24 && m === 0) return "00:00";
 
-        if (valor.length > 2) {
-            const horas = parseInt(valor.slice(0, -2), 10);
-            const minutos = parseInt(valor.slice(-2), 10);
-            if (horas > 23 || minutos > 59) {
-                if (erroDiv) { erroDiv.textContent = "Hora inválida (máx 23:59)!"; erroDiv.style.color = "red"; }
-                input.style.border = "2px solid red";
-                return false;
-            }
-        }
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
 
-        if (erroDiv) erroDiv.textContent = "";
-        input.style.border = "";
-        return true;
-    }
 
     function formatarDataParaKey(date) {
         if (typeof date === "string") {
@@ -207,28 +189,29 @@ function proximoMes() {
         } catch (e) { console.error("Erro ao buscar feriados:", e); return []; }
     }
 
-    function isCycleComplete() {
-        const [inicio, fim] = gerarPeriodo();
-        let currentDate = new Date(inicio);
-        const feriados = carregarLS(`feriados_PT_${inicio.getFullYear()}`) || [];
+function isCycleComplete(mes, ano) {
+    const [inicio, fim] = gerarPeriodo(mes, ano);
+    let currentDate = new Date(inicio);
+    const feriados = carregarLS(`feriados_PT_${inicio.getFullYear()}`) || [];
 
-        while (currentDate <= fim) {
-            const key = formatarDataParaKey(currentDate);
-            const r = window.registros[key];
+    while (currentDate <= fim) {
+        const key = formatarDataParaKey(currentDate);
+        const r = window.registros[key];
 
-            const weekend = isWeekend(currentDate);
-            const holiday = isHoliday(currentDate, feriados.map(d => d.date ? d.date : d));
+        const weekend = isWeekend(currentDate);
+        const holiday = isHoliday(currentDate, feriados.map(d => d.date ? d.date : d));
 
-            if (!weekend && !holiday) {
-                if (!r || !r.entrada || !r.saida_alm || !r.retorno || !r.saida_final) return false;
-            } else {
-                if (r && (!r.entrada || !r.saida_alm || !r.retorno || !r.saida_final)) return false;
-            }
-
-            currentDate.setDate(currentDate.getDate() + 1);
+        if (!weekend && !holiday) {
+            if (!r || !r.entrada || !r.saida_alm || !r.retorno || !r.saida_final) return false;
+        } else {
+            if (r && (!r.entrada || !r.saida_alm || !r.retorno || !r.saida_final)) return false;
         }
-        return true;
+
+        currentDate.setDate(currentDate.getDate() + 1);
     }
+    return true;
+}
+
 
     function atualizarCardsPerfil() {
         const placar = calcularPlacarTotal();
@@ -269,6 +252,13 @@ function proximoMes() {
     const saidaFinal = document.getElementById("saidaFinal");
     const salvarHorasBtn = document.getElementById("salvar-horas");
     const fecharModalBtn = document.getElementById("fechar-modal");
+    const camposHora = [entrada, saidaAlmoco, retornoAlmoco, saidaFinal];
+    camposHora.forEach(campo => {
+    if (!campo) return;
+    campo.addEventListener("blur", () => {
+        campo.value = formatarHora(campo.value);
+    });
+});
 
     const modalAvailable = !!(modalHoras && modalData && entrada && saidaAlmoco && retornoAlmoco && saidaFinal && salvarHorasBtn && fecharModalBtn);
 
@@ -285,45 +275,107 @@ function proximoMes() {
         salvarLS("horas_" + window.usuario_atual, window.registros);
     }
 
-    function carregarHorasDoDia(dateKey) {
-        const r = window.registros[dateKey] || { entrada: "", saida_alm: "", retorno: "", saida_final: "", salvo: false };
-        entrada.value = r.entrada || "";
-        saidaAlmoco.value = r.saida_alm || "";
-        retornoAlmoco.value = r.retorno || "";
-        saidaFinal.value = r.saida_final || "";
-    }
+ function carregarHorasDoDia(dateKey) {
+    const r = window.registros[dateKey] || { entrada: "", saida_alm: "", retorno: "", saida_final: "", salvo: false };
+    // -> aqui usamos formatarHora() para garantir apresentação consistente, mesmo quando o valor vem do storage
+    entrada.value = r.entrada ? formatarHora(r.entrada) : "";
+    saidaAlmoco.value = r.saida_alm ? formatarHora(r.saida_alm) : "";
+    retornoAlmoco.value = r.retorno ? formatarHora(r.retorno) : "";
+    saidaFinal.value = r.saida_final ? formatarHora(r.saida_final) : "";
+}
+
 
     // --- FUNÇÃO ATUALIZADA PARA ZERAR REGISTROS NO ÚLTIMO DIA ---
-    function salvarHorasDoDia(dateKey) {
-        const dados = {
-            entrada: entrada.value,
-            saida_alm: saidaAlmoco.value,
-            retorno: retornoAlmoco.value,
-            saida_final: saidaFinal.value,
-            salvo: true
-        };
+function salvarHorasDoDia(dateKey) {
+    const dados = {
+        entrada: entrada.value,
+        saida_alm: saidaAlmoco.value,
+        retorno: retornoAlmoco.value,
+        saida_final: saidaFinal.value,
+        salvo: true
+    };
 
-        const allEmpty = !dados.entrada && !dados.saida_alm && !dados.retorno && !dados.saida_final;
-        if (allEmpty) {
-            delete window.registros[dateKey];
-        } else {
-            window.registros[dateKey] = dados;
+    const allEmpty = !dados.entrada && !dados.saida_alm && !dados.retorno && !dados.saida_final;
+
+    // Se tudo estiver vazio, remove o registro
+    if (allEmpty) {
+        delete window.registros[dateKey];
+    } else {
+        window.registros[dateKey] = dados;
+    }
+
+    salvarRegistrosUsuario();
+    window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
+
+    // --- Reset automático baseado no dia de fechamento da empresa ---
+    const [inicio, fim] = gerarPeriodo();
+    const fechamentoDia = 19; // dia fixo de fechamento na empresa
+    const dataFechamento = new Date(inicio.getFullYear(), inicio.getMonth(), fechamentoDia);
+    const fechamentoKey = formatarDataParaKey(dataFechamento);
+
+    if (dateKey === fechamentoKey) {
+        // Calcula resumo
+        let totalHoras = 0;
+        let totalExtras = 0;
+        let diasTrabalhados = 0;
+        let estimativaVale = 0;
+
+        for (const d in window.registros) {
+            const r = window.registros[d];
+            if (!r || !r.salvo) continue;
+
+            const horasDia = calcularHorasDoDia(r);
+            if (horasDia > 0) {
+                diasTrabalhados++;
+                totalHoras += horasDia;
+                totalExtras += Math.max(0, horasDia - 8);
+                // Vale refeição extra por 4h extras
+                let refeicaoDia = 8;
+                if (Math.max(0, horasDia - 8) >= 4) refeicaoDia += 8;
+                estimativaVale += refeicaoDia;
+            }
         }
 
-        salvarRegistrosUsuario();
-        window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
+        // Mostra resumo em alerta
+        const resumoMsg = `Resumo do mês:\nDias trabalhados: ${diasTrabalhados}\nHoras extras: ${totalExtras.toFixed(2)}h\nEstimativa de vale-refeição: €${estimativaVale.toFixed(2)}\n\nDeseja resetar os registros do mês?`;
+        const confirmReset = confirm(resumoMsg);
 
-        // --- ZERA REGISTROS AUTOMATICAMENTE NO ÚLTIMO DIA ---
-        const [inicio, fim] = gerarPeriodo();
-        const ultimoDia = formatarDataParaKey(fim);
+        if (confirmReset) {
+            // Marca os registros atuais como "concluídos" e reseta o resto
+            for (const d in window.registros) {
+                if (!window.registros[d].salvo) continue;
+                window.registros[d].mesAnterior = true; // flag para indicar que é do mês passado
+            }
 
-        if (dateKey === ultimoDia) {
+            // Limpa registros do mês atual
             window.registros = {};
             salvarRegistrosUsuario();
             atualizarCardsPerfil();
             setTimeout(() => gerarCalendarioPeriodo(), 50);
+            return;
         }
     }
+
+    // --- Bloqueio de preenchimento para dias do mês passado ---
+    const registroDia = window.registros[dateKey];
+    if (registroDia && registroDia.mesAnterior) {
+        const aviso = `Este dia já pertence ao ciclo anterior. Tem certeza que deseja sobrescrever?`;
+        const confirmDia = confirm(aviso);
+        if (!confirmDia) {
+            // Recarrega os dados originais
+            carregarHorasDoDia(dateKey);
+            return;
+        } else {
+            // Reseta apenas este dia
+            delete registroDia.mesAnterior;
+            window.registros[dateKey] = dados;
+            salvarRegistrosUsuario();
+            window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
+        }
+    }
+}
+
+
 
      async function gerarCalendarioPeriodo(mesAno = null) {
         const container = document.getElementById(calendarElId);
