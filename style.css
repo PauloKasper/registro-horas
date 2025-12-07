@@ -1246,7 +1246,7 @@ div.h-safe-area-inset-top {
 
 /* Inputs do modal */
 .modal-content input {
-  width: 90%;
+  width: 93%;
   padding: 8px 10px;
   font-size: 15px;
   border-radius: 5px;
@@ -1318,4 +1318,5 @@ div.h-safe-area-inset-top {
     gap: 10px;           /* espaço entre inputs e botões */
 
 }
+
 
