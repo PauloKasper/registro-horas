@@ -1293,7 +1293,7 @@ div.h-safe-area-inset-top {
     box-sizing: border-box;
 }
 
-.day.hoje { border: 2px solid #4caf50; }
+.day.hoje { border: 1px solid #fff; }
 .day.weekend {     background-color: #f69; }
 .day.feriado { background: #ff000080 !important; }
 .day.registrado { background: #00c89680; }
@@ -1306,8 +1306,8 @@ div.h-safe-area-inset-top {
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     border: 1px solid rgba(255,255,255,0.5);
     padding: 100px 45px;
-    margin-top: 15px;
-    height: 80%;
+    margin-top: 20px;
+    height: 70%;
     max-width: 500px;
     color: #fff;
 
@@ -1319,5 +1319,6 @@ div.h-safe-area-inset-top {
     gap: 10px;           /* espaço entre inputs e botões */
 
 }
+
 
 
