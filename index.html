@@ -106,7 +106,7 @@
 <!-- REGISTRO (CALENDÁRIO) -->
 <div id="tela-registro" class="tela">
     <!-- CABEÇALHO: MÊS + BOTÕES -->
- <div id="calendar-header">
+  <div id="calendar-header">
     <button id="btn-mes-anterior">&lt;</button>
     <span id="month-year">Dezembro 2025</span>
     <button id="btn-proximo-mes">&gt;</button>
@@ -129,17 +129,21 @@
       <div class="modal-content">
           <h2 id="modal-data"></h2>
 
-          <label for="entrada">Entrada</label>
-          <input id="entrada" type="time">
+        <label for="entrada">Entrada</label>
+        <input id="entrada" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="hh:mm"
+               oninput="this.value = formatarHora(this.value)">
 
-          <label for="saidaAlmoco">Saída Almoço</label>
-          <input id="saidaAlmoco" type="time">
+        <label for="saidaAlmoco">Saída Almoço</label>
+        <input id="saidaAlmoco" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="hh:mm"
+               oninput="this.value = formatarHora(this.value)">
 
-          <label for="retornoAlmoco">Retorno Almoço</label>
-          <input id="retornoAlmoco" type="time">
+        <label for="retornoAlmoco">Retorno Almoço</label>
+        <input id="retornoAlmoco" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="hh:mm"
+               oninput="this.value = formatarHora(this.value)">
 
-          <label for="saidaFinal">Saída Final</label>
-          <input id="saidaFinal" type="time">
+        <label for="saidaFinal">Saída Final</label>
+        <input id="saidaFinal" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="hh:mm"
+               oninput="this.value = formatarHora(this.value)">
 
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
             <button id="salvar-horas">Salvar</button>
@@ -197,4 +201,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
