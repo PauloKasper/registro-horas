@@ -163,10 +163,26 @@
 <div id="tela-configurações" class="tela">
   <h2>Ajustes</h2>
   <div class="radio-inputs">
-    <label class="radio">
-      <input type="radio" name="config-option" checked>
-      <span class="name">EXCLUIR USUÁRIO</span>
-    </label>
+  <!-- Botão de exclusão -->
+<!-- Botão de exclusão na tela de configurações -->
+<button id="btn-excluir-usuario" class="danger-button">Excluir Conta</button>
+
+<!-- Modal de confirmação -->
+<div id="modal-excluir-usuario" class="modal">
+  <div class="modal-content">
+    <h2>Excluir Conta</h2>
+    <p>⚠ ATENÇÃO! Esta ação é permanente e não pode ser desfeita.</p>
+    <p>Digite sua senha para confirmar:</p>
+    <input type="password" id="senha-excluir" placeholder="Senha">
+    <div id="erro-excluir" class="alerta"></div>
+    <div class="modal-buttons">
+      <button id="cancelar-exclusao">Cancelar</button>
+      <button id="confirmar-exclusao" disabled>Excluir Conta</button>
+    </div>
+  </div>
+</div>
+
+
   </div>
 </div>
 
