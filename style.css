@@ -1216,37 +1216,46 @@ div.h-safe-area-inset-top {
 }
 
 
-/* MODAL */
-.modal {
+/* ======================================
+   MODAL DE HORAS — CENTRALIZADO E LIMPO
+   ====================================== */
+#modal-horas {
   position: fixed;
   inset: 0;
-  background: transparent; /* sem sombra */
+  background: transparent !important;   /* sem escurecer o fundo */
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* mantém acima de tudo */
+  z-index: 9999;
 }
 
-
-.modal-content {
+/* Caixa interna do modal */
+#modal-horas .modal-content {
   background: #fff;
-  color: #000;
-  padding: 20px;
-  width: 80%;
-  max-width: 350px;
-  border-radius: 10px;
+  padding: 15px;
+  width: 75%;
+  max-width: 300px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 10000; /* opcional, acima do overlay */
-  position: relative;
   border: 1px solid #ccc;
-  box-shadow: none; /* remove qualquer sombra */
+  box-sizing: border-box;
+  box-shadow: none !important;    /* remove sombra */
 }
 
-/* Inputs do modal */
-.modal-content input {
-  width: 93%;
+/* Mantém o título com a data */
+#modal-horas h2#modal-data {
+  color: #2f4f4f;
+  margin-top: 50px;
+  text-align: center;             /* centraliza */
+  font-size: 25px;
+  font-weight: bold;
+}
+
+/* Inputs */
+#modal-horas .modal-content input {
+  width: 100%;
   padding: 8px 10px;
   font-size: 15px;
   border-radius: 5px;
@@ -1254,33 +1263,31 @@ div.h-safe-area-inset-top {
   box-sizing: border-box;
 }
 
-/* Botões do modal */
-.modal-content button {
-  width: 100%;       /* ocupa a mesma largura do input */
-  padding: 8px 10px; /* mesmo padding dos inputs */
-  font-size: 15px;   /* mesma fonte */
-  border-radius: 5px; /* mesma curvatura */
-  border: none;
-  cursor: pointer;
-  transition: 0.2s;
-  background-color: #2196f3;
-  color: white;
-
-}
-
-.modal-content button:hover {
-  opacity: 0.9;
-}
-
-/* Exemplo específico do botão de fechar */
-.close-btn {
-  background: #444;
-  color: #fff;
-  width: 100%; /* igual aos inputs */
+/* Botões */
+#modal-horas .modal-content button {
+  width: 100%;
   padding: 8px 10px;
   font-size: 15px;
   border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
 }
+
+#salvar-horas {
+  background: #2196f3;
+  color: white;
+}
+
+#fechar-modal {
+  background: #444;
+  color: white;
+}
+
+#modal-horas button:hover {
+  opacity: 0.9;
+}
+
 
 
 #lista-dias {
@@ -1401,4 +1408,5 @@ div.h-safe-area-inset-top {
   z-index: 9999;  /* maior que o botão */
   background: rgba(0,0,0,0.5); /* opcional: escurece fundo */
 }
+
 
