@@ -1216,25 +1216,29 @@ div.h-safe-area-inset-top {
 }
 
 
-/* ======================================
-   MODAL DE HORAS — CENTRALIZADO E LIMPO
-   ====================================== */
+/* =============================
+   Modal de horas — overlay total
+   ============================= */
 #modal-horas {
-  position: fixed;
-  inset: 0;
-  background: transparent !important;   /* sem escurecer o fundo */
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+  position: fixed;        /* fixa na tela inteira */
+  top: 0;                 /* topo da tela */
+  left: 0;                /* esquerda da tela */
+  width: 100%;           /* largura total da viewport */
+  height: 100%;          /* altura total da viewport */
+  background: rgba(0,0,0,0.0); /* escurece o fundo */
+  display: none;          /* padrão: oculto */
+  justify-content: center; /* centraliza horizontal */
+  align-items: center;     /* centraliza vertical */
+  z-index: 9999;           /* acima de tudo */
 }
+
 
 /* Caixa interna do modal */
 #modal-horas .modal-content {
   background: #fff;
   padding: 15px;
   width: 75%;
-  max-width: 300px;
+  max-width: 400px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -1311,7 +1315,7 @@ div.h-safe-area-inset-top {
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     border: 1px solid rgba(255,255,255,0.5);
-    padding: 100px 45px;
+    padding: 30px 45px;
     margin-top: 30px;
     height: 80%;
     max-width: 500px;
@@ -1408,5 +1412,7 @@ div.h-safe-area-inset-top {
   z-index: 9999;  /* maior que o botão */
   background: rgba(0,0,0,0.5); /* opcional: escurece fundo */
 }
+
+
 
 
