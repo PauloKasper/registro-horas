@@ -1320,43 +1320,85 @@ div.h-safe-area-inset-top {
 }
 
 -------------------
-
-.modal {
-  position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+/* Modal — inicialmente oculto */
+#modal-excluir-usuario {
+  position: fixed;               /* fixa na tela inteira */
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: none;                 /* começa oculto */
+  align-items: center;           /* centraliza verticalmente */
+  justify-content: center;       /* centraliza horizontalmente */
+  background: rgba(0,0,0,0.5);   /* escurece o fundo */
+  z-index: 10000;                /* acima do conteúdo */
 }
-.modal-content {
+
+/* Caixa interna do modal */
+#modal-excluir-usuario .modal-content {
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  max-width: 400px;
-  width: 90%;
-}
-.modal-actions {
-  margin-top: 15px;
+  width: 80%;
+  max-width: 320px;
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  position: relative;
 }
 
-.feedback {
+/* Botões do modal */
+#modal-excluir-usuario .modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#modal-excluir-usuario button {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#cancelar-exclusao {
+  background: #555;
+  color: white;
+}
+
+#confirmar-exclusao {
+  background: #d32f2f;
+  color: white;
+}
+
+#modal-excluir-usuario button:hover {
+  opacity: 0.85;
+}
+
+/* Input e mensagem de erro */
+#modal-excluir-usuario input {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+#erro-excluir {
   color: red;
-  font-size: 0.9rem;
-  margin-top: 5px;
-  display: block;
+  font-size: 14px;
+  min-height: 18px;
+  text-align: center;
 }
-.alerta-permanente {
-    color: red;
-    font-weight: bold;
-    margin-top: 5px;
-    min-height: 1.2em;
+#modal-excluir-usuario {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;  /* maior que o botão */
+  background: rgba(0,0,0,0.5); /* opcional: escurece fundo */
 }
+
