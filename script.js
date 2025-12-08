@@ -703,5 +703,95 @@ function salvarHorasDoDia(dateKey) {
             else setTimeout(waitForUserAndLoad, 100);
         })();
     })();
+const btnExcluirUsuario = document.getElementById("btn-excluir-usuario");
+const modalExcluir = document.getElementById("modal-excluir-usuario");
+const inputSenhaExcluir = document.getElementById("senha-excluir");
+const btnConfirmarExcluir = document.getElementById("confirmar-exclusao");
+const btnCancelarExcluir = document.getElementById("cancelar-exclusao");
+const divErroExcluir = document.getElementById("erro-excluir");
+
+if (btnExcluirUsuario && modalExcluir) {
+
+    // Abrir modal
+    btnExcluirUsuario.onclick = (e) => {
+        e.stopPropagation();
+        modalExcluir.style.display = "flex";
+        inputSenhaExcluir.value = "";
+        btnConfirmarExcluir.disabled = true;
+        divErroExcluir.innerText = "";
+    };
+
+    // Habilitar botão apenas se digitar algo
+    inputSenhaExcluir.addEventListener("input", () => {
+        btnConfirmarExcluir.disabled = inputSenhaExcluir.value.trim() === "";
+        divErroExcluir.innerText = "";
+    });
+
+    // Cancelar
+    btnCancelarExcluir.onclick = () => {
+        modalExcluir.style.display = "none";
+        inputSenhaExcluir.value = "";
+        divErroExcluir.innerText = "";
+    };
+
+    // Confirmar exclusão
+    btnConfirmarExcluir.onclick = () => {
+        if (!window.usuario_atual) {
+            divErroExcluir.innerText = "Nenhum usuário logado.";
+            return;
+        }
+
+        const usuarios = carregarLS("usuarios");
+        const usuario = window.usuario_atual;
+        const senhaCorreta = usuarios[usuario]?.numero;
+
+        if (!senhaCorreta) {
+            divErroExcluir.innerText = "Erro: dados do usuário não encontrados.";
+            return;
+        }
+
+        if (inputSenhaExcluir.value !== senhaCorreta) {
+            divErroExcluir.innerText = "Senha incorreta.";
+            return;
+        }
+
+        // Remover dados do usuário
+        try {
+            // Registros de horas
+            localStorage.removeItem(`horas_${usuario}`);
+
+            // Foto de perfil
+            localStorage.removeItem(`profile_pic_${usuario}`);
+            const profileImageDisplay = document.getElementById('profile-image-display');
+            const avatarContainer = document.querySelector('.card__avatar') || document.querySelector('.foto-container');
+            if (profileImageDisplay) profileImageDisplay.src = '';
+            if (avatarContainer) avatarContainer.classList.add('no-photo');
+
+            // Cadastro
+            delete usuarios[usuario];
+            salvarLS("usuarios", usuarios);
+
+            // Limpar sessão
+            window.usuario_atual = null;
+
+            // Fechar modal
+            modalExcluir.style.display = "none";
+
+            // Feedback permanente
+            alert("Conta excluída com sucesso. Todos os dados foram removidos permanentemente.");
+
+            // Redirecionar para login
+            mostrar("tela-login");
+        } catch (err) {
+            console.error("Erro ao excluir usuário:", err);
+            divErroExcluir.innerText = "Erro ao excluir a conta. Tente novamente.";
+        }
+    };
+
+    // Fechar modal clicando fora do conteúdo
+    modalExcluir.addEventListener("click", (ev) => {
+        if (ev.target === modalExcluir) modalExcluir.style.display = "none";
+    });
+}
 
 });
