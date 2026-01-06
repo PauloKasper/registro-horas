@@ -149,6 +149,26 @@ function gerarPeriodo(mesAno = null) {
 
     return [inicio, fim];
 }
+function gerarPeriodoFechoEmpresa(mesAno = null) {
+    const hoje = new Date();
+
+    let inicio;
+    let fim;
+
+    if (hoje.getDate() < 20) {
+        // Estamos antes do fecho → ciclo anterior
+        inicio = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 20);
+        fim = new Date(hoje.getFullYear(), hoje.getMonth(), 19);
+    } else {
+        // Estamos após o fecho → ciclo atual
+        inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 20);
+        fim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 19);
+    }
+
+    return [inicio, fim];
+}
+
+
 
 // Função para ir para o mês anterior
 function mesAnterior() {
@@ -607,21 +627,275 @@ function salvarHorasDoDia(dateKey) {
     window.addEventListener('load', ajustarAlturaViewport);
     window.addEventListener('resize', ajustarAlturaViewport);
 
-    const btnGerarCSV = document.getElementById("btn-gerar-csv");
-    if (btnGerarCSV) {
-        btnGerarCSV.onclick = () => {
-            let linhas = ["Data,Entrada,Saída Almoço,Retorno,Saída Final"];
-            for (const d in window.registros) {
-                const r = window.registros[d];
-                linhas.push(`${d},${r.entrada || ""},${r.saida_alm || ""},${r.retorno || ""},${r.saida_final || ""}`);
+// script.js
+
+// TODO: Certifique-se que as suas funções auxiliares estão disponíveis aqui (ex: gerarPeriodoFechoEmpresa, formatarDataParaKey, buscarFeriados)
+
+async function gerarPDFComHTML() {
+    // 1. Popula os campos de informação do colaborador no HTML oculto
+    document.getElementById('colaborador').innerText = `COLABORADOR: ${window.usuario_atual || ''}`;
+    document.getElementById('data_emissao').innerText = `DATA: ${new Date().toLocaleDateString()}`;
+    document.getElementById('funcao').innerText = `FUNÇÃO: ${window.funcao_padrao || 'Operador de Armazém'}`;
+    document.getElementById('empresa').innerText = `EMPRESA: ${window.empresa_padrao || 'CDIL'}`;
+    document.getElementById('contribuinte').innerText = `CONTRIBUINTE: ${window.NIF || ''}`;
+    document.getElementById('horario').innerText = `HORÁRIO: ${window.horario_padrao || '08:30 - 17:00'}`;
+        const hoje = new Date().toLocaleDateString('pt-PT', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    document.getElementById('data-assinatura').innerText = hoje;
+    // Ajuste a data de assinatura no rodapé se necessário:
+    // document.getElementById('data-assinatura').innerText = `Data: ${new Date().toLocaleDateString()}`;
+
+    // 2. Gera o corpo da tabela dinamicamente (substituindo a lógica autoTable)
+    const tbody = document.getElementById('tabela-body');
+    tbody.innerHTML = ''; // Limpa o corpo da tabela
+    const [inicio, fim] = gerarPeriodoFechoEmpresa(new Date()); // use suas datas reais
+
+    const d = new Date(inicio);
+    const totalRowsForDidDrawCell = calcularTotalDeLinhas(inicio, fim); // Função auxiliar para replicar a lógica de índice exato
+
+
+    // --- Funções auxiliares ---
+    function calcularHorasDoDia(r) {
+        function paraMinutos(hora) {
+            const [h, m] = hora.split(":").map(Number);
+            return h * 60 + m;
+        }
+
+        if (!r.entrada) return { total: '', noturnas: '' };
+
+        // se não houver saída final, usa a saída do almoço como saída do dia
+        const saidaDia = r.saida_final || r.saida_alm;
+        if (!saidaDia) return { total: '', noturnas: '' };
+
+
+        let entrada = paraMinutos(r.entrada);
+        let saidaFinal = paraMinutos(saidaDia);
+        if (saidaFinal <= entrada) saidaFinal += 1440;
+
+        let intervalos = [];
+
+        if (r.saida_alm && r.retorno) {
+            let saidaAlm = paraMinutos(r.saida_alm);
+            let retorno = paraMinutos(r.retorno);
+            if (saidaAlm <= entrada) saidaAlm += 1440;
+            if (retorno <= saidaAlm) retorno += 1440;
+            intervalos.push([entrada, saidaAlm], [retorno, saidaFinal]);
+        } else {
+            intervalos.push([entrada, saidaFinal]);
+        }
+
+        let totalMin = 0, noturnoMin = 0;
+
+        for (const [ini, fim] of intervalos) {
+            for (let m = ini; m < fim; m++) {
+                totalMin++;
+                const rel = m % 1440;
+                if (rel >= 1320 || rel < 420) noturnoMin++;
             }
-            const blob = new Blob([linhas.join("\n")], { type: "text/csv" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = `horas_${window.usuario_atual || "anon"}.csv`;
-            a.click();
+        }
+
+        return {
+            total: +(totalMin / 60).toFixed(2),       // ex: 0.5, 1.25, 4
+            noturnas: +(noturnoMin / 60).toFixed(2)
+        };
+
+    }
+
+    function calcularHorasExtras(total) {
+        if (!total || total <= 8) return { h1: '', h2: '', rest: '' };
+        const e = total - 8;
+        return {
+            h1: e >= 1 ? 1 : '',
+            h2: e >= 2 ? 1 : '',
+            rest: e > 2 ? e - 2 : ''
         };
     }
+
+    // --- Feriados (anos cruzados) ---
+    const anosPeriodo = new Set([inicio.getFullYear(), fim.getFullYear()]);
+    const feriadosSet = new Set();
+
+    for (const ano of anosPeriodo) {
+        const feriadosAno = await buscarFeriados(ano, 'PT');
+        feriadosAno.forEach(f => feriadosSet.add(f.date));
+    }
+
+    // --- Acumuladores ---
+    let somaTotalHoras = 0;
+    let somaHorasNoturnas = 0;
+    let somaExtra1 = 0;
+    let somaExtra2 = 0;
+    let somaExtraRest = 0;
+    let somaSabDom = 0;
+    let somaFeriados = 0;
+    let diasTrabalhados = 0;
+
+    // --- Loop ---
+while (d <= fim) {
+
+    const key = formatarDataParaKey(d);
+    const r = window.registros?.[key] || {};
+    const trabalhouNoDia =
+    !!r.entrada && !!(r.saida_final || r.saida_alm);
+
+    if (trabalhouNoDia) {
+        diasTrabalhados++;
+    }
+
+    const rDate = new Date(d);
+    const isFimSemana = rDate.getDay() === 0 || rDate.getDay() === 6;
+    const isFeriado = feriadosSet.has(key);
+
+    const horas = calcularHorasDoDia(r);
+    const extras = calcularHorasExtras(horas.total);
+
+    // 👉 PRIMEIRO define
+    const horasSabDom =
+        isFimSemana && horas.total !== ''
+            ? horas.total
+            : '';
+
+    const horasFeriado =
+        isFeriado && horas.total !== ''
+            ? horas.total
+            : '';
+
+     // TOTAL E NOTURNAS
+    if (horas.total !== '') somaTotalHoras += horas.total;
+    if (horas.noturnas !== '') somaHorasNoturnas += horas.noturnas;
+
+    // HORAS EXTRAS
+    if (extras.h1 !== '') somaExtra1 += Number(extras.h1);
+    if (extras.h2 !== '') somaExtra2 += Number(extras.h2);
+    if (extras.rest !== '') somaExtraRest += Number(extras.rest);
+
+    // SAB / DOM
+    if (horasSabDom !== '') somaSabDom += Number(horasSabDom);
+
+    // FERIADOS
+    if (horasFeriado !== '') somaFeriados += Number(horasFeriado);
+
+
+    let rowHTML = `<tr>`;
+
+    rowHTML += `<td>${key}</td>`;
+    rowHTML += `<td>${r.entrada || ''}</td>`;
+    rowHTML += `<td>${r.saida_alm || ''}</td>`;
+    rowHTML += `<td>${r.retorno || ''}</td>`;
+    rowHTML += `<td>${r.saida_final || ''}</td>`;
+
+    rowHTML += `<td>${horas.total || ''}</td>`;
+    rowHTML += `<td>${horas.noturnas || ''}</td>`;
+
+     // HORAS EXTRAS
+    rowHTML += `<td>${extras.h1}</td>`;
+    rowHTML += `<td>${extras.h2}</td>`;
+    rowHTML += `<td>${extras.rest}</td>`;
+    rowHTML += `<td>${horasSabDom}</td>`;
+    rowHTML += `<td>${horasFeriado}</td>`;
+
+    // FORMAÇÃO
+    rowHTML += `<td></td>`;
+
+    // SUBSTITUIÇÃO
+    rowHTML += `<td></td>`;
+
+    // FÉRIAS
+    rowHTML += `<td></td>`;
+    rowHTML += `<td></td>`;
+
+    // FALTAS JUST.
+    rowHTML += `<td></td>`;
+    rowHTML += `<td></td>`;
+
+    // FALTAS INJUST.
+    rowHTML += `<td></td>`;
+
+    rowHTML += `</tr>`;
+
+    tbody.insertAdjacentHTML('beforeend', rowHTML);
+
+    d.setDate(d.getDate() + 1);
+}
+
+    // 3. Usa a biblioteca html2pdf para gerar o download a partir do elemento oculto
+const element = document.getElementById('pdf-content');
+const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
+
+const opt = {
+    margin: [15,10,0,0],
+    filename: filename,
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: {
+        scale: 3,
+        windowWidth: 1500,
+        useCORS: true,
+        letterRendering: true
+    },
+    jsPDF: {
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'landscape',
+        precision: 16
+    }
+};
+
+// --- Totais ---
+document.getElementById('total-horas-trabalhadas').innerText =
+somaTotalHoras || '';
+
+document.getElementById('total-horas-noturnas').innerText =
+somaHorasNoturnas || '';
+
+document.getElementById('total-extra-1').innerText =
+    somaExtra1 || '';
+
+document.getElementById('total-extra-2').innerText =
+    somaExtra2 || '';
+
+document.getElementById('total-extra-rest').innerText =
+    somaExtraRest || '';
+
+document.getElementById('total-sabdom').innerText =
+    somaSabDom || '';
+
+document.getElementById('total-feriados').innerText =
+    somaFeriados || '';
+
+// --- Subsídio de refeição ---
+const valorRefeicao = diasTrabalhados * 8;
+
+document.getElementById('subsidio-refeicao').innerText =
+    `${diasTrabalhados} X 8 = ${valorRefeicao}`;
+
+// --- PDF ---
+html2pdf().set(opt).from(element).save();
+}
+
+
+// Função auxiliar para calcular o número total de linhas para a lógica de índice
+function calcularTotalDeLinhas(inicio, fim) {
+    let count = 0;
+    const d = new Date(inicio);
+    while (d <= fim) {
+        count++;
+        d.setDate(d.getDate() + 1);
+    }
+    // Adicione +2 para as linhas vazias/totais que adicionou no código original, se aplicável
+    return count;
+}
+
+
+// Event listener para o botão de imprimir na TELA DE REGISTRO
+const btnImprimir = document.getElementById('btn-gerar-csv');
+if (btnImprimir) {
+    btnImprimir.onclick = () => gerarPDFComHTML().catch(console.error);
+}
+
 
     // --- FOTO DE PERFIL (mantida) ---
     (function setupFoto() {
