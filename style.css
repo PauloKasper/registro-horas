@@ -2,6 +2,15 @@
    BASE GERAL
 ========================================================== */
 
+@page {
+    margin: 20mm;
+}
+.page {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+}
+
+
 /* --- BODY: Container geral --- */
 html, body {
     margin: 0;
@@ -27,6 +36,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    page-break-after: avoid;
 }
 
 
@@ -1051,7 +1061,6 @@ div.h-safe-area-inset-top {
   display: none;
 }
 
-/* ... (código anterior) ... */
 
 .radio-inputs .radio .name {
   display: flex;
@@ -1214,8 +1223,9 @@ div.h-safe-area-inset-top {
   background: transparent;
   cursor: default;
 }
-
-
+/* ======================================
+   MODAL DE HORAS — CENTRALIZADO E LIMPO
+   ====================================== */
 /* =============================
    Modal de horas — overlay total
    ============================= */
@@ -1412,7 +1422,232 @@ div.h-safe-area-inset-top {
   z-index: 9999;  /* maior que o botão */
   background: rgba(0,0,0,0.5); /* opcional: escurece fundo */
 }
+/* style.css */
+
+/* ===== CONTAINER PDF ===== */
+#pdf-container {   position: absolute;
+    left: -9999px;
+    top: 0;
+    display: block; }
+#pdf-content {
+    width: 100%;
+    font-family: Helvetica, Arial, sans-serif;
+    padding: 0.1mm 5mm;
+    box-sizing: border-box;
+    overflow: visible !important;
+    height: auto !important;
+}
+
+/* ===== ESTRUTURA BASE (FIXED: Usa Flexbox para evitar sobreposição) ===== */
+.table-container {
+    display: flex; /* Alinha tabela e box lado a lado */
+    align-items: stretch; /* Garante altura igual para ambos */
+    width: 100%;
+    /* Removido: position: relative; */
+}
+
+table {
+    width: auto; /* Permite que a largura total seja definida pelas colunas + a div ao lado */
+    table-layout: fixed;
+    border-collapse: collapse !important; /* Usar collapse para evitar bordas duplas */
+    flex-shrink: 0; /* Impede a tabela de encolher */
+    border: none !important; /* Adiciona a borda da tabela */
+}
+.header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 2px solid transparent;
+}
 
 
+th, td {
+    border: 0.01px solid #333 !important;
+    padding: 0;
+    min-height: 12px;
+    height: auto !important;
+    font-size: 6pt !important;
+    color: #000000;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: visible !important;
+    text-overflow: clip;
+}
+
+thead th {
+    font-weight: bold;
+    background: #f2f2f2;
+    font-size: 5pt !important;
+    min-height: 12px;
+    height: auto !important;
+}
+
+/* ===== LARGURAS DAS COLUNAS (1 a 18) - INTACTAS ===== */
+table th:nth-child(1), table td:nth-child(1) { width: 55px; }/* DIA */
+table th:nth-child(2), table td:nth-child(2) { width: 35px; }/* ENTRADA */
+table th:nth-child(3), table td:nth-child(3) { width: 25px; }/* SAIDA */
+table th:nth-child(4), table td:nth-child(4) { width: 39px; }
+table th:nth-child(5), table td:nth-child(5) { width: 29px; }/* HORAS NOTURNAS */
+table th:nth-child(6), table td:nth-child(6) { width: 5px; }/* 1 */
+table th:nth-child(7), table td:nth-child(7) { width: 45px; }
+table th:nth-child(8), table td:nth-child(8) { width: 50px; }/* HORAS EXTRAS */
+table th:nth-child(9), table td:nth-child(9) { width: 30px; }/* 2 */
+table th:nth-child(10), table td:nth-child(10) { width: 9px; }/* REST */
+table th:nth-child(11), table td:nth-child(11) { width: 50px; }
+table th:nth-child(12), table td:nth-child(12) { width: 45px; }
+table th:nth-child(13), table td:nth-child(13) { width: 35px; }
+table th:nth-child(14), table td:nth-child(14) { width: 55px; }
+table th:nth-child(15), table td:nth-child(15) { width: 50px; }
+table th:nth-child(16), table td:nth-child(16) { width: 20px; }
+table th:nth-child(18), table td:nth-child(18) { width: 60px; }/* FALTAS INJUST */
 
 
+/* ===== COLUNA 19 (SUBSÍDIOS) - CORRIGIDA COM FLEXBOX ===== */
+.floating-calc-box {
+    width: 100px;
+    flex-shrink: 0;
+    border: 1px solid black !important;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    /* Removido position: absolute/relative que causavam sobreposição */
+}
+
+.calc-header {
+    background-color: #f2f2f2;
+    border-bottom: 2px solid black;
+    font-weight: bold;
+    font-size: 5pt;
+    height: 16px; /* Altura combinada das 2 linhas do cabeçalho da tabela */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.calc-body-content {
+    padding: 5px 2px;
+    font-size: 4pt;
+    text-align: left;
+    line-height: 1;
+    flex-grow: 1;
+}
+
+/* 5. Zebra (Listras Cinzentas): Apenas até à coluna 18 */
+tbody tr:nth-child(even) td:nth-child(-n+18) {
+    background-color: #fafafa !important;
+}
+
+/* ===== ASSINATURAS E RODAPÉ (4 COLUNAS FIXAS) ===== */
+.signature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 3mm;
+}
+
+.signature-box {
+    border: 0.4px solid #000;
+    height: 5px;
+}
+
+.legal-info {
+    font-size: 5pt;
+    margin-top: 3mm;
+}
+.linha-vazia td {
+    height: 10px; /* Define uma altura para a linha vazia */
+    border: none; /* Garante que não apareçam bordas visíveis */
+}
+
+.total-row td {
+    background-color: transparent !important;
+    height: auto !important; /* Permite que o conteúdo defina a altura */
+    padding: 2px 5px !important;
+}
+
+/* Se quiser uma linha de separação por cima do total, adicione isto */
+.total-row td:first-child {
+    border: 0px transparent !important;
+}
+
+/* >>>>>>>>>>>>>>> rodape<<<<<<<<<<<<< */
+.footer-container {
+    display: flex;
+    justify-content: space-between; /* Distributes space evenly between columns */
+    padding: 30px;
+    font-family: sans-serif; /* Use a common sans-serif font to match general look */
+    font-size: 10px; /* Adjust font size as needed to fit your PDF layout */
+}
+
+.footer-column {
+    flex: 1; /* Each column takes up equal width */
+    padding: 0 10px; /* Add some space between the text blocks */
+    /* text-align: left; */ /* Default alignment is usually fine */
+}
+
+.footer-column p {
+    margin: 0; /* Remove default paragraph margins for tighter spacing */
+    line-height: 1.2; /* Adjust line height if necessary */
+    white-space: nowrap; /* Prevents text from wrapping too early within a column */
+}
+
+/* Optional: adjust the middle column slightly if needed */
+.footer-column:nth-child(2) {
+    text-align: center; /* Center the middle block text if preferred */
+}
+
+/* Optional: adjust the right column alignment if needed */
+.footer-column:nth-child(3) {
+    text-align: right; /* Align the right block text to the right edge */
+}
+
+
+@media print {
+    #pdf-container {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        display: block !important;
+    }
+
+    html, body, #pdf-content {
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    td, th {
+        color: #000 !important;
+        background: #fff !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+}
+tr.fim-de-semana td {
+    background-color: #f4f4f4; /* cinza claro */
+    color: #000;
+}
+
+:root {
+    --altura-linha: 18px; /* ajuste fino se necessário */
+}
+
+.sub-linha {
+    height: var(--altura-linha);
+    border-bottom: 1px solid #333;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.sub-multi {
+    border-bottom: 1px solid #333;
+    padding: 2px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
