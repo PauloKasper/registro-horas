@@ -13,7 +13,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
   <link rel="apple-touch-startup-image" href="/splash.png">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="cdn.jsdelivr.net"></script>
   <title>Registro de Horas</title>
 </head>
 <body>
@@ -26,8 +26,8 @@
     <input id="senha" type="password" placeholder="Número do Colaborador" autocomplete="current-password">
     <button id="toggle-senha" class="eye-btn" aria-label="Mostrar senha">
       <svg id="icon-eye" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
-        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-        <circle cx="12" cy="12" r="3"/>
+      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+      <circle cx="12" cy="12" r="3"/>
       </svg>
     </button>
   </div>
@@ -153,7 +153,7 @@
   </div>
 
   <div class="botoes-lado-a-lado" style="margin-top:12px;">
-    <button id="btn-gerar-csv">Exportar CSV</button>
+    <button id="btn-gerar-csv">Imprimir</button>
   </div>
 
   <h2 id="usuario-logado" class="usuario-h2"></h2>
@@ -163,11 +163,8 @@
 <div id="tela-configurações" class="tela">
   <h2>Ajustes</h2>
   <div class="radio-inputs">
-      <!-- Botão de exclusão -->
-    <!-- Botão de exclusão na tela de configurações -->
     <button id="btn-excluir-usuario" class="danger-button">Excluir Conta</button>
 
-    <!-- Modal de confirmação -->
     <div id="modal-excluir-usuario" class="modal">
       <div class="modal-content">
         <h2>Excluir Conta</h2>
@@ -212,7 +209,159 @@
   </div>
 </div>
 
+<!-- INÍCIO DO BLOCO OCULTO DO PDF (NÃO APARECE NA TELA) -->
+<div id="pdf-container" >
+    <div id="pdf-content" class="page">
+            <div class="header">FOLHA DE HORAS</div>
+
+            <div class="info-grid">
+                <div>
+                    <div class="info-item" id="colaborador">COLABORADOR:</div>
+                    <div class="info-item" id="data_emissao">DATA:</div>
+                    <div class="info-item" id="funcao">FUNÇÃO:</div>
+                    <div class="info-item" id="empresa">EMPRESA:</div>
+                    <div class="info-item" id="contribuinte">CONTRIBUINTE:</div>
+                    <div class="info-item" id="horario">HORÁRIO:</div>
+                </div>
+                <div><!-- Outras informações aqui --></div>
+            </div>
+
+            <!-- NOVO CONTAINER para a tabela e a caixa flutuante -->
+    <div class="table-container">
+    <table>
+        <!-- ... SEU THEAD EXISTENTE AQUI ... -->
+        <thead>
+            <tr>
+                <th rowspan="2">DIA</th>
+                <th rowspan="2">ENTRADA</th><th rowspan="2">SAÍDA</th><th rowspan="2">ENTRADA</th><th rowspan="2">SAÍDA</th>
+                <th rowspan="2">TOTAL DE HORAS<br> TRABALHADAS</th>
+                <th rowspan="2">Nº HORAS<br> NOTURNAS</th>
+                <th colspan="5">HORAS EXTRAS</th>
+                <th colspan="1">FORMAÇÃO</th>
+                <th colspan="1">SUBSTITUIÇÃO</th>
+                <th colspan="1">FÉRIAS</th>
+                <th colspan="2">FALTAS JUST.</th>
+                <th rowspan="2">FALTAS INJUST.</th>
+            </tr>
+           <tr>
+                <th>1</th>
+                <th>2</th>
+                <th>REST</th>
+                <th>SAB/DOM</th>
+                <th>FERIADOS</th>
+                <th>N</th>
+                <th>N</th>
+                <th>P</th>
+                <th>P</th>
+                <th>NP</th>
+            </tr>
+
+        </thead>
+        <tbody id="tabela-body">
+            <!-- Linhas geradas via JS (devem ter 19 colunas TD vazias/preenchidas) -->
+        </tbody>
+        <tfoot id="table-footer-totals">
+            <!-- ... Linha Vazia (empty-total-row) permanece igual ... -->
+            <tr class="empty-total-row">
+                <td colspan="18">&nbsp;</td>
+            </tr>
+
+            <tr class="total-row">
+                <td colspan="4"></td>
+                <td style="font-weight:bold;">TOTAL</td>
+
+                <td id="total-horas-trabalhadas"></td>
+                <td id="total-horas-noturnas"></td>
+
+                <td id="total-extra-1"></td>
+                <td id="total-extra-2"></td>
+                <td id="total-extra-rest"></td>
+                <td id="total-sabdom"></td>
+                <td id="total-feriados"></td>
+
+                <td></td> <!-- Formação -->
+                <td></td> <!-- Substituição -->
+                <td></td> <!-- Férias -->
+                <td></td> <!-- Férias -->
+                <td></td> <!-- Faltas Just -->
+                <td></td> <!-- Faltas Injust -->
+            </tr>
+
+
+        </tfoot>
+
+    </table>
+
+    <!-- BLOCO DE CÁLCULO ÚNICO DE SUBSÍDIOS (FLEXBOX solution) -->
+    <div class="floating-calc-box" >
+        <div class="calc-header">SUBSÍDIOS</div>
+
+        <!-- Conteúdo com divisões internas para imitar as linhas da tabela -->
+        <div class="calc-body-content">
+            <!-- Refeição/Cálculo (Ocupa várias linhas visuais) -->
+            <div style="border-bottom: 0.01px solid #333; height: 63px; padding: 5px 2px; text-align: left; vertical-align: top;">
+                <strong>Refeição<br></strong><br>
+                <div id="subsidio-refeicao" style="font-size:14px;font-weight:bold;"></div>
+            </div>
+
+            <div style="border-bottom: 0.01px solid #333; height: 35px; padding: 5px 2px; text-align: left;">
+                Outros
+            </div>
+
+            <!-- TRABALHADOR ADECCO -->
+            <div style="border-bottom: 0.01px solid #333; height: 2px; padding: 5px 2px; text-align: left;">
+                TRABALHADOR ADECCO
+            </div>
+
+            <!-- Assinatura -->
+            <div style="border-bottom: 0.01px solid #333; height: 60px; padding: 3.5px 2px; text-align: left;">
+                <br><br><br><br><br><br><br><br>Assinatura<br><br>
+                Data: <span id="data-assinatura"></span>
+            </div>
+
+            <!-- Divs vazias para preencher o espaço -->
+            <div style="border-bottom: 0.01px solid #333; height: 12px ;"></div>
+            <div style="border-bottom: 0.01px solid #333; height: 62px;"></div>
+
+            <!-- Confirmação do Serviço Prestado -->
+            <div style="border-bottom: 0.01px solid #333; height: 15px; padding: 4.4px 2px; text-align: left;">
+                 Confirmação <br> do Serviço Prestado
+             </div>
+
+            <div style="border-bottom: 0.01px solid #333; height: 24.7px ;"></div>
+            <div style=" height: 20.5px; padding: 5px 2px; text-align: left;">
+                Nome do Resp. do Departamento
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="footer-container">
+            <div class="footer-column">
+                <p>Sede: R. Antonio Pedro nº111-3° Frente-1150-045 Lisboa</p>
+                <p>Segurança Social N° 564999 Fax: 213519629</p>
+            </div>
+            <div class="footer-column">
+                <p>Contribuinte N° 503 402 516</p>
+                <p>Sociedade por Quotas</p>
+            </div>
+            <div class="footer-column">
+                <p>Registada na C.R.C. de Lisboa sob o nº5190-Capital Social 25.000 €</p>
+            </div>
+        </div>
+
+
+<!-- Secção de Assinaturas (Redundante agora, mas mantida como no seu código) -->
+<div class="signature-grid">
+    <!-- ... seu HTML de assinaturas aqui ... -->
+</div>
+</div> <!-- pdf-content -->
+
+</div> <!-- pdf-container -->
+
+
+<!-- Inclua as bibliotecas necessárias COM OS LINKS COMPLETOS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <script src="script.js"></script>
 </body>
 </html>
-
