@@ -829,7 +829,7 @@ const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 const isMobile = window.innerWidth < 768;
 
 const opt = {
-    margin: 0, // ❗ tira margens do jsPDF
+    margin: [40,60,20,20], // ❗ tira margens do jsPDF
     filename: filename,
     image: { type: 'jpeg', quality: 1 },
 
@@ -1080,3 +1080,4 @@ if (btnExcluirUsuario && modalExcluir) {
 }
 
 });
+
