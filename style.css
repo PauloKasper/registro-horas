@@ -1651,3 +1651,25 @@ tr.fim-de-semana td {
     flex-direction: column;
     justify-content: center;
 }
+
+
+#pdf-content {
+    width: 297mm;
+    margin: 0 auto;   /* 👈 ISTO resolve */
+    background: white;
+}
+
+
+@media screen {
+    #pdf-content {
+        transform: scale(1); /* normal na tela */
+    }
+}
+
+@media print {
+    body {
+        margin: 0;
+    }
+}
+
+
