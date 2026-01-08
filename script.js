@@ -826,23 +826,34 @@ while (d <= fim) {
 const element = document.getElementById('pdf-content');
 const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 
+const isMobile = window.innerWidth < 768;
+
 const opt = {
-    margin: [15,10,0,0],
+    margin: 0, // ❗ tira margens do jsPDF
     filename: filename,
     image: { type: 'jpeg', quality: 1 },
+
     html2canvas: {
-        scale: 3,
-        windowWidth: 1500,
+        scale: 2,
+        windowWidth: 1600,      // viewport desktop fake
+        width: 1600,
+        scrollX: -window.scrollX, // 🔥 CORREÇÃO DO DESLOCAMENTO
+        scrollY: -window.scrollY,
         useCORS: true,
-        letterRendering: true
+        backgroundColor: '#ffffff'
     },
+
     jsPDF: {
         unit: 'mm',
         format: 'a4',
-        orientation: 'landscape',
-        precision: 16
+        orientation: 'landscape'
     }
 };
+
+
+
+
+
 
 // --- Totais ---
 document.getElementById('total-horas-trabalhadas').innerText =
