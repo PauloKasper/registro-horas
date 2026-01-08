@@ -829,30 +829,25 @@ const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 const isMobile = window.innerWidth < 768;
 
 const opt = {
-    margin: [40,60,20,20], // ❗ tira margens do jsPDF
-    filename: filename,
-    image: { type: 'jpeg', quality: 1 },
+  margin: [20, 0, 0, 0],
+  filename: filename,
+  image: { type: 'jpeg', quality: 1 },
 
-    html2canvas: {
-        scale: 2,
-        windowWidth: 1600,      // viewport desktop fake
-        width: 1600,
-        scrollX: -window.scrollX, // 🔥 CORREÇÃO DO DESLOCAMENTO
-        scrollY: -window.scrollY,
-        useCORS: true,
-        backgroundColor: '#ffffff'
-    },
+  html2canvas: {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    scrollX: 0,
+    scrollY: 0,
+    windowWidth: 1500  // <<< FIXA A BASE (muito importante)
+  },
 
-    jsPDF: {
-        unit: 'mm',
-        format: 'a4',
-        orientation: 'landscape'
-    }
+  jsPDF: {
+    unit: 'mm',
+    format: 'a4',
+    orientation: 'landscape'
+  }
 };
-
-
-
-
 
 
 // --- Totais ---
@@ -882,6 +877,26 @@ const valorRefeicao = diasTrabalhados * 8;
 
 document.getElementById('subsidio-refeicao').innerText =
     `${diasTrabalhados} X 8 = ${valorRefeicao}`;
+
+document.getElementById('colaborador').innerText =
+    window.usuario_atual || '';
+
+document.getElementById('data_emissao').innerText =
+    new Date().toLocaleDateString('pt-PT');
+
+document.getElementById('funcao').innerText =
+    window.funcao_padrao || 'Operador de Armazém';
+
+document.getElementById('empresa').innerText =
+    window.empresa_padrao || 'CDIL';
+
+document.getElementById('contribuinte').innerText =
+    window.NIF || '';
+
+document.getElementById('horario').innerText =
+    window.horario_padrao || '08:30 - 17:00';
+
+
 
 // --- PDF ---
 html2pdf().set(opt).from(element).save();
@@ -1080,4 +1095,3 @@ if (btnExcluirUsuario && modalExcluir) {
 }
 
 });
-
