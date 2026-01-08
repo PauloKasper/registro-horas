@@ -1431,6 +1431,7 @@ div.h-safe-area-inset-top {
     display: block; }
 #pdf-content {
     width: 100%;
+    display: block !important;
     font-family: Helvetica, Arial, sans-serif;
     padding: 0.1mm 5mm;
     box-sizing: border-box;
@@ -1444,6 +1445,8 @@ div.h-safe-area-inset-top {
     align-items: stretch; /* Garante altura igual para ambos */
     width: 100%;
     /* Removido: position: relative; */
+    justify-content: center; /* <<< ADICIONAR */
+
 }
 
 table {
@@ -1654,9 +1657,12 @@ tr.fim-de-semana td {
 
 
 #pdf-content {
-    width: 297mm;
-    margin: 0 auto;   /* 👈 ISTO resolve */
+     width: 267mm;
     background: white;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block;
+
 }
 
 
@@ -1673,3 +1679,35 @@ tr.fim-de-semana td {
 }
 
 
+.header-top {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    margin-bottom: 6mm;
+}
+
+#logo-empresa {
+    height: 13mm;      /* tamanho real de formulário */
+    width: auto;
+    object-fit: contain;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 110px 1fr; /* largura fixa + conteúdo */
+    row-gap: 3px;
+    column-gap: 10px;
+    font-size: 8pt;
+    margin-top: 8px;
+}
+
+.info-label {
+    font-weight: bold;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.info-value {
+    text-align: left;
+    white-space: nowrap;
+}
