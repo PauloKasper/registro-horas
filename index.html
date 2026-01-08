@@ -211,19 +211,37 @@
 
 <!-- INÍCIO DO BLOCO OCULTO DO PDF (NÃO APARECE NA TELA) -->
 <div id="pdf-container" >
+
     <div id="pdf-content" class="page">
+
             <div class="header">FOLHA DE HORAS</div>
+                   <div class="header-top">
+                        <img id="logo-empresa" src="assets/adecco.png" alt="Adecco">
+                   </div>
 
             <div class="info-grid">
-                <div>
-                    <div class="info-item" id="colaborador">COLABORADOR:</div>
-                    <div class="info-item" id="data_emissao">DATA:</div>
-                    <div class="info-item" id="funcao">FUNÇÃO:</div>
-                    <div class="info-item" id="empresa">EMPRESA:</div>
-                    <div class="info-item" id="contribuinte">CONTRIBUINTE:</div>
-                    <div class="info-item" id="horario">HORÁRIO:</div>
-                </div>
+              <div class="info-grid">
+                <div class="info-label">COLABORADOR:</div>
+                <div class="info-value" id="colaborador"></div>
+
+                <div class="info-label">DATA:</div>
+                <div class="info-value" id="data_emissao"></div>
+
+                <div class="info-label">FUNÇÃO:</div>
+                <div class="info-value" id="funcao"></div>
+
+                <div class="info-label">EMPRESA:</div>
+                <div class="info-value" id="empresa"></div>
+
+                <div class="info-label">CONTRIBUINTE:</div>
+                <div class="info-value" id="contribuinte"></div>
+
+                <div class="info-label">HORÁRIO:</div>
+                <div class="info-value" id="horario"></div>
+            </div>
+
                 <div><!-- Outras informações aqui --></div>
+
             </div>
 
             <!-- NOVO CONTAINER para a tabela e a caixa flutuante -->
