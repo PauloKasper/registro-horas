@@ -855,10 +855,10 @@ const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 const isMobile = window.innerWidth < 768;
 
 const opt = {
-  margin: [10, 10, 10, 10], // margens reais do PDF
+  margin: 0, // margens reais do PDF
   filename,
   html2canvas: {
-    scale: 3,
+    scale: 2,
     windowWidth: 1100,   // 🔑 largura virtual estável
     scrollX: 0,
     scrollY: 0
