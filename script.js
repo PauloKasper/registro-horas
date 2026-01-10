@@ -20,23 +20,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- FUNÇÕES DE CÁLCULO ---
-    function calcularHorasDoDia(r) {
-        const parseHora = (h) => {
-            if (!h || h.indexOf(':') === -1) return 0;
-            const [horas, minutos] = h.split(':').map(Number);
-            return (horas * 60) + minutos;
-        };
-        const entrada = parseHora(r.entrada);
-        const saidaAlm = parseHora(r.saida_alm);
-        const retorno = parseHora(r.retorno);
-        const saidaFinal = parseHora(r.saida_final);
+function calcularHorasDoDia(r) {
+    const paraMinutos = (h) => {
+        if (!h || !h.includes(':')) return null;
+        const [hh, mm] = h.split(':').map(Number);
+        return hh * 60 + mm;
+    };
 
-        if (!entrada || !saidaAlm || !retorno || !saidaFinal || saidaAlm < entrada || retorno < saidaAlm || saidaFinal < retorno) return 0;
+    const entrada = paraMinutos(r.entrada);
+    if (entrada === null) return 0;
 
-        const manha = saidaAlm - entrada;
-        const tarde = saidaFinal - retorno;
-        return (manha + tarde) / 60;
+    // CASO 1 — dia completo com almoço
+    if (r.saida_alm && r.retorno) {
+        const saidaAlm = paraMinutos(r.saida_alm);
+        const retorno = paraMinutos(r.retorno);
+        const saidaFinal = paraMinutos(r.saida_final);
+
+        if (saidaAlm !== null && retorno !== null && saidaFinal !== null) {
+            return +(((saidaAlm - entrada) + (saidaFinal - retorno)) / 60).toFixed(2);
+        }
     }
+
+    // CASO 2 — meio período (entrada → saída almoço)
+    if (r.saida_alm) {
+        const saidaAlm = paraMinutos(r.saida_alm);
+        if (saidaAlm !== null) {
+            return +((saidaAlm - entrada) / 60).toFixed(2);
+        }
+    }
+
+    // CASO 3 — sem almoço (entrada → saída final)
+    if (r.saida_final) {
+        const saidaFinal = paraMinutos(r.saida_final);
+        if (saidaFinal !== null) {
+            return +((saidaFinal - entrada) / 60).toFixed(2);
+        }
+    }
+
+    return 0;
+}
+
+
+
+
 
     function calcularValeRefeicao(diasTrabalhados) {
         const valorPorDia = 8.00;
@@ -829,26 +855,20 @@ const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 const isMobile = window.innerWidth < 768;
 
 const opt = {
-  margin: 0,
-  filename: filename,
-  image: { type: 'jpeg', quality: 1 },
-
+  margin: [10, 10, 10, 10], // margens reais do PDF
+  filename,
   html2canvas: {
-    scale: 2,
-    backgroundColor: '#ffffff',
-    useCORS: true,
+    scale: 3,
+    windowWidth: 1550,   // 🔑 largura virtual estável
     scrollX: 0,
-    scrollY: 0,
-    windowWidth: 1200  // <<< FIXA A BASE (muito importante)
+    scrollY: 0
   },
-
   jsPDF: {
     unit: 'mm',
     format: 'a4',
     orientation: 'landscape'
   }
 };
-
 
 
 // --- Totais ---
@@ -1096,4 +1116,3 @@ if (btnExcluirUsuario && modalExcluir) {
 }
 
 });
-
