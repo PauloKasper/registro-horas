@@ -829,7 +829,7 @@ const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 const isMobile = window.innerWidth < 768;
 
 const opt = {
-  margin: [20, 0, 0, 0],
+  margin: 0,
   filename: filename,
   image: { type: 'jpeg', quality: 1 },
 
@@ -839,7 +839,7 @@ const opt = {
     useCORS: true,
     scrollX: 0,
     scrollY: 0,
-    windowWidth: 1500  // <<< FIXA A BASE (muito importante)
+    windowWidth: 1200  // <<< FIXA A BASE (muito importante)
   },
 
   jsPDF: {
@@ -848,6 +848,7 @@ const opt = {
     orientation: 'landscape'
   }
 };
+
 
 
 // --- Totais ---
@@ -1095,3 +1096,4 @@ if (btnExcluirUsuario && modalExcluir) {
 }
 
 });
+
