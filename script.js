@@ -859,7 +859,7 @@ const opt = {
   filename,
   html2canvas: {
     scale: 3,
-    windowWidth: 1550,   // 🔑 largura virtual estável
+    windowWidth: 1200,   // 🔑 largura virtual estável
     scrollX: 0,
     scrollY: 0
   },
@@ -1119,6 +1119,7 @@ if (btnExcluirUsuario && modalExcluir) {
 }
 
 });
+
 
 
 
