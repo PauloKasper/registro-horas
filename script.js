@@ -858,8 +858,8 @@ const opt = {
   margin: 0, // margens reais do PDF
   filename,
   html2canvas: {
-    scale: 2,
-    windowWidth: 1100,   // 🔑 largura virtual estável
+    scale: 3,
+    windowWidth: 1550,   // 🔑 largura virtual estável
     scrollX: 0,
     scrollY: 0
   },
@@ -867,7 +867,10 @@ const opt = {
     unit: 'mm',
     format: 'a4',
     orientation: 'landscape'
-  }
+  },
+   pagebreak: {
+        mode: ['avoid-all'] // 🔑 ISSO É O SEGREDO
+    }
 };
 
 
@@ -1116,5 +1119,6 @@ if (btnExcluirUsuario && modalExcluir) {
 }
 
 });
+
 
 
