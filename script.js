@@ -60,55 +60,59 @@ function calcularHorasDoDia(r) {
     return 0;
 }
 
-
-
-
-
     function calcularValeRefeicao(diasTrabalhados) {
         const valorPorDia = 8.00;
         return diasTrabalhados * valorPorDia;
     }
 
-    function calcularPlacarTotal() {
-        let totalHoras = 0;
-        let diasTrabalhados = 0;
+ function calcularPlacarTotal() {
+    let totalHoras = 0;
+    let diasTrabalhados = 0;
 
-        for (const data in window.registros) {
-            const r = window.registros[data];
-            if (!r || !r.salvo) continue;
-            const horasNoDia = calcularHorasDoDia(r);
-            if (horasNoDia > 0) {
-                totalHoras += horasNoDia;
-                diasTrabalhados++;
-            }
+    for (const data in window.registros) {
+        const r = window.registros[data];
+        if (!r || !r.salvo) continue;
+
+        const horasNoDia = Number(calcularHorasDoDia(r)) || 0;
+
+        if (horasNoDia > 0) {
+            totalHoras += horasNoDia;
+            diasTrabalhados += 1;
         }
-
-        return {
-            totalHoras,
-            diasTrabalhados,
-            estimativaVale: calcularValeRefeicao(diasTrabalhados)
-        };
     }
 
-    function calcularHorasNormaisExtras() {
-        let totalNormais = 0;
-        let totalExtras = 0;
+    return {
+        totalHoras,
+        diasTrabalhados,
+        estimativaVale: calcularValeRefeicao(diasTrabalhados)
+    };
+}
 
-        for (const data in window.registros) {
-            const r = window.registros[data];
-            if (!r || !r.salvo) continue;
 
-            const h = calcularHorasDoDia(r);
-            if (h > 8) {
-                totalNormais += 8;
-                totalExtras += h - 8;
-            } else {
-                totalNormais += h;
-            }
+  function calcularHorasNormaisExtras() {
+    let totalNormais = 0;
+    let totalExtras = 0;
+
+    for (const data in window.registros) {
+        const r = window.registros[data];
+        if (!r || !r.salvo) continue;
+
+        const h = Number(calcularHorasDoDia(r)) || 0;
+
+        if (h > 8) {
+            totalNormais += 8;
+            totalExtras += (h - 8);
+        } else {
+            totalNormais += h;
         }
-
-        return { totalNormais, totalExtras };
     }
+
+    return {
+        totalNormais,
+        totalExtras
+    };
+}
+
 
     function formatarHora(valor) {
     if (!valor) return '';
@@ -259,32 +263,59 @@ function isCycleComplete(mes, ano) {
 }
 
 
-    function atualizarCardsPerfil() {
-        const placar = calcularPlacarTotal();
-        const { totalNormais, totalExtras } = calcularHorasNormaisExtras();
-        const totalHorasNegativas = Math.max(0, placar.diasTrabalhados * 8 - totalNormais);
+function atualizarCardsPerfil() {
+    const placar = calcularPlacarTotal();
+    const { totalNormais, totalExtras } = calcularHorasNormaisExtras();
 
-        const elDiasFront = document.getElementById('dias-front');
-        const elHorasBack = document.getElementById('horas-back');
-        if (elDiasFront && elHorasBack) {
-            elDiasFront.innerHTML = `<span>Dias:</span><strong>${placar.diasTrabalhados}</strong>`;
-            elHorasBack.innerHTML = `<span>Total:</span><strong>${placar.totalHoras.toFixed(2)}h</strong>`;
-        }
+    const horasEsperadas = placar.diasTrabalhados * 8;
+    const totalHorasNegativas = Math.max(
+        0,
+        horasEsperadas - placar.totalHoras
+    );
+        // CARD 1 – TOTAL DIAS (FRENTE) / TOTAL HORAS (VERSO)
+    const elDiasFront = document.getElementById('dias-front');
+    const elHorasBack = document.getElementById('horas-back');
 
-        const elRefeicaoFront = document.getElementById('refeicao-front');
-        const elEstimativaBack = document.getElementById('estimativa-back');
-        if (elRefeicaoFront && elEstimativaBack) {
-            elRefeicaoFront.innerHTML = `<span>Refeição</span>`;
-            elEstimativaBack.innerHTML = `<span>Estimativa:</span><strong>€ ${placar.estimativaVale.toFixed(2)}</strong>`;
-        }
-
-        const elExtrasFront = document.getElementById('extras-front');
-        const elExtrasBack = document.getElementById('extras-back');
-        if (elExtrasFront && elExtrasBack) {
-            elExtrasFront.innerHTML = `<span>Horas Extras</span><strong>${totalExtras.toFixed(2)}h</strong>`;
-            elExtrasBack.innerHTML = `<span>Horas Negativas</span><strong>${totalHorasNegativas.toFixed(2)}h</strong>`;
-        }
+    if (elDiasFront) {
+        elDiasFront.innerHTML =
+            `<span>Total Dias</span><strong>${placar.diasTrabalhados}</strong>`;
     }
+
+    if (elHorasBack) {
+        elHorasBack.innerHTML =
+            `<span>Total Horas</span><strong>${placar.totalHoras.toFixed(2)}h</strong>`;
+    }
+
+    // =========================
+    // CARD RESUMO (embaixo)
+    // =========================
+    const elTotalHoras = document.getElementById('total-horas');
+    const elHorasExtras = document.getElementById('horas-extras');
+    const elHorasNegativas = document.getElementById('horas-negativas');
+
+    if (elTotalHoras)
+        elTotalHoras.innerText = `${placar.totalHoras.toFixed(2)}h`;
+
+    if (elHorasExtras)
+        elHorasExtras.innerText = `${totalExtras.toFixed(2)}h`;
+
+    if (elHorasNegativas)
+        elHorasNegativas.innerText = `${totalHorasNegativas.toFixed(2)}h`;
+
+    // =========================
+    // 🔥 CARDS DE CIMA (FLIP)
+    // =========================
+    const elRefeicaoFront = document.getElementById('refeicao-front');
+    const elEstimativaBack = document.getElementById('estimativa-back');
+
+   
+    if (elEstimativaBack) {
+        elEstimativaBack.innerHTML =
+            `<span>Estimativa</span><strong>€ ${placar.estimativaVale.toFixed(2)}</strong>`;
+    }
+}
+
+
 
     window.addEventListener('dadosPWAHorasAtualizados', atualizarCardsPerfil);
 
@@ -859,7 +890,7 @@ const opt = {
   filename,
   html2canvas: {
     scale: 3,
-    windowWidth: 1200,   // 🔑 largura virtual estável
+    windowWidth: 1100,   // 🔑 largura virtual estável
     scrollX: 0,
     scrollY: 0
   },
@@ -1119,7 +1150,3 @@ if (btnExcluirUsuario && modalExcluir) {
 }
 
 });
-
-
-
-
