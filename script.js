@@ -308,11 +308,18 @@ function atualizarCardsPerfil() {
     const elRefeicaoFront = document.getElementById('refeicao-front');
     const elEstimativaBack = document.getElementById('estimativa-back');
 
-   
+
     if (elEstimativaBack) {
         elEstimativaBack.innerHTML =
             `<span>Estimativa</span><strong>€ ${placar.estimativaVale.toFixed(2)}</strong>`;
     }
+    const elExtrasTotal = document.getElementById('extras-total');
+
+    if (elExtrasTotal) {
+        elExtrasTotal.innerText = '€ 123.45';
+    }
+
+
 }
 
 
@@ -886,11 +893,11 @@ const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 const isMobile = window.innerWidth < 768;
 
 const opt = {
-  margin: 0, // margens reais do PDF
+  margin: [10, 10, 10, 10], // margens reais do PDF
   filename,
   html2canvas: {
     scale: 3,
-    windowWidth: 1100,   // 🔑 largura virtual estável
+    windowWidth: 1550,   // 🔑 largura virtual estável
     scrollX: 0,
     scrollY: 0
   },
