@@ -13,6 +13,13 @@
 
 /* --- BODY: Container geral --- */
 html, body {
+          /* Impede o scroll e o efeito de 'puxar para atualizar' no Android/iOS */
+    overscroll-behavior: none;
+            /* Garante que o conteúdo não ultrapasse o tamanho da tela */
+    overflow: hidden;
+            /* Desativa gestos de zoom específicos em navegadores modernos */
+    touch-action: pan-x pan-y;
+    position: fixed;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -572,7 +579,7 @@ button {
     z-index: 10;
     text-align: center;
     border-radius: 25px;
-    padding: 10px;
+    padding-top: 5px;
     width: 100%;
     max-width: 350px;
     background: rgba(255, 255, 255, 0.2);
@@ -601,11 +608,11 @@ button {
 
 /* Foto do perfil */
 .foto-container {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
     margin: 0 auto;
     position: relative;
-    border-radius: 50%;
+    border-radius: 25%;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -637,29 +644,29 @@ button {
 /* Texto dentro do perfil */
 .perfil-card h2 {
     margin: 0;
-    font-size: 22px;
+    font-size: 15px;
     color: inherit;
 }
 
 .perfil-card .cargo {
-    font-size: 14px;
+    font-size: 10px;
     margin: 5px 0;
     opacity: 0.8;
 }
 
 .perfil-card .descricao {
-    font-size: 14px;
+    font-size: 10px;
     margin: 15px 0;
 }
 
 .perfil-info-text h2 {
     margin: 0;
-    font-size: 22px;
+    font-size: 15px;
     color: #333;
 }
 
 .perfil-info-text .cargo {
-    font-size: 14px;
+    font-size: 10px;
     margin: 5px 0 0 0;
     opacity: 0.7;
     color: #555;
