@@ -569,25 +569,23 @@ button {
 /* PERFIL CARD COM FUNDO E HIGHLIGHT CENTRALIZADO */
 .perfil-card {
     position: relative;
-    top: 50%;                /* centraliza verticalmente */
-    left: 50%;               /* centraliza horizontalmente */
-    transform: translate(-50%, -0%); /* ajusta para centralização exata */
     z-index: 10;
     text-align: center;
     border-radius: 25px;
     padding: 10px;
     width: 100%;
-    max-width: 350px;        /* mantém card dentro de limites */
-    background: rgba(255, 255, 255, 0.2); /* fundo branco gelo semi-transparente */
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
     overflow: hidden;
 
-    /* flex para alinhar conteúdo internamente */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+
+    margin-bottom: 5px; /* 🔑 controla distância para os cards */
 }
+
 
 /* Pseudo-elemento para semi-background azul claro atrás da foto */
 .perfil-card::before {
@@ -872,17 +870,16 @@ div.h-safe-area-inset-top {
 /* Cards */
 .cards-container {
     display: flex;
-    gap: 10px;           /* espaço entre os cards */
-    justify-content: center; /* centraliza os cards no container */
-    margin-top: 30px;
-    margin-bottom: 30px;
-
+    gap: 6px;              /* 🔑 menor distância */
+    justify-content: center;
+    margin-bottom: 8px;
 }
 
+
 .card {
-    padding: 20px;
-    width: 160px;
-    height: 100px;
+    width: 100px;          /* 🔑 mais compacto */
+    height: 80px;
+    padding: 5px;
     perspective: 1000px;
 }
 
@@ -1000,7 +997,7 @@ div.h-safe-area-inset-top {
 .card-resumo {
     background: rgba(255, 255, 255, 0.4); /* fundo claro semi-transparente */
     border-radius: 12px;
-    padding: 15px 7px;
+    padding: 5px 20px;
     color: #000;                 /* texto escuro para contraste */
     max-width: 300px;
     width: 90%;                   /* responsivo */
@@ -1010,24 +1007,25 @@ div.h-safe-area-inset-top {
     margin: auto; /* centraliza em caso de overflow */
 }
 
-.card-resumo h3 {
+.card-resumo h3, h4 {
     text-align: center;
-    margin-bottom: 12px;
-    font-size: 1.2rem;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
     color:  #333333; /* amarelo chamativo */
 }
 
 .resumo-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 1rem;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
 }
 
 .resumo-item strong {
     font-weight: bold;
     color: #ecf0f1;
 }
+
 
 #bottom-nav.radio-inputs {
   position: fixed;
@@ -1663,6 +1661,9 @@ tr.fim-de-semana td {
 }
 
 
+}
+
+
 @media screen {
     #pdf-content {
         transform: scale(1); /* normal na tela */
@@ -1708,4 +1709,3 @@ tr.fim-de-semana td {
     text-align: left;
     white-space: nowrap;
 }
-
