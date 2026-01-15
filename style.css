@@ -10,23 +10,6 @@
     page-break-inside: avoid;
 }
 
-/* Se o celular for virado, forçamos o layout a não quebrar ou avisamos */
-@media (orientation: landscape) {
-  body::after {
-    content: "Por favor, use o app em modo vertical.";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100dvh;
-    background: #007bff;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-}
-
-
 
 /* --- BODY: Container geral --- */
 html, body {
@@ -1734,3 +1717,4 @@ tr.fim-de-semana td {
     text-align: left;
     white-space: nowrap;
 }
+
