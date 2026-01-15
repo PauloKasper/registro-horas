@@ -3,7 +3,7 @@
 ========================================================== */
 
 @page {
-    margin: 20mm;
+    margin: 0;
 }
 .page {
     page-break-after: avoid;
@@ -1717,4 +1717,5 @@ tr.fim-de-semana td {
     text-align: left;
     white-space: nowrap;
 }
+
 
