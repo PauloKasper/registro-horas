@@ -870,15 +870,15 @@ div.h-safe-area-inset-top {
 /* Cards */
 .cards-container {
     display: flex;
-    gap: 6px;              /* 🔑 menor distância */
+    gap: 25px;              /* 🔑 menor distância */
     justify-content: center;
     margin-bottom: 8px;
 }
 
 
 .card {
-    width: 100px;          /* 🔑 mais compacto */
-    height: 80px;
+    width: 80px;          /* 🔑 mais compacto */
+    height: 60px;
     padding: 5px;
     perspective: 1000px;
 }
@@ -901,7 +901,7 @@ div.h-safe-area-inset-top {
     align-items: center;
     text-align: center;
 
-    font-size: 18px;
+    font-size: 12px;
     font-weight: bold;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.2);
