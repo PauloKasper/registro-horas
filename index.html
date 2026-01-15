@@ -77,7 +77,7 @@
 
     </div>
 
-    <div class="cards-container">
+   <div class="cards-container">
       <div class="card">
         <div class="flip">
           <div id="dias-front" class="face front">Total Dias</div>
@@ -91,14 +91,74 @@
           <div id="estimativa-back" class="face back">Estimativa</div>
         </div>
       </div>
+
+      <!-- ✅ NOVO CARD -->
+      <div class="card">
+          <div class="flip">
+            <div id="extras-front" class="face front">
+              Extras (€)
+            </div>
+            <div id="extras-back" class="face back">
+              <strong id="extras-total">€ 0.00</strong>
+            </div>
+          </div>
+        </div>
+
     </div>
 
+
     <div id="card-horas-resumo" class="card-resumo">
-      <h3>Resumo de Horas</h3>
-      <div class="resumo-item"><span>Total de Horas:</span> <strong id="total-horas">0h</strong></div>
-      <div class="resumo-item"><span>Horas Extras:</span> <strong id="horas-extras">0h</strong></div>
-      <div class="resumo-item"><span>Horas Negativas:</span> <strong id="horas-negativas">0h</strong></div>
-    </div>
+
+  <h3>Resumo de Horas</h3>
+
+  <!-- PARTE EXISTENTE (mantida) -->
+  <div class="resumo-item">
+    <span>Total de Horas:</span>
+    <strong id="total-horas">0h</strong>
+  </div>
+
+  <div class="resumo-item">
+    <span>Horas Extras (total):</span>
+    <strong id="horas-extras">0h</strong>
+  </div>
+
+  <div class="resumo-item">
+    <span>Horas Negativas:</span>
+    <strong id="horas-negativas">0h</strong>
+  </div>
+
+  <hr>
+
+  <!-- NOVA PARTE -->
+  <h4 id="Extras-por-Escalão">Extras por Escalão</h4>
+
+  <div class="resumo-item">
+    <span>1ª hora extra:</span>
+    <span id="extra-h1-horas">0.00h</span>
+    <strong id="extra-h1-valor">€ 0.00</strong>
+  </div>
+
+  <div class="resumo-item">
+    <span>2ª hora extra:</span>
+    <span id="extra-h2-horas">0.00h</span>
+    <strong id="extra-h2-valor">€ 0.00</strong>
+  </div>
+
+  <div class="resumo-item">
+    <span>3ª+ horas:</span>
+    <span id="extra-rest-horas">0.00h</span>
+    <strong id="extra-rest-valor">€ 0.00</strong>
+  </div>
+
+  <hr>
+
+  <div class="resumo-item resumo-total">
+    <span>Total Extras (€):</span>
+    <strong id="extra-total-valor">€ 0.00</strong>
+  </div>
+
+</div>
+
 
   </div>
 </div>
@@ -216,7 +276,7 @@
 
             <div class="header">FOLHA DE HORAS</div>
                    <div class="header-top">
-                        <img id="logo-empresa" src="https://github.com/PauloKasper/registro-horas/blob/main/adecco.png?raw=true" alt="Adecco">
+                        <img id="logo-empresa" src="assets/adecco.png" alt="Adecco">
                    </div>
 
             <div class="info-grid">
@@ -383,5 +443,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
-
