@@ -37,7 +37,6 @@ html, body {
     height: calc(var(--vh, 1%) * 100);
     background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
     background-size: cover;
-    background-repeat: no-repeat;
 
     /* Flex container */
     display: flex;
@@ -1716,6 +1715,7 @@ tr.fim-de-semana td {
     text-align: left;
     white-space: nowrap;
 }
+
 
 
 
