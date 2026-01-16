@@ -29,6 +29,7 @@ html, body {
     align-items: center;
     /* Garante que o conteúdo respeite a área segura do iPhone/Android */
     padding-bottom: env(safe-area-inset-bottom);
+
 }
 
 
@@ -52,6 +53,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 15px;
+
 }
 
 .tela.ativa {
@@ -1136,7 +1138,7 @@ div.h-safe-area-inset-top {
 /* 1. Container fixo no rodapé */
 #bottom-nav.radio-inputs {
   position: fixed;
-  bottom: 0px; /* Distância da borda inferior */
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%); /* Centraliza horizontalmente */
   display: flex;
