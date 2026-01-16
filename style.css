@@ -10,35 +10,25 @@
     page-break-inside: avoid;
 }
 
-/* --- BODY: Container geral --- */
+/* --- BODY: Ajustado para ocupar 100% da tela real --- */
 html, body {
-          /* Impede o scroll e o efeito de 'puxar para atualizar' no Android/iOS */
     overscroll-behavior: none;
-            /* Garante que o conteúdo não ultrapasse o tamanho da tela */
     overflow: hidden;
-            /* Desativa gestos de zoom específicos em navegadores modernos */
-    touch-action: pan-x pan-y;
-    position: fixed;
+    touch-action: manipulation;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     width: 100%;
-    height: 200dvh;
-    min-height: 100%;
+    /* Usa dvh para evitar problemas com barras de navegação mobile */
+    height: 100dvh;
     color: #000;
-    overflow: hidden; /* Bloqueia rolagem global */
+    background: linear-gradient(135deg, #ffffff 50%, #f0f0f0 100%);
 
-    /* Fundo com gradiente */
-    height: calc(var(--vh, 1%) * 100);
-    background: linear-gradient(135deg, #ffffff 50%);
-    background-size: cover;
-    background-repeat: no-repeat;
-
-    /* Flex container */
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    page-break-after: avoid;
+    flex-direction: column;
+    align-items: center;
+    /* Garante que o conteúdo respeite a área segura do iPhone/Android */
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 
