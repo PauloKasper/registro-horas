@@ -3,13 +3,12 @@
 ========================================================== */
 
 @page {
-    margin: 0;
+    margin: 20mm;
 }
 .page {
     page-break-after: avoid;
     page-break-inside: avoid;
 }
-
 
 /* --- BODY: Container geral --- */
 html, body {
@@ -24,7 +23,7 @@ html, body {
     padding: 0;
     font-family: Arial, sans-serif;
     width: 100%;
-    height: 100vh;
+    height: 200dvh;
     min-height: 100%;
     color: #000;
     overflow: hidden; /* Bloqueia rolagem global */
@@ -35,8 +34,9 @@ html, body {
 
     /* Fundo com gradiente */
     height: calc(var(--vh, 1%) * 100);
-    background: linear-gradient(135deg, #7f8c8d 0%, #3498db 50%, #e67e22 100%);
+    background: linear-gradient(135deg, #ffffff 50%);
     background-size: cover;
+    background-repeat: no-repeat;
 
     /* Flex container */
     display: flex;
@@ -61,10 +61,11 @@ html, body {
     max-width: 400px;
     min-height: 50%;
     margin: 125px auto; /* centraliza e reduz a margem */
+    padding: 20px;
     display: none;
     flex-direction: column;
     align-items: center;
-   
+    gap: 15px;
 }
 
 .tela.ativa {
@@ -83,7 +84,7 @@ html, body {
 
 /* Card centralizado dentro da tela */
 .cadastro-card {
-    background-color: rgba(255,255,255,0.4);
+    background-color: #0080ff;
     backdrop-filter: blur(12px);
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
@@ -110,26 +111,25 @@ html, body {
 .cadastro-card input {
     padding: 10px 10px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #fff;
     width: 265px;
     margin: 10px;
 
 }
 
 .cadastro-card button {
-
     padding: 55px 15px;
     border-radius: 10px;
     border: none;
-    background-color: #2196f3;
-    color: #fff;
+    background-color: #333;
+    color: #ffffff;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     margin: 10px;
 }
 
 .cadastro-card button:hover {
-    background-color: #1976d2;
+    background-color: #ffff;
     transform: translateY(-2px);
 }
 
@@ -193,7 +193,7 @@ button,
     width: 100px;
     margin-top: 20px;
     margin-bottom: 10px;
-    background-color: #2196f3;
+    background-color: #ffff;
 }
 
 button:active,
@@ -214,33 +214,93 @@ button {
     width: 107%;
     font-size: 16px;
 }
-
-#btn-salvar-cadastro{
-    color: white;
+#btn-salvar-cadastro {
+    color: #333;
     width: 360px;
     margin-top: 20px;
     margin-bottom: 10px;
-    background-color: #2196f3;
+    background-color: #ffffff; /* Corrigido de #ffff para #ffffff */
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: block;
+    /* Transição suave apenas para a escala e cor */
+    transition: transform 0.1s ease-in-out, background-color 0.2s;
+    /* Impede qualquer movimento inicial */
+    transform: scale(1);
 }
+
+/* Hover: Apenas cor, sem movimento ou mudança de tamanho */
+#btn-salvar-cadastro:hover {
+    background-color: #f9f9f9;
+    transform: scale(1);
+}
+
+/* Active: O efeito de "afundar" (diminuir) */
+#btn-salvar-cadastro:active {
+    /* Diminui levemente para dar sensação de profundidade */
+    transform: scale(0.96);
+    /* Adiciona sombra interna para parecer que entrou na tela */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
 #btn-entrar,
 #btn-logout {
     background: #2196f3;
     color: white;
 }
-#btn-voltar-login{
+#btn-voltar-login {
+    background: #fff; /* Adicionado ; */
     width: 360px;
     margin-top: 20px;
     margin-bottom: 10px;
+    padding: 10px; /* Adicionado para melhor aparência */
+    border: 1px solid #ccc;
+    cursor: pointer;
+    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2); /* Sombra 'sólida' para parecer altura */
+    transition: all 0.1s ease-in-out;
 }
+
+/* Corrigido para #btn (com 'n') */
+#btn-voltar-login:active {
+    background-color: #f0f0f0; /* Cor levemente diferente ao clicar */
+    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2); /* Sombra quase some */
+    transform: translateY(0.1px); /* 'Desce' o botão */
+}
+
+
 #btn-gerar-csv{
     width: 385px;
     color: white;
     background-color: #2196f3
 }
 
-#btn-abrir-cadastro{
-    background: #e0e0e0;
+#btn-abrir-cadastro {
+    background: #ffffff;
+    width: 310px; /* Mantendo o padrão do botão de salvar */
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.2s;
+    transform: scale(1); /* Estático por padrão */
 }
+
+/* Hover: Fica parado, apenas muda levemente a cor */
+#btn-abrir-cadastro:hover {
+    background-color: #f9f9f9;
+    transform: scale(1);
+}
+
+/* Active: O efeito de encolher ao clicar */
+#btn-abrir-cadastro:active {
+    transform: scale(0.96);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0;
+}
+
 /* Botão salvar dentro da lista de dias */
 .card-dia .btn-salvar-hora {
     width: 900%;          /* ocupa toda a largura do input */
@@ -311,29 +371,49 @@ button {
     background-color: #1976d2;
 }
 
-/* Todos os botões de voltar */
+/* Estado Base e Hover: Absolutamente estáticos */
 .btn-voltar,
 #btn-registro-voltar,
 #btn-ajustes-voltar,
 #btn-voltar-login {
-    background-color: #b0b0b0;
-    color: white;
-    width: 150px;          /* mesma largura do botão azul */
+    background-color: #f4f4f4;
+    color: #333;
+    width: 150px;
     padding: 10px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
     display: inline-block;
     text-align: center;
+
+    /* Sombra que dá a altura inicial */
+    box-shadow: 0 1px 0 #bbb;
+    /* Importante: Transform em zero para não haver movimento acidental */
+    transform: translateY(0);
+    transition: background-color 0.2s ease; /* Transição apenas para a cor */
 }
 
+/* Hover: APENAS mudança de cor, sem mexer 1 pixel sequer */
 .btn-voltar:hover,
 #btn-registro-voltar:hover,
 #btn-ajustes-voltar:hover,
 #btn-voltar-login:hover {
-    background-color: #999999;
+    background-color: #f9f9f9;
+    transform: scale(1); /* Garante que não mude de tamanho */
+
 }
+
+/* Active: O único lugar onde o movimento é permitido */
+.btn-voltar:active,
+#btn-registro-voltar:active,
+#btn-ajustes-voltar:active,
+#btn-voltar-login:active {
+       /* Diminui para 95% do tamanho original */
+    transform: scale(0.95);
+    /* Sombra interna opcional para reforçar que 'entrou' na tela */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);  /* Resposta imediata ao clique */
+}
+
 
 /* ==========================================================
    ERROS
@@ -703,7 +783,7 @@ button {
    LOGIN GLASSMORPHISM
 ========================================================== */
 #tela-login.tela.ativa {
-    background-color: rgba(255,255,255,0.4);
+    background: linear-gradient(135deg, #0080ff 50%);
     backdrop-filter: blur(12px);
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
@@ -720,7 +800,7 @@ button {
 }
 
 #tela-login input {
-    background-color: rgba(255,255,255,0.6);
+    background-color: #ffff;
     border: none;
     border-bottom: 1px solid rgba(0,0,0,0.2);
     color: #333;
@@ -732,24 +812,30 @@ button {
 }
 
 #tela-login input::placeholder {
-    color: rgba(51,51,51,0.7);
+    color: #333;
     text-align: center; /* centraliza o placeholder */
 }
 
 #btn-entrar {
-    background: linear-gradient(90deg, #607D8B 0%, #455A64 100%);
-    color: white;
+    background: #ffff;
+    color: #333;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     border-radius: 50px;
 }
+#btn-entrar:hover{
+    background: #f9f9f9;
 
-#tela-login h2 { color: #333; }
+    }
+
+
+#tela-login h2 { color: #ffff; }
 
 
 
 /* ==========================================================
    POPUPS E BOTÕES SECUNDÁRIOS
 ========================================================== */
+/* 1. Botão de Texto - Sem mexer na posição da janela */
 .text-btn-edit-pic {
     background: none;
     border: none;
@@ -759,14 +845,21 @@ button {
     font-size: 0.7em;
     text-decoration: underline;
     width: auto;
-    margin-top: 0;
-    margin-bottom: 40px;
+    display: inline-block; /* Essencial para o transform funcionar */
+    transition: transform 0.1s ease;
 }
 
-.text-btn-edit-pic:hover { text-decoration:none; opacity:0.8; }
+.text-btn-edit-pic:hover {
+    text-decoration: none;
+    opacity: 0.8;
+    transform: scale(1); /* Imóvel no hover */
+}
 
-.menu-foto-container { position: relative; width: 100%; }
+.text-btn-edit-pic:active {
+    transform: scale(0.92); /* Afunda apenas no clique */
+}
 
+/* 2. Botão Gerir Foto - Corrigido para não quebrar a abertura da janela */
 #btn-gerir-foto {
     background: #2196f3;
     color: white;
@@ -774,12 +867,30 @@ button {
     font-size: 0.7em !important;
     padding: 5px 10px !important;
     margin: 15px 0;
-    display: relative;
-    transition: transform 0.1s ease;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    /* Alterado para inline-block para manter o fluxo e permitir animação */
+    display: inline-block;
+    transition: transform 0.1s ease, background-color 0.2s;
 }
 
-#btn-gerir-foto:hover { background: #0d8aee; }
-#btn-gerir-foto:active { transform: scale(1.05); }
+#btn-gerir-foto:hover {
+    background-color: #1976d2;
+    transform: scale(1); /* Imóvel no hover */
+}
+
+#btn-gerir-foto:active {
+    /* O !important garante que o efeito de encolher funcione */
+    transform: scale(0.95) !important;
+}
+
+/* Garante que o container da janela não seja afetado pelo clique */
+.menu-foto-container {
+    position: relative;
+    width: 100%;
+}
+
 
 .popup-opcoes {
     display: none;
@@ -902,18 +1013,22 @@ div.h-safe-area-inset-top {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column; /* empilha os textos verticalmente */
-    justify-content: center; /* centra o conteúdo verticalmente */
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     text-align: center;
-
     font-size: 12px;
     font-weight: bold;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.6); /* Fundo um pouco mais opaco */
     backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    /* REMOVIDO: border: 1px solid rgba(255, 255, 255, 0.3); */
+
+    /* ADICIONADO: Sombra sutil para dar profundidade */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     backface-visibility: hidden;
+    transition: all 0.1s ease; /* Transição para o active */
 }
 
 .back {
@@ -1029,27 +1144,24 @@ div.h-safe-area-inset-top {
 
 .resumo-item strong {
     font-weight: bold;
-    color: #ecf0f1;
+    color: gray;
 }
 
-
+/* 1. Container fixo no rodapé */
 #bottom-nav.radio-inputs {
   position: fixed;
-  bottom: 30px;
+  bottom: 20px; /* Distância da borda inferior */
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%); /* Centraliza horizontalmente */
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
   width: 90%;
   max-width: 500px;
   border-radius: 10rem;
-  background-color: rgba(238, 238, 238, 0.5); /* Fundo transparente parcial */
+  background-color: rgba(238, 238, 238, 0.9);
   padding: 0.25rem;
-  box-sizing: border-box;
-  font-size: 14px;
   z-index: 1000;
- }
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
 
 #bottom-nav.radio-inputs.oculto {
@@ -1066,6 +1178,7 @@ div.h-safe-area-inset-top {
 }
 
 
+/* 2. O item clicável (Label) */
 .radio-inputs .radio .name {
   display: flex;
   align-items: center;
@@ -1073,20 +1186,18 @@ div.h-safe-area-inset-top {
   border-radius: 10rem;
   padding: 0.75rem 0;
   cursor: pointer;
-  transition: all 0.15s ease-in-out;
-  color: rgba(51,65,85,1);
-  /* Garante que o elemento seja focado */
-  outline: none;
+  transition: transform 0.1s ease, background-color 0.2s;
+  transform: scale(1); /* Estático por padrão */
 }
 
 /* Adicione estas regras para garantir que o efeito de toque/foco seja arredondado */
 .radio-inputs .radio .name:focus,
 .radio-inputs .radio .name:focus-visible,
 .radio-inputs .radio .name:active {
-    /* Remove a sombra retangular padrão do navegador */
-    outline: none !important;
-    /* Adiciona uma sombra personalizada que é redonda e imita o foco */
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.4);
+   transform: scale(0.92); /* Efeito de encolher no próprio eixo */
+  background-color: rgba(0, 0, 0, 0.1);
+  /* Sombra interna para dar sensação de profundidade */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .radio-inputs .radio input:checked + .name {
@@ -1715,10 +1826,3 @@ tr.fim-de-semana td {
     text-align: left;
     white-space: nowrap;
 }
-
-
-
-
-
-
-
