@@ -28,10 +28,6 @@ html, body {
     color: #000;
     overflow: hidden; /* Bloqueia rolagem global */
 
-    /* Padding seguro topo/rodapé para iOS */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-
     /* Fundo com gradiente */
     height: calc(var(--vh, 1%) * 100);
     background: linear-gradient(135deg, #ffffff 50%);
