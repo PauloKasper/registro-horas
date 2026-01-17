@@ -29,6 +29,7 @@ html, body {
     align-items: center;
     /* Garante que o conteúdo respeite a área segura do iPhone/Android */
     padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
 
 }
 
