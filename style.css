@@ -1292,7 +1292,8 @@ div.h-safe-area-inset-top {
   height: 45px;
   width: 45px;
   border-radius: 10px;
-  background: #ffffff50; /* branco com 50% de opacidade */
+  border-shadow: 5px;
+  background: #cccccc; /* branco com 50% de opacidade */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1303,7 +1304,7 @@ div.h-safe-area-inset-top {
 }
 
 .day:hover {
-  background: #ffffff70;
+  background: gray;
 }
 
 .day.hoje {
