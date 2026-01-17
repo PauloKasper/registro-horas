@@ -43,6 +43,9 @@
     <h2>Cadastro Inicial</h2>
     <input id="cad-colaborador" placeholder="Colaborador">
     <input id="cad-numero" placeholder="Número do Colaborador">
+    <input id="cad-empresa" placeholder="Empresa">
+    <input id="cad-funcao" placeholder="Função">
+    <input id="cad-contribuicao" placeholder="Contribuinte">
     <div id="erro-cadastro" class="erro"></div>
     <div class="botoes-lado-a-lado">
       <button id="btn-salvar-cadastro">Salvar e Continuar</button>
@@ -68,21 +71,33 @@
         <div id="popup-opcoes-foto" class="popup-opcoes">
           <button id="btn-adicionar-nova-foto" class="opcao-foto">Adicionar/Mudar Foto</button>
           <button id="btn-remover-foto" class="opcao-foto remover">Remover Foto</button>
+          <button id="btn-editar-perfil" class="btn-editar-perfil">
+  Editar Perfil
+</button>
         </div>
 
       </div>
 
-      <div class="perfil-info-text">
-        <h2 id="nome-usuario-perfil">COLABORADOR:</h2>
-          <hr style="opacity: 0.5;">
-        <h2 class="funcao" id="funcao-usuario-perfil">FUNÇÃO:</h2>
-          <hr style="opacity: 0.5;">
-        <h2 class="empreas" id="empresa-usuario-perfil">EMPRESA:</h2>
-          <hr style="opacity: 0.5;">
-        <h2 class="contribuinte" id="contribuinte-usuario-perfil">CONTRIBUINTE:</h2>
-          <hr style="opacity: 0.5;">
-        <h2 class="horario" id="horario-usuario-perfil">HORARIO:</h2>
-      </div>
+    <div class="perfil-dados">
+
+      <label>COLABORADOR:</label>
+      <input id="perfil-colaborador" disabled>
+
+      <label>FUNÇÃO:</label>
+      <input id="perfil-funcao" disabled>
+
+      <label>EMPRESA:</label>
+      <input id="perfil-empresa" disabled>
+
+      <label>CONTRIBUINTE:</label>
+      <input id="perfil-contribuicao" disabled>
+
+      <label>HORÁRIO:</label>
+      <input id="perfil-horario" disabled>
+
+      <button id="btn-salvar-perfil" class="oculto">Salvar</button>
+    </div>
+
 
     </div>
 
