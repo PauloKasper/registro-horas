@@ -1,81 +1,96 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const btnEditarPerfil = document.getElementById("btn-editar-perfil");
 
-if (btnEditarPerfil) {
-    btnEditarPerfil.onclick = () => {
-
-        const editando = btnEditarPerfil.dataset.editando === "true";
-
-        const inputs = document.querySelectorAll(".perfil-dados input");
-
-        if (!editando) {
-            // 👉 MODO EDITAR
-            inputs.forEach(i => i.disabled = false);
-            btnEditarPerfil.innerText = "Salvar";
-            btnEditarPerfil.dataset.editando = "true";
-
-        } else {
-            // 👉 MODO SALVAR
-            const usuarioLogado = carregarLS("usuario_logado");
-            if (!usuarioLogado) return;
-
-            const usuarios = carregarLS("usuarios");
-            const u = usuarios[usuarioLogado];
-            if (!u) return;
-
-            u.display_name = document.getElementById("perfil-colaborador").value;
-            u.funcao = document.getElementById("perfil-funcao").value;
-            u.empresa = document.getElementById("perfil-empresa").value;
-            u.contribuicao = document.getElementById("perfil-contribuicao").value;
-            u.horario = document.getElementById("perfil-horario").value;
-
-            salvarLS("usuarios", usuarios);
-
-            inputs.forEach(i => i.disabled = true);
-            btnEditarPerfil.innerText = "Editar";
-            btnEditarPerfil.dataset.editando = "false";
-        }
-    };
-}
-
-    // --- VARIÁVEIS GLOBAIS (únicas fontes) ---
+    /* =========================
+       VARIÁVEIS GLOBAIS
+    ========================= */
     window.usuario_atual = null;
-    window.registros = {}; // única fonte de verdade para registros (map date -> {entrada,saida_alm,retorno,saida_final,salvo})
+    window.registros = {};
     let chartHoras = null;
 
-    // --- SERVICE WORKER ---
+    /* =========================
+       LOCAL STORAGE HELPERS
+    ========================= */
+    function salvarLS(c, v) {
+        localStorage.setItem(c, JSON.stringify(v));
+    }
+
+    function carregarLS(chave) {
+        const valor = localStorage.getItem(chave);
+        if (valor === null) return {};
+
+        try {
+            return JSON.parse(valor);
+        } catch {
+            return valor; // string (ex: usuario_logado)
+        }
+    }
+
+    /* =========================
+       PERFIL – CARREGAR DADOS
+    ========================= */
+    function carregarPerfil() {
+        const usuarioLogado = carregarLS("usuario_logado");
+        if (!usuarioLogado) return;
+
+        const usuarios = carregarLS("usuarios");
+        const u = usuarios[usuarioLogado];
+        if (!u) return;
+
+        document.getElementById("perfil-colaborador").value = u.display_name || "";
+        document.getElementById("perfil-funcao").value = u.funcao || "";
+        document.getElementById("perfil-empresa").value = u.empresa || "";
+        document.getElementById("perfil-contribuicao").value = u.contribuicao || "";
+        document.getElementById("perfil-horario").value = u.horario || "";
+    }
+
+    /* =========================
+       PERFIL – EDITAR / SALVAR
+    ========================= */
+    const btnEditarPerfil = document.getElementById("btn-editar-perfil");
+
+    if (btnEditarPerfil) {
+        btnEditarPerfil.onclick = () => {
+
+            const editando = btnEditarPerfil.dataset.editando === "true";
+            const inputs = document.querySelectorAll(".perfil-dados input");
+
+            if (!editando) {
+                inputs.forEach(i => i.disabled = false);
+                btnEditarPerfil.innerText = "Salvar";
+                btnEditarPerfil.dataset.editando = "true";
+
+            } else {
+                const usuarioLogado = carregarLS("usuario_logado");
+                if (!usuarioLogado) return;
+
+                const usuarios = carregarLS("usuarios");
+                const u = usuarios[usuarioLogado];
+                if (!u) return;
+
+                u.display_name = document.getElementById("perfil-colaborador").value;
+                u.funcao = document.getElementById("perfil-funcao").value;
+                u.empresa = document.getElementById("perfil-empresa").value;
+                u.contribuicao = document.getElementById("perfil-contribuicao").value;
+                u.horario = document.getElementById("perfil-horario").value;
+
+                salvarLS("usuarios", usuarios);
+
+                inputs.forEach(i => i.disabled = true);
+                btnEditarPerfil.innerText = "Editar";
+                btnEditarPerfil.dataset.editando = "false";
+            }
+        };
+    }
+
+    /* =========================
+       SERVICE WORKER
+    ========================= */
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/service-worker.js")
             .then(() => console.log("Service Worker registrado"))
             .catch(err => console.error("Erro ao registrar Service Worker:", err));
     }
 
-    // --- LOCAL STORAGE HELPERS ---
-    function salvarLS(c, v) { localStorage.setItem(c, JSON.stringify(v)); }
-    function carregarLS(c) {
-    const valor = localStorage.getItem(c);
-    if (valor === null) return null;
-
-    try {
-        return JSON.parse(valor);
-    } catch {
-        return valor; // 🔥 retorna string
-    }
-}
-function carregarPerfil() {
-    const usuarioLogado = carregarLS("usuario_logado");
-    if (!usuarioLogado) return;
-
-    const usuarios = carregarLS("usuarios");
-    const u = usuarios[usuarioLogado];
-    if (!u) return;
-
-    document.getElementById("perfil-colaborador").value = u.display_name || "";
-    document.getElementById("perfil-funcao").value = u.funcao || "";
-    document.getElementById("perfil-empresa").value = u.empresa || "";
-    document.getElementById("perfil-contribuicao").value = u.contribuicao || "";
-    document.getElementById("perfil-horario").value = u.horario || "";
-}
 
 
     // --- FUNÇÕES DE CÁLCULO ---
