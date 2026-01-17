@@ -564,37 +564,49 @@ function salvarHorasDoDia(dateKey) {
         });
     }
 
-    // --- LOGIN / CADASTRO / NAVEGAÇÃO ---
-    function mostrar(tela) {
-        document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
-        const alvo = document.getElementById(tela);
-        if (alvo) alvo.classList.add("ativa");
+   function mostrar(tela) {
+    document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
+    const alvo = document.getElementById(tela);
+    if (alvo) alvo.classList.add("ativa");
 
-        const nav = document.getElementById("bottom-nav");
-        if (nav) {
-            if (tela === "tela-login" || tela === "tela-cadastro") nav.classList.add("oculto");
-            else nav.classList.remove("oculto");
+    const nav = document.getElementById("bottom-nav");
+    if (nav) {
+        if (tela === "tela-login" || tela === "tela-cadastro") nav.classList.add("oculto");
+        else nav.classList.remove("oculto");
 
-            const radios = nav.querySelectorAll("input[name='bottom-nav']");
-            radios.forEach(r => r.checked = false);
-            switch (tela) {
-                case "tela-perfil": if (radios[0]) radios[0].checked = true; break;
-                case "tela-registro": if (radios[1]) radios[1].checked = true; break;
-                case "tela-configurações": if (radios[2]) radios[2].checked = true; break;
-                case "tela-login": if (radios[3]) radios[3].checked = true; break;
-            }
-        }
-
-        if (tela === "tela-registro") {
-            carregarRegistrosUsuario();
-            gerarCalendarioPeriodo();
-        }
-
-        if (tela === "tela-perfil") {
-            carregarRegistrosUsuario();
-            atualizarCardsPerfil();
+        const radios = nav.querySelectorAll("input[name='bottom-nav']");
+        radios.forEach(r => r.checked = false);
+        switch (tela) {
+            case "tela-perfil": if (radios[0]) radios[0].checked = true; break;
+            case "tela-registro": if (radios[1]) radios[1].checked = true; break;
+            case "tela-configurações": if (radios[2]) radios[2].checked = true; break;
+            case "tela-login": if (radios[3]) radios[3].checked = true; break;
         }
     }
+
+    /* === NOVO BLOCO ADICIONADO AQUI PARA CONTROLAR O BOTÃO IMPRIMIR === */
+    const btnImprimir = document.getElementById("btn-gerar-csv");
+    if (btnImprimir) {
+        if (tela === "tela-registro") {
+            btnImprimir.classList.remove("oculto"); // Mostrar apenas nesta tela
+        } else {
+            btnImprimir.classList.add("oculto"); // Esconder em todas as outras telas
+        }
+    }
+    /* ================================================================= */
+
+
+    if (tela === "tela-registro") {
+        carregarRegistrosUsuario();
+        gerarCalendarioPeriodo();
+    }
+
+    if (tela === "tela-perfil") {
+        carregarRegistrosUsuario();
+        atualizarCardsPerfil();
+    }
+}
+
 
     const btnEntrar = document.getElementById("btn-entrar");
     if (btnEntrar) {
@@ -671,6 +683,7 @@ function salvarHorasDoDia(dateKey) {
                     mostrar("tela-login");
                     break;
             }
+
         });
     });
 
@@ -1154,6 +1167,16 @@ if (btnExcluirUsuario && modalExcluir) {
     modalExcluir.addEventListener("click", (ev) => {
         if (ev.target === modalExcluir) modalExcluir.style.display = "none";
     });
+}
+function mostrarTelaRegistro() {
+    document.getElementById('tela-registro').classList.remove('oculto');
+    document.getElementById('btn-gerar-csv').classList.remove('oculto');
+}
+
+function mostrarOutraTela() {
+    document.getElementById('tela-registro').classList.add('oculto');
+    // Adiciona a classe oculta para esconder o botão em outras telas
+    document.getElementById('btn-gerar-csv').classList.add('oculto');
 }
 
 });
