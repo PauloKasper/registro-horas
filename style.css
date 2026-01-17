@@ -996,7 +996,7 @@ div.h-safe-area-inset-top {
 .card {
     width: 80px;          /* 🔑 mais compacto */
     height: 60px;
-    padding: 5px;
+    padding: 15px;
     perspective: 1000px;
 }
 
@@ -1118,7 +1118,7 @@ div.h-safe-area-inset-top {
 .card-resumo {
     background: rgba(255, 255, 255, 0.4); /* fundo claro semi-transparente */
     border-radius: 12px;
-    padding: 5px 20px;
+    padding: 10px 20px;
     color: #000;                 /* texto escuro para contraste */
     max-width: 300px;
     width: 90%;                   /* responsivo */
@@ -1150,7 +1150,7 @@ div.h-safe-area-inset-top {
 /* 1. Container fixo no rodapé */
 #bottom-nav.radio-inputs {
   position: fixed;
-  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(25px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%); /* Centraliza horizontalmente */
   display: flex;
@@ -1845,4 +1845,3 @@ tr.fim-de-semana td {
     text-align: left;
     white-space: nowrap;
 }
-
