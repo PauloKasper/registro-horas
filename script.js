@@ -1,4 +1,42 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const btnEditarPerfil = document.getElementById("btn-editar-perfil");
+
+if (btnEditarPerfil) {
+    btnEditarPerfil.onclick = () => {
+
+        const editando = btnEditarPerfil.dataset.editando === "true";
+
+        const inputs = document.querySelectorAll(".perfil-dados input");
+
+        if (!editando) {
+            // 👉 MODO EDITAR
+            inputs.forEach(i => i.disabled = false);
+            btnEditarPerfil.innerText = "Salvar";
+            btnEditarPerfil.dataset.editando = "true";
+
+        } else {
+            // 👉 MODO SALVAR
+            const usuarioLogado = carregarLS("usuario_logado");
+            if (!usuarioLogado) return;
+
+            const usuarios = carregarLS("usuarios");
+            const u = usuarios[usuarioLogado];
+            if (!u) return;
+
+            u.display_name = document.getElementById("perfil-colaborador").value;
+            u.funcao = document.getElementById("perfil-funcao").value;
+            u.empresa = document.getElementById("perfil-empresa").value;
+            u.contribuicao = document.getElementById("perfil-contribuicao").value;
+            u.horario = document.getElementById("perfil-horario").value;
+
+            salvarLS("usuarios", usuarios);
+
+            inputs.forEach(i => i.disabled = true);
+            btnEditarPerfil.innerText = "Editar";
+            btnEditarPerfil.dataset.editando = "false";
+        }
+    };
+}
 
     // --- VARIÁVEIS GLOBAIS (únicas fontes) ---
     window.usuario_atual = null;
@@ -15,9 +53,30 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- LOCAL STORAGE HELPERS ---
     function salvarLS(c, v) { localStorage.setItem(c, JSON.stringify(v)); }
     function carregarLS(c) {
-        try { return JSON.parse(localStorage.getItem(c) || "{}"); }
-        catch (e) { return {}; }
+    const valor = localStorage.getItem(c);
+    if (valor === null) return null;
+
+    try {
+        return JSON.parse(valor);
+    } catch {
+        return valor; // 🔥 retorna string
     }
+}
+function carregarPerfil() {
+    const usuarioLogado = carregarLS("usuario_logado");
+    if (!usuarioLogado) return;
+
+    const usuarios = carregarLS("usuarios");
+    const u = usuarios[usuarioLogado];
+    if (!u) return;
+
+    document.getElementById("perfil-colaborador").value = u.display_name || "";
+    document.getElementById("perfil-funcao").value = u.funcao || "";
+    document.getElementById("perfil-empresa").value = u.empresa || "";
+    document.getElementById("perfil-contribuicao").value = u.contribuicao || "";
+    document.getElementById("perfil-horario").value = u.horario || "";
+}
+
 
     // --- FUNÇÕES DE CÁLCULO ---
 function calcularHorasDoDia(r) {
@@ -602,9 +661,11 @@ function salvarHorasDoDia(dateKey) {
     }
 
     if (tela === "tela-perfil") {
+        carregarPerfil();              // 🔥 MOSTRA DADOS DO CADASTRO
         carregarRegistrosUsuario();
         atualizarCardsPerfil();
     }
+
 }
 
 
@@ -618,10 +679,12 @@ function salvarHorasDoDia(dateKey) {
             if (erro) erro.innerText = "";
 
             if (u in us && us[u].numero === s) {
-                window.usuario_atual = u;
+                salvarLS("usuario_logado", u); // 🔥 ESSENCIAL
+                window.usuario_atual = u;      // pode manter se quiser
                 carregarRegistrosUsuario();
                 mostrar("tela-perfil");
-            } else {
+            }
+             else {
                 if (erro) erro.innerText = "Usuário ou senha incorretos.";
             }
         };
@@ -643,28 +706,45 @@ function salvarHorasDoDia(dateKey) {
     }
 
     const btnSalvarCadastro = document.getElementById("btn-salvar-cadastro");
-    if (btnSalvarCadastro) {
-        btnSalvarCadastro.onclick = () => {
-            const u = (document.getElementById("cad-colaborador").value || "").trim().toLowerCase();
-            const n = (document.getElementById("cad-numero").value || "").trim();
-            const erro = document.getElementById("erro-cadastro");
+if (btnSalvarCadastro) {
+    btnSalvarCadastro.onclick = () => {
 
-            if (erro) erro.innerText = "";
-            if (!u || !n) {
-                if (erro) erro.innerText = "Preencha todos os campos";
-                return;
-            }
+        const colaborador = (document.getElementById("cad-colaborador").value || "").trim();
+        const numero = (document.getElementById("cad-numero").value || "").trim();
+        const empresa = (document.getElementById("cad-empresa").value || "").trim();
+        const funcao = (document.getElementById("cad-funcao").value || "").trim();
+        const contribuicao = (document.getElementById("cad-contribuicao").value || "").trim();
 
-            const us = carregarLS("usuarios");
-            us[u] = { display_name: u, numero: n };
-            salvarLS("usuarios", us);
+        const erro = document.getElementById("erro-cadastro");
+        if (erro) erro.innerText = "";
 
-            document.getElementById("usuario").value = u;
-            document.getElementById("senha").value = n;
+        if (!colaborador || !numero || !empresa || !funcao || !contribuicao) {
+            if (erro) erro.innerText = "Preencha todos os campos";
+            return;
+        }
 
-            mostrar("tela-login");
+        const usuarioKey = colaborador.toLowerCase();
+
+        const usuarios = carregarLS("usuarios");
+
+        usuarios[usuarioKey] = {
+            display_name: colaborador,
+            numero: numero,
+            empresa: empresa,
+            funcao: funcao,
+            contribuicao: contribuicao
         };
-    }
+
+        salvarLS("usuarios", usuarios);
+
+        // Pré-preenche login
+        document.getElementById("usuario").value = usuarioKey;
+        document.getElementById("senha").value = numero;
+
+        mostrar("tela-login");
+    };
+}
+
 
     if (document.getElementById("btn-configurações-voltar"))
         document.getElementById("btn-configurações-voltar").onclick = () => mostrar("tela-perfil");
