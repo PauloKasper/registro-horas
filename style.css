@@ -29,7 +29,6 @@ html, body {
     align-items: center;
     /* Garante que o conteúdo respeite a área segura do iPhone/Android */
     padding-bottom: env(safe-area-inset-bottom);
-    padding-top: env(safe-area-inset-top);
 
 }
 
@@ -263,7 +262,17 @@ button {
 #btn-gerar-csv{
     width: 385px;
     color: white;
-    background-color: #2196f3
+    background-color: #2196f3;
+    padding-bottom: 150px;
+
+}
+.oculto {
+    display: none !important;
+}
+
+/* Apenas quando a tela de registro está visível/ativa, mostre o botão */
+#tela-registro.tela-activa + .botoes-lado-a-lado > #btn-gerar-csv {
+    display: block;
 }
 
 #btn-abrir-cadastro {
@@ -321,15 +330,16 @@ button {
     gap: 5px;                       /* aumenta espaço entre os botões */
 }
 
-/* Botões dentro do contêiner */
+/* Botões dentro do contêiner botao gerar csv */
 .botoes-lado-a-lado button {
     flex: 1;                         /* ambos ocupam largura igual */
-    max-width: 150px;                /* limite de largura */
+    max-width: 250px;                /* limite de largura */
     padding: 10px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+
 }
 
 /* Botão azul principal (Registrar) */
@@ -649,6 +659,7 @@ button {
     padding-top: 5px;
     padding-bottom: 10px;
     width: 100%;
+    height: 250px;
     max-width: 350px;
     background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
@@ -669,8 +680,8 @@ button {
     top: 0;
     left: 0;
     width: 100%;
-    height: 85px; /* altura do semi-background azul */
-    background-color: #ADD8E6; /* azul claro */
+    height: 140px; /* altura do semi-background azul */
+    background-color: #0080ff; /* azul claro */
     z-index: 0; /* atrás do conteúdo do card */
 }
 
@@ -1206,7 +1217,8 @@ div.h-safe-area-inset-top {
 /* CONTAINER DO CALENDÁRIO */
 #calendar-container {
   width: 100%;
-  max-width: 400px;
+  max-width: 100px;
+  min-height: 100px;
   margin: 10px auto;
   font-family: Arial, sans-serif;
   position: relative;
@@ -1220,10 +1232,11 @@ div.h-safe-area-inset-top {
   display: flex;
   justify-content: space-between; /* botões nas extremidades */
   align-items: center;
-  gap: 50px; /* diminui o espaço entre botões e título */
+  gap: 80px; /* diminui o espaço entre botões e título */
   margin-bottom: 10px; /* espaço entre header e dias */
   padding: 1px 1px; /* opcional: mais próximo das bordas */
   border-radius: 10px 10px 0 0;
+
 }
 
 /* TÍTULO DO MÊS CENTRALIZADO */
@@ -1239,8 +1252,8 @@ div.h-safe-area-inset-top {
 /* BOTÕES SIMPLES DE NAVEGAÇÃO DO MÊS */
 #btn-mes-anterior,
 #btn-proximo-mes {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1248,7 +1261,7 @@ div.h-safe-area-inset-top {
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f0f0f0;
-  color: #333;
+  color: black;
   font-weight: bold;
   font-size: 16px;
   box-sizing: border-box; /* importante */
@@ -1275,17 +1288,17 @@ div.h-safe-area-inset-top {
   text-align: center;
   font-weight: bold;
   color: #2f4f4f;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   padding: 0 5px;
-  gap: 14px;
+  gap: 18.1px;
 }
 
 /* GRADE DOS DIAS */
 #calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  padding: 0 5px;
+  gap: 8px;
+  margin: 0;
 }
 
 /* CÉLULAS DOS DIAS */
@@ -1302,6 +1315,7 @@ div.h-safe-area-inset-top {
   font-size: 15px;
   cursor: pointer;
   transition: 0.2s;
+
 }
 
 .day:hover {
@@ -1311,17 +1325,31 @@ div.h-safe-area-inset-top {
 .day.hoje {
   border: 2px solid #4caf50;
 }
+.day.hoje:hover {
+  color: black;
+}
 
 .day.weekend {
   background: #ff535350;
+}
+.day.weekend:hover{
+    color: #333;
 }
 
 .day.feriado {
   background: #ff000080 !important;
 }
 
+.day.feriado:hover {
+  color: #333 !important;
+}
+
 .day.registrado {
   background: #00c89680;
+}
+
+.day.registrado:hover {
+  color: #333;
 }
 
 .day.empty {
@@ -1416,6 +1444,7 @@ div.h-safe-area-inset-top {
     gap: 8px;
     padding: 15px;
     box-sizing: border-box;
+
 }
 
 .day.hoje { border: 1px solid #fff; }
@@ -1435,13 +1464,13 @@ div.h-safe-area-inset-top {
     height: 70%;
     max-width: 500px;
     color: #fff;
-
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
 
     /* centraliza os filhos */
     display: flex;
     flex-direction: column;
     align-items: center; /* centraliza horizontalmente */
-    gap: 15px;           /* espaço entre inputs e botões */
+    gap: 5px;           /* espaço entre inputs e botões */
 
 }
 
