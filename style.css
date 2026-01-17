@@ -77,17 +77,17 @@ html, body {
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     border: 1px solid rgba(255,255,255,0.5);
-    padding: 40px 30px;
+    padding: 20px 30px;
     max-width: 350px;
-    width: 72%;
+    width: 77%;
     color: white;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 1px;
     text-align: center;
 
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
@@ -657,7 +657,7 @@ button {
     text-align: center;
     border-radius: 25px;
     padding-top: 30px;
-    padding-bottom: 10px;
+    padding-bottom: 30px;
     width: 100%;
     height: 280px;
     max-width: 350px;
@@ -669,7 +669,7 @@ button {
     flex-direction: column;
     align-items: center;
 
-    margin-bottom: 5px; /* 🔑 controla distância para os cards */
+    margin-bottom: 0px; /* 🔑 controla distância para os cards */
 }
 
 
@@ -722,46 +722,81 @@ button {
     display: none; /* esconde a imagem quando não existe */
 
 }
+
 /* =========================
    TEXTO DO PERFIL
 ========================= */
+
 .perfil-info-text {
-    width: 93%;
-    margin-top: 0;
-    padding-left: 20px;
+    width: 90%;
+    max-width: none;
+    text-align: left;
     box-sizing: border-box;
-
-    text-align: left;        /* 🔥 texto à esquerda */
-    align-self: stretch;     /* 🔥 ignora centralização do flex */
-    z-index: 1;
+    align-self: stretch;
 }
 
-/* Nome */
-.perfil-info-text h2 {
-    margin: 0;
-    font-size: 10px;
-    color: #333;
+
+.perfil-dados {
+    width: 90%;
     text-align: left;
-
-    padding: 1px;
 }
 
-/* Cargo */
-.perfil-info-text .cargo {
-    font-size: 15px;
+/* Labels */
+.perfil-dados label {
+    font-size: 9.5px;
+    font-weight: 600;
     color: #333;
-    margin-top: 4px;
-    opacity: 0.9;
-
+    display: block;
+    margin-top: 0px;
 }
 
-/* Descrição (se usar) */
-.perfil-card .descricao {
+/* Inputs */
+.perfil-dados input {
+    width: 100%;                 /* 🔥 linha longa */
+    border: none;
+    border-bottom: 1px solid #bbb;
+    padding: 0px 0;
     font-size: 10px;
-    margin: 15px 0;
-    text-align: left;
-    padding-left: 20px;
+    background: transparent;
+    outline: none;
 }
+
+/* Input desabilitado (dados visíveis) */
+.perfil-dados input:disabled {
+    color: #222;                 /* 🔥 mais contraste */
+    opacity: 1;                  /* evita “apagado” */
+}
+
+/* Botão salvar */
+#btn-salvar-perfil {
+    margin-top: 5px;
+}
+
+.btn-editar-perfil{
+    width: 70%;
+    padding: 5px;
+    background: transparent;        /* 🔥 transparente */
+    border: 0px solid rgba(255,255,255,0.1);
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    color: #333;
+    backdrop-filter: blur(2px);     /* opcional, efeito bonito */
+}
+.btn-editar-perfil:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* cinza transparente */
+    color: #333;
+    border-radius: 5px;
+    width: 100%;
+}
+
+
+.perfil-card::before {
+    z-index: 0;
+}
+
+
 /* Mantenha o botão no fluxo normal, apenas com z-index baixo */
 #btn-registrar-hora {
     display: block;
@@ -1001,7 +1036,7 @@ div.h-safe-area-inset-top {
     display: flex;
     gap: 25px;              /* 🔑 menor distância */
     justify-content: center;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
 }
 
 
