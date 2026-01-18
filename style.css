@@ -5,8 +5,8 @@
 
 
 .page {
-  page-break-after: avoid;
-  page-break-inside: avoid;
+  page-break-after: auto;
+  page-break-inside: auto;
 }
 
 /* --- BODY: Ajustado para ocupar 100% da tela real --- */
@@ -1947,10 +1947,19 @@ tr.fim-de-semana td {
     }
 }
 
-/* ===== AJUSTE MOBILE PDF ===== */
-.pdf-mobile #pdf-content {
-    transform: scale(0.97);
-    transform-origin: top left;
+/* ===== DESKTOP ===== */
+.pdf-desktop #pdf-content {
+  transform: scale(1);
 }
 
+/* ===== ANDROID ===== */
+.pdf-android #pdf-content {
+  transform: scale(0.98);
+  transform-origin: top left;
+}
 
+/* ===== IOS (iPhone / iPad / PWA) ===== */
+.pdf-ios #pdf-content {
+  transform: scale(0.96);
+  transform-origin: top left;
+}
