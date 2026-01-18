@@ -1,4 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+function getDeviceType() {
+  const ua = navigator.userAgent;
+
+  if (/iPhone|iPad|iPod/i.test(ua)) {
+    return 'ios';
+  }
+
+  if (/Android/i.test(ua)) {
+    return 'android';
+  }
+
+  return 'desktop';
+}
+
+
 function abrirModalHoras() {
   const modal = document.getElementById("modal-horas");
   modal.setAttribute("aria-hidden", "false");
@@ -1016,22 +1032,16 @@ while (d <= fim) {
 
   // Elemento que será convertido em PDF
   const element = document.getElementById('pdf-content');
+  const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 
-  // Nome do arquivo
-  const filename = `folha_horas_${new Date().toISOString().slice(0, 10)}.pdf`;
+  const device = getDeviceType();
 
-  // Detecta mobile
-  const isMobile = window.innerWidth < 768;
+  // 🔑 aplica classe conforme o dispositivo
+  document.body.classList.add(`pdf-${device}`);
 
-  // 🔑 APLICA AJUSTE MOBILE ANTES DO SNAPSHOT
-  if (isMobile) {
-    document.body.classList.add('pdf-mobile');
-  }
-
-  // Configuração do html2pdf
   const opt = {
     margin: [10, 10, 10, 10],
-    filename: filename,
+    filename,
     html2canvas: {
       scale: 2,
       scrollX: 0,
@@ -1100,17 +1110,16 @@ while (d <= fim) {
      GERAÇÃO DO PDF
      =============================== */
 
-  html2pdf()
+html2pdf()
     .set(opt)
     .from(element)
     .save()
     .then(() => {
-      // 🔑 REMOVE AJUSTE MOBILE APÓS O PDF
-      document.body.classList.remove('pdf-mobile');
+      // 🔑 remove TODAS as classes de PDF
+      document.body.classList.remove('pdf-ios', 'pdf-android', 'pdf-desktop');
     })
-    .catch(err => {
-      document.body.classList.remove('pdf-mobile');
-      console.error('Erro ao gerar PDF:', err);
+    .catch(() => {
+      document.body.classList.remove('pdf-ios', 'pdf-android', 'pdf-desktop');
     });
 }
 
