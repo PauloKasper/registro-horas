@@ -1648,7 +1648,7 @@ div.h-safe-area-inset-top {
 }
 
 #pdf-content {
-    width: 260mm;          /* 🔑 largura segura A4 landscape */
+    width: 267mm;          /* 🔑 largura segura A4 landscape */
     margin: 0;
     padding: 5mm;
     box-sizing: border-box;
@@ -1802,7 +1802,7 @@ tbody tr:nth-child(even) td:nth-child(-n+18) {
 .footer-container {
     display: flex;
     justify-content: space-between; /* Distributes space evenly between columns */
-    padding: 30px;
+    padding: 10px;
     font-family: sans-serif; /* Use a common sans-serif font to match general look */
     font-size: 10px; /* Adjust font size as needed to fit your PDF layout */
 }
@@ -1960,4 +1960,3 @@ tr.fim-de-semana td {
   overflow: visible !important;
   height: auto !important;
 }
-
