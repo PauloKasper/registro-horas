@@ -15,24 +15,45 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => console.error("Erro ao registrar Service Worker:", err));
     }
 });
-const CACHE_NAME = 'horas-cache-v1';
-const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png'
+const CACHE_NAME = 'horas-cache-v2';
+
+const STATIC_ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/style.css',
+  '/script.js',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png'
 ];
 
-// Service Worker Listeners (Fora do DOMContentLoaded)
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(response => response || fetch(e.request))
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+      )
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', event => {
+  const req = event.request;
+
+  // ❌ nunca cachear PDF
+  if (req.url.endsWith('.pdf')) return;
+
+  if (req.method !== 'GET') return;
+
+  event.respondWith(
+    caches.match(req).then(cached => cached || fetch(req))
   );
 });
