@@ -5,8 +5,8 @@
 
 
 .page {
-  page-break-after: auto;
-  page-break-inside: auto;
+  page-break-after: avoid;
+  page-break-inside: avoid;
 }
 
 /* --- BODY: Ajustado para ocupar 100% da tela real --- */
@@ -1926,3 +1926,4 @@ tr.fim-de-semana td {
     text-align: left;
     white-space: nowrap;
 }
+
