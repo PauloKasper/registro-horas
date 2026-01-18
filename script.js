@@ -1,4 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
+function abrirModalHoras() {
+  const modal = document.getElementById("modal-horas");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden"; // trava scroll
+}
+
+function fecharModalHoras() {
+  const modal = document.getElementById("modal-horas");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+// Botão fechar
+document.getElementById("fechar-modal").onclick = fecharModalHoras;
+
+// Clique fora do card fecha
+document.getElementById("modal-horas").addEventListener("click", e => {
+  if (e.target.id === "modal-horas") fecharModalHoras();
+});
+
 
     /* =========================
        VARIÁVEIS GLOBAIS
@@ -1001,11 +1021,11 @@ const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 const isMobile = window.innerWidth < 768;
 
 const opt = {
-  margin: [10, 10, 10, 10], // margens reais do PDF
+  margin: 0, // margens reais do PDF
   filename,
   html2canvas: {
     scale: 3,
-    windowWidth: 1550,   // 🔑 largura virtual estável
+    windowWidth: 1200,   // 🔑 largura virtual estável
     scrollX: 0,
     scrollY: 0
   },
