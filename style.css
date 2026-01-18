@@ -560,19 +560,49 @@ button {
     background-color: #ccc;
 }
 
+.foto-container {
+  position: relative;
+}
+
+.profile-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20%;
+}
+
+.foto-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.foto-loading.oculto {
+  display: none;
+}
+
+.spinner {
+  width: 45px;
+  height: 45px;
+  border: 6px solid rgba(255,255,255,0.3);
+  border-top: 6px solid #1e90ff;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .foto-container.no-photo {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 24 24'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60%;
-
-}
-
-.profile-pic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
 
 }
 
@@ -784,7 +814,7 @@ button {
     backdrop-filter: blur(2px);     /* opcional, efeito bonito */
 }
 .btn-editar-perfil:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* cinza transparente */
+    background-color: rgba(0, 0, 0, 0.04); /* cinza transparente */
     color: #333;
     border-radius: 5px;
     width: 100%;
@@ -907,8 +937,9 @@ button {
 
 /* 2. Botão Gerir Foto - Corrigido para não quebrar a abertura da janela */
 #btn-gerir-foto {
-    background: #2196f3;
-    color: white;
+    background: #f4f4f4;
+    color: black;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     width: auto !important;
     font-size: 0.7em !important;
     padding: 5px 10px !important;
@@ -922,8 +953,10 @@ button {
 }
 
 #btn-gerir-foto:hover {
-    background-color: #1976d2;
+    background-color: #2196f3;
+    color: #ffff;
     transform: scale(1); /* Imóvel no hover */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 #btn-gerir-foto:active {
@@ -1308,8 +1341,8 @@ div.h-safe-area-inset-top {
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #f0f0f0;
-  color: black;
+  background-color: #2196f3;
+  color: white;
   font-weight: bold;
   font-size: 16px;
   box-sizing: border-box; /* importante */
@@ -1394,7 +1427,7 @@ div.h-safe-area-inset-top {
 }
 
 .day.registrado {
-  background: #00c89680;
+  background: #10080ff;
 }
 
 .day.registrado:hover {
