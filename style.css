@@ -1876,16 +1876,6 @@ tr.fim-de-semana td {
 }
 
 
-#pdf-content {
-    width: 260mm;
-    margin: 0;          /* ❌ tira auto */
-    padding: 0.1mm 5mm;
-}
-
-
-}
-
-
 @media screen {
     #pdf-content {
         transform: scale(1); /* normal na tela */
@@ -1964,3 +1954,9 @@ tr.fim-de-semana td {
   transform-origin: top left;
 }
 
+/* 🔥 RESET CRÍTICO PARA iOS */
+.pdf-ios html,
+.pdf-ios body {
+  overflow: visible !important;
+  height: auto !important;
+}
