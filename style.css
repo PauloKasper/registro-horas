@@ -1405,49 +1405,66 @@ div.h-safe-area-inset-top {
   background: transparent;
   cursor: default;
 }
-/* ======================================
-   MODAL DE HORAS — CENTRALIZADO E LIMPO
-   ====================================== */
 /* =============================
-   MODAL DE HORAS — OVERLAY TOTAL
+   MODAL DE HORAS — OVERLAY
 ============================= */
 #modal-horas {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);   /* 🔥 fundo escuro */
-  display: flex;
-  align-items: center;
+  display: none;
   justify-content: center;
-  z-index: 9999;
+  align-items: center;
+  background: rgba(0,0,0,0.5);
+  z-index: 99999;
 }
 
-/* Modal oculto */
 #modal-horas[aria-hidden="true"] {
   display: none;
+}
+
+#modal-horas[aria-hidden="false"] {
+  display: flex;
+}
+
+
+/* Modal aberto */
+#modal-horas.ativo {
+  display: flex;
 }
 
 /* =============================
    CAIXA DO MODAL
 ============================= */
 #modal-horas .modal-content {
-  background: #ffffff;
-  width: 85%;
-  max-width: 380px;
-  padding: 16px;
-  border-radius: 12px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-  animation: modalFade 0.2s ease;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 320px;
+}
+
+body.modal-aberto {
+  overflow: hidden;
+}
+
+body.modal-aberto #bottom-nav {
+  display: none !important;
+}
+
+body.modal-aberto button,
+body.modal-aberto a {
+  pointer-events: none;
+}
+
+#modal-horas * {
+  pointer-events: auto;
 }
 
 /* =============================
-   TÍTULO (DATA)
+   TÍTULO
 ============================= */
 #modal-horas h2#modal-data {
-  margin: 0 0 6px 0;
+  margin: 0 0 6px;
   text-align: center;
   font-size: 18px;
   font-weight: bold;
@@ -1477,20 +1494,28 @@ div.h-safe-area-inset-top {
 /* =============================
    BOTÕES
 ============================= */
-#modal-horas button {
-  padding: 8px 12px;
+.modal-actions button {
+  flex: 1;                   /* ambos com mesma largura */
+  padding: 10px;
   font-size: 14px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
-  transition: opacity 0.2s;
 }
 
+.modal-actions {
+  display: flex;
+  gap: 10px;                 /* espaço entre os botões */
+  margin-top: 12px;
+}
+
+/* Botão salvar */
 #salvar-horas {
   background: #1e90ff;
   color: #fff;
 }
 
+/* Botão cancelar */
 #fechar-modal {
   background: #555;
   color: #fff;
@@ -1499,6 +1524,19 @@ div.h-safe-area-inset-top {
 #modal-horas button:hover {
   opacity: 0.9;
 }
+
+/* =============================
+   ESTADO GLOBAL DO MODAL
+============================= */
+body.modal-aberto {
+  overflow: hidden;
+  touch-action: none;
+}
+
+body.modal-aberto #bottom-nav {
+  display: none !important;
+}
+
 
 /* =============================
    ANIMAÇÃO
