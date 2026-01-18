@@ -1932,14 +1932,23 @@ tr.fim-de-semana td {
     white-space: nowrap;
 }
 
+/* ===== PRINT RESET ===== */
 @media print {
-  * {
-    position: static !important;
-  }
+    html, body {
+        height: auto !important;
+        overflow: visible !important;
+        margin: 0 !important;
+    }
+
+    * {
+        position: static !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
 }
-@media print {
-  html, body {
-    height: auto !important;
-    overflow: visible !important;
-  }
+
+/* ===== AJUSTE MOBILE PDF ===== */
+.pdf-mobile #pdf-content {
+    transform: scale(0.98);
+    transform-origin: top left;
 }
