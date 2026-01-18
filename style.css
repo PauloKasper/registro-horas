@@ -5,8 +5,8 @@
 
 
 .page {
-  page-break-after: avoid;
-  page-break-inside: avoid;
+  page-break-after: auto;
+  page-break-inside: auto;
 }
 
 /* --- BODY: Ajustado para ocupar 100% da tela real --- */
@@ -1638,21 +1638,26 @@ div.h-safe-area-inset-top {
 /* style.css */
 
 /* ===== CONTAINER PDF ===== */
-#pdf-container {   position: absolute;
+#pdf-container {
+    position: absolute;
     left: -9999px;
     top: 0;
     display: block;
-    }
+    max-width: none !important;
+
+}
 
 #pdf-content {
-    width: 100%;
-    display: block !important;
-    font-family: Helvetica, Arial, sans-serif;
-    padding: 0.1mm 5mm;
+    width: 260mm;          /* 🔑 largura segura A4 landscape */
+    margin: 0;
+    padding: 5mm;
     box-sizing: border-box;
+    font-family: Helvetica, Arial, sans-serif;
+
     overflow: visible !important;
     height: auto !important;
 }
+
 
 /* ===== ESTRUTURA BASE (FIXED: Usa Flexbox para evitar sobreposição) ===== */
 .table-container {
@@ -1927,3 +1932,14 @@ tr.fim-de-semana td {
     white-space: nowrap;
 }
 
+@media print {
+  * {
+    position: static !important;
+  }
+}
+@media print {
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
