@@ -1014,81 +1014,106 @@ while (d <= fim) {
     d.setDate(d.getDate() + 1);
 }
 
-    // 3. Usa a biblioteca html2pdf para gerar o download a partir do elemento oculto
-const element = document.getElementById('pdf-content');
-const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
+  // Elemento que será convertido em PDF
+  const element = document.getElementById('pdf-content');
 
-const opt = {
-  margin: [10, 10, 10, 10],
-  filename,
-  html2canvas: {
-    scale: 2,
-    scrollX: 0,
-    scrollY: 0
-  },
-  jsPDF: {
-    unit: 'mm',
-    format: 'a4',
-    orientation: 'landscape'
-  },
-  pagebreak: {
-    mode: ['css', 'legacy']
+  // Nome do arquivo
+  const filename = `folha_horas_${new Date().toISOString().slice(0, 10)}.pdf`;
+
+  // Detecta mobile
+  const isMobile = window.innerWidth < 768;
+
+  // 🔑 APLICA AJUSTE MOBILE ANTES DO SNAPSHOT
+  if (isMobile) {
+    document.body.classList.add('pdf-mobile');
   }
-};
 
+  // Configuração do html2pdf
+  const opt = {
+    margin: [10, 10, 10, 10],
+    filename: filename,
+    html2canvas: {
+      scale: 2,
+      scrollX: 0,
+      scrollY: 0
+    },
+    jsPDF: {
+      unit: 'mm',
+      format: 'a4',
+      orientation: 'landscape'
+    },
+    pagebreak: {
+      mode: ['css', 'legacy']
+    }
+  };
 
+  /* ===============================
+     ATUALIZA DADOS DO PDF
+     =============================== */
 
-// --- Totais ---
-document.getElementById('total-horas-trabalhadas').innerText =
-somaTotalHoras || '';
+  document.getElementById('total-horas-trabalhadas').innerText =
+    somaTotalHoras || '';
 
-document.getElementById('total-horas-noturnas').innerText =
-somaHorasNoturnas || '';
+  document.getElementById('total-horas-noturnas').innerText =
+    somaHorasNoturnas || '';
 
-document.getElementById('total-extra-1').innerText =
+  document.getElementById('total-extra-1').innerText =
     somaExtra1 || '';
 
-document.getElementById('total-extra-2').innerText =
+  document.getElementById('total-extra-2').innerText =
     somaExtra2 || '';
 
-document.getElementById('total-extra-rest').innerText =
+  document.getElementById('total-extra-rest').innerText =
     somaExtraRest || '';
 
-document.getElementById('total-sabdom').innerText =
+  document.getElementById('total-sabdom').innerText =
     somaSabDom || '';
 
-document.getElementById('total-feriados').innerText =
+  document.getElementById('total-feriados').innerText =
     somaFeriados || '';
 
-// --- Subsídio de refeição ---
-const valorRefeicao = diasTrabalhados * 8;
-
-document.getElementById('subsidio-refeicao').innerText =
+  // Subsídio de refeição
+  const valorRefeicao = diasTrabalhados * 8;
+  document.getElementById('subsidio-refeicao').innerText =
     `${diasTrabalhados} X 8 = ${valorRefeicao}`;
 
-document.getElementById('colaborador').innerText =
+  // Dados gerais
+  document.getElementById('colaborador').innerText =
     window.usuario_atual || '';
 
-document.getElementById('data_emissao').innerText =
+  document.getElementById('data_emissao').innerText =
     new Date().toLocaleDateString('pt-PT');
 
-document.getElementById('funcao').innerText =
+  document.getElementById('funcao').innerText =
     window.funcao_padrao || 'Operador de Armazém';
 
-document.getElementById('empresa').innerText =
+  document.getElementById('empresa').innerText =
     window.empresa_padrao || 'CDIL';
 
-document.getElementById('contribuinte').innerText =
+  document.getElementById('contribuinte').innerText =
     window.NIF || '';
 
-document.getElementById('horario').innerText =
+  document.getElementById('horario').innerText =
     window.horario_padrao || '08:30 - 17:00';
 
+  /* ===============================
+     GERAÇÃO DO PDF
+     =============================== */
 
-
-// --- PDF ---
-html2pdf().set(opt).from(element).save();
+  html2pdf()
+    .set(opt)
+    .from(element)
+    .save()
+    .then(() => {
+      // 🔑 REMOVE AJUSTE MOBILE APÓS O PDF
+      document.body.classList.remove('pdf-mobile');
+    })
+    .catch(err => {
+      document.body.classList.remove('pdf-mobile');
+      console.error('Erro ao gerar PDF:', err);
+    });
 }
+
 
 
 // Função auxiliar para calcular o número total de linhas para a lógica de índice
