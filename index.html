@@ -209,37 +209,34 @@
 
   <div id="calendar"></div>
     <!-- Modal -->
-  <div id="modal-horas" class="modal" aria-hidden="true">
-      <div class="modal-content">
-          <h2 id="modal-data"></h2>
-
-        <label for="entrada">Entrada</label>
-        <input id="entrada" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="hh:mm"
-               oninput="this.value = formatarHora(this.value)">
-
-        <label for="saidaAlmoco">Saída Almoço</label>
-        <input id="saidaAlmoco" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="hh:mm"
-               oninput="this.value = formatarHora(this.value)">
-
-        <label for="retornoAlmoco">Retorno Almoço</label>
-        <input id="retornoAlmoco" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="hh:mm"
-               oninput="this.value = formatarHora(this.value)">
-
-        <label for="saidaFinal">Saída Final</label>
-        <input id="saidaFinal" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="hh:mm"
-               oninput="this.value = formatarHora(this.value)">
-
-          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
-            <button id="salvar-horas">Salvar</button>
-            <button id="fechar-modal" class="close-btn">Fechar</button>
-          </div>
-      </div>
-  </div>
-
-
-
-  <h2 id="usuario-logado" class="usuario-h2"></h2>
+    <h2 id="usuario-logado" class="usuario-h2"></h2>
 </div>
+<!-- =========================
+     MODAL GLOBAL — HORAS
+========================= -->
+<div id="modal-horas" aria-hidden="true">
+  <div class="modal-content">
+    <h2 id="modal-data"></h2>
+
+    <label>Entrada</label>
+    <input id="entrada" type="text" maxlength="5">
+
+    <label>Saída Almoço</label>
+    <input id="saidaAlmoco" type="text" maxlength="5">
+
+    <label>Retorno Almoço</label>
+    <input id="retornoAlmoco" type="text" maxlength="5">
+
+    <label>Saída Final</label>
+    <input id="saidaFinal" type="text" maxlength="5">
+
+    <div class="modal-actions">
+      <button id="salvar-horas">Salvar</button>
+      <button id="fechar-modal">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <div class="botoes-lado-a-lado" style="margin-top:12px;">
     <button id="btn-gerar-csv" class="oculto">Imprimir</button>
   </div>
