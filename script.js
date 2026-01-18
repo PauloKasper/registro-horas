@@ -29,18 +29,6 @@ function getDeviceType() {
 }
 
 
-function abrirModalHoras() {
-  const modal = document.getElementById("modal-horas");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden"; // trava scroll
-}
-
-function fecharModalHoras() {
-  const modal = document.getElementById("modal-horas");
-  modal.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
-}
-
 // Botão fechar
 document.getElementById("fechar-modal").onclick = fecharModalHoras;
 
@@ -140,6 +128,23 @@ document.getElementById("modal-horas").addEventListener("click", e => {
             .then(() => console.log("Service Worker registrado"))
             .catch(err => console.error("Erro ao registrar Service Worker:", err));
     }
+
+function sincronizarPerfilComPDF() {
+    const usuario = carregarLS("usuario_logado");
+    if (!usuario) return;
+
+    const usuarios = carregarLS("usuarios");
+    const u = usuarios[usuario];
+    if (!u) return;
+
+    document.getElementById("colaborador").innerText = u.display_name || "";
+    document.getElementById("funcao").innerText = u.funcao || "";
+    document.getElementById("empresa").innerText = u.empresa || "";
+    document.getElementById("contribuinte").innerText = u.contribuicao || "";
+    document.getElementById("horario").innerText = u.horario || "";
+    document.getElementById("data_emissao").innerText =
+        new Date().toLocaleDateString("pt-PT");
+}
 
 
 
@@ -725,11 +730,16 @@ function salvarHorasDoDia(dateKey) {
         gerarCalendarioPeriodo();
     }
 
-    if (tela === "tela-perfil") {
-        carregarPerfil();              // 🔥 MOSTRA DADOS DO CADASTRO
-        carregarRegistrosUsuario();
-        atualizarCardsPerfil();
+   if (tela === "tela-perfil") {
+    carregarPerfil();
+    carregarRegistrosUsuario();
+    atualizarCardsPerfil();
+
+    // 🔑 Garante sincronização visual
+    if (window.loadProfilePic) {
+        window.loadProfilePic();
     }
+}
 
 }
 
@@ -744,11 +754,20 @@ function salvarHorasDoDia(dateKey) {
             if (erro) erro.innerText = "";
 
             if (u in us && us[u].numero === s) {
-                salvarLS("usuario_logado", u); // 🔥 ESSENCIAL
-                window.usuario_atual = u;      // pode manter se quiser
+                salvarLS("usuario_logado", u);
+                window.usuario_atual = u;
+
+                carregarPerfil();
                 carregarRegistrosUsuario();
+
+                // 🔑 ESTA LINHA É O QUE FALTAVA
+                if (window.loadProfilePic) {
+                    window.loadProfilePic();
+                }
+
                 mostrar("tela-perfil");
             }
+
              else {
                 if (erro) erro.innerText = "Usuário ou senha incorretos.";
             }
@@ -855,12 +874,7 @@ if (btnSalvarCadastro) {
 
 async function gerarPDFComHTML() {
     // 1. Popula os campos de informação do colaborador no HTML oculto
-    document.getElementById('colaborador').innerText = `COLABORADOR: ${window.usuario_atual || ''}`;
-    document.getElementById('data_emissao').innerText = `DATA: ${new Date().toLocaleDateString()}`;
-    document.getElementById('funcao').innerText = `FUNÇÃO: ${window.funcao_padrao || 'Operador de Armazém'}`;
-    document.getElementById('empresa').innerText = `EMPRESA: ${window.empresa_padrao || 'CDIL'}`;
-    document.getElementById('contribuinte').innerText = `CONTRIBUINTE: ${window.NIF || ''}`;
-    document.getElementById('horario').innerText = `HORÁRIO: ${window.horario_padrao || '08:30 - 17:00'}`;
+
         const hoje = new Date().toLocaleDateString('pt-PT', {
         day: '2-digit',
         month: 'long',
@@ -1101,25 +1115,6 @@ while (d <= fim) {
   document.getElementById('subsidio-refeicao').innerText =
     `${diasTrabalhados} X 8 = ${valorRefeicao}`;
 
-  // Dados gerais
-  document.getElementById('colaborador').innerText =
-    window.usuario_atual || '';
-
-  document.getElementById('data_emissao').innerText =
-    new Date().toLocaleDateString('pt-PT');
-
-  document.getElementById('funcao').innerText =
-    window.funcao_padrao || 'Operador de Armazém';
-
-  document.getElementById('empresa').innerText =
-    window.empresa_padrao || 'CDIL';
-
-  document.getElementById('contribuinte').innerText =
-    window.NIF || '';
-
-  document.getElementById('horario').innerText =
-    window.horario_padrao || '08:30 - 17:00';
-
   /* ===============================
      GERAÇÃO DO PDF
      =============================== */
@@ -1152,93 +1147,136 @@ function calcularTotalDeLinhas(inicio, fim) {
 }
 
 
-// Event listener para o botão de imprimir na TELA DE REGISTRO
 const btnImprimir = document.getElementById('btn-gerar-csv');
 if (btnImprimir) {
-    btnImprimir.onclick = () => gerarPDFComHTML().catch(console.error);
+    btnImprimir.onclick = async () => {
+
+        // 🔑 PRIMEIRO: perfil → PDF
+        sincronizarPerfilComPDF();
+
+        // 🔑 DEPOIS: gera PDF
+        await gerarPDFComHTML();
+    };
 }
 
 
-    // --- FOTO DE PERFIL (mantida) ---
-    (function setupFoto() {
-        const btnGerirFoto = document.getElementById('btn-gerir-foto');
-        const popupOpcoesFoto = document.getElementById('popup-opcoes-foto');
-        const btnAdicionarNovaFoto = document.getElementById('btn-adicionar-nova-foto');
-        const btnRemoverFoto = document.getElementById('btn-remover-foto');
-        const fileInput = document.getElementById('file-input');
-        const profileImageDisplay = document.getElementById('profile-image-display');
-        const avatarContainer = document.querySelector('.card__avatar') || document.querySelector('.foto-container');
 
-        if (!(btnGerirFoto && popupOpcoesFoto && btnAdicionarNovaFoto && btnRemoverFoto && fileInput && profileImageDisplay && avatarContainer)) return;
 
-        btnGerirFoto.onclick = (e) => {
-            e.stopPropagation();
-            popupOpcoesFoto.style.display = (popupOpcoesFoto.style.display === 'block') ? 'none' : 'block';
-        };
-        document.addEventListener('click', () => { popupOpcoesFoto.style.display = 'none'; });
-        popupOpcoesFoto.addEventListener('click', e => e.stopPropagation());
+    // =========================
+// FOTO DE PERFIL (CORRIGIDO)
+// =========================
+(function setupFoto() {
+    const btnGerirFoto = document.getElementById('btn-gerir-foto');
+    const popupOpcoesFoto = document.getElementById('popup-opcoes-foto');
+    const btnAdicionarNovaFoto = document.getElementById('btn-adicionar-nova-foto');
+    const btnRemoverFoto = document.getElementById('btn-remover-foto');
+    const fileInput = document.getElementById('file-input');
+    const profileImageDisplay = document.getElementById('profile-image-display');
+    const avatarContainer =
+        document.querySelector('.card__avatar') ||
+        document.querySelector('.foto-container');
 
-        btnAdicionarNovaFoto.onclick = () => {
-            fileInput.value = '';
-            fileInput.click();
-        };
+    if (!(
+        btnGerirFoto &&
+        popupOpcoesFoto &&
+        btnAdicionarNovaFoto &&
+        btnRemoverFoto &&
+        fileInput &&
+        profileImageDisplay &&
+        avatarContainer
+    )) return;
 
-        btnRemoverFoto.onclick = () => {
+    // =========================
+    // ABRIR / FECHAR MENU
+    // =========================
+    btnGerirFoto.onclick = (e) => {
+        e.stopPropagation();
+        popupOpcoesFoto.style.display =
+            popupOpcoesFoto.style.display === 'block' ? 'none' : 'block';
+    };
+
+    document.addEventListener('click', () => {
+        popupOpcoesFoto.style.display = 'none';
+    });
+
+    popupOpcoesFoto.addEventListener('click', e => e.stopPropagation());
+
+    // =========================
+    // ADICIONAR FOTO
+    // =========================
+    btnAdicionarNovaFoto.onclick = () => {
+        fileInput.value = '';
+        fileInput.click();
+    };
+
+    fileInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
             if (!window.usuario_atual) {
-                alert("Usuário não definido. Não é possível remover a foto.");
+                alert("Usuário não definido. Foto não será salva.");
                 return;
             }
-            localStorage.removeItem(`profile_pic_${window.usuario_atual}`);
-            profileImageDisplay.src = '';
-            avatarContainer.classList.add('no-photo');
-            fileInput.value = '';
-            alert("Foto removida.");
-        };
 
-        fileInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (!file) return;
+            try {
+                localStorage.setItem(
+                    `profile_pic_${window.usuario_atual}`,
+                    e.target.result
+                );
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
                 profileImageDisplay.src = e.target.result;
-                if (!window.usuario_atual) {
-                    alert("Usuário não definido. Foto não será salva.");
-                    return;
-                }
-                try {
-                    localStorage.setItem(`profile_pic_${window.usuario_atual}`, e.target.result);
-                    avatarContainer.classList.remove('no-photo');
-                } catch (err) {
-                    console.error("Erro ao salvar foto no localStorage:", err);
-                    alert("Erro ao salvar a foto. Talvez a imagem seja muito grande.");
-                }
-            };
-            reader.readAsDataURL(file);
-        });
-
-        function loadProfilePic() {
-            if (!window.usuario_atual) {
-                profileImageDisplay.src = '';
-                avatarContainer.classList.add('no-photo');
-                return;
-            }
-            const savedPic = localStorage.getItem(`profile_pic_${window.usuario_atual}`);
-            if (savedPic) {
-                profileImageDisplay.src = savedPic;
                 avatarContainer.classList.remove('no-photo');
-            } else {
-                profileImageDisplay.src = '';
-                avatarContainer.classList.add('no-photo');
+
+            } catch (err) {
+                console.error("Erro ao salvar foto:", err);
+                alert("Erro ao salvar a foto. Talvez a imagem seja muito grande.");
             }
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    // =========================
+    // REMOVER FOTO
+    // =========================
+    btnRemoverFoto.onclick = () => {
+        if (!window.usuario_atual) {
+            alert("Usuário não definido.");
+            return;
         }
 
-        window.addEventListener('dadosPWAHorasAtualizados', loadProfilePic);
-        (function waitForUserAndLoad() {
-            if (window.usuario_atual) loadProfilePic();
-            else setTimeout(waitForUserAndLoad, 100);
-        })();
-    })();
+        localStorage.removeItem(`profile_pic_${window.usuario_atual}`);
+        profileImageDisplay.src = '';
+        avatarContainer.classList.add('no-photo');
+        fileInput.value = '';
+    };
+
+    // =========================
+    // CARREGAR FOTO DO USUÁRIO ATUAL
+    // =========================
+    window.loadProfilePic = function () {
+        if (!window.usuario_atual) {
+            profileImageDisplay.src = '';
+            avatarContainer.classList.add('no-photo');
+            return;
+        }
+
+        const savedPic = localStorage.getItem(
+            `profile_pic_${window.usuario_atual}`
+        );
+
+        if (savedPic) {
+            profileImageDisplay.src = savedPic;
+            avatarContainer.classList.remove('no-photo');
+        } else {
+            profileImageDisplay.src = '';
+            avatarContainer.classList.add('no-photo');
+        }
+    };
+})();
+
 const btnExcluirUsuario = document.getElementById("btn-excluir-usuario");
 const modalExcluir = document.getElementById("modal-excluir-usuario");
 const inputSenhaExcluir = document.getElementById("senha-excluir");
