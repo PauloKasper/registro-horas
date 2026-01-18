@@ -6,8 +6,8 @@
     margin: 20mm;
 }
 .page {
-    page-break-after: avoid;
-    page-break-inside: avoid;
+  page-break-after: auto;
+  page-break-inside: auto;
 }
 
 /* --- BODY: Ajustado para ocupar 100% da tela real --- */
@@ -655,10 +655,10 @@ button {
     position: relative;
     z-index: 10;
     text-align: center;
-    border-radius: 25px;
+    border-radius: 15px;
     padding-top: 30px;
-    padding-bottom: 60px;
-    width: 100%;
+    padding-bottom: 40px;
+    width: 98%;
     height: 280px;
     max-width: 350px;
     background: rgba(255, 255, 255, 0.2);
@@ -1272,6 +1272,7 @@ div.h-safe-area-inset-top {
   background-color: #1e1e1e; /* fundo do card */
   border-radius: 10px;
   padding-bottom: 10px;
+
 }
 
 /* CALENDÁRIO - HEADER */
@@ -1283,6 +1284,7 @@ div.h-safe-area-inset-top {
   margin-bottom: 10px; /* espaço entre header e dias */
   padding: 1px 1px; /* opcional: mais próximo das bordas */
   border-radius: 10px 10px 0 0;
+
 
 }
 
@@ -1346,6 +1348,7 @@ div.h-safe-area-inset-top {
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
   margin: 0;
+
 }
 
 /* CÉLULAS DOS DIAS */
@@ -1407,79 +1410,109 @@ div.h-safe-area-inset-top {
    MODAL DE HORAS — CENTRALIZADO E LIMPO
    ====================================== */
 /* =============================
-   Modal de horas — overlay total
-   ============================= */
+   MODAL DE HORAS — OVERLAY TOTAL
+============================= */
 #modal-horas {
-  position: fixed;        /* fixa na tela inteira */
-  top: 0;                 /* topo da tela */
-  left: 0;                /* esquerda da tela */
-  width: 100%;           /* largura total da viewport */
-  height: 100%;          /* altura total da viewport */
-  background: rgba(0,0,0,0.0); /* escurece o fundo */
-  display: none;          /* padrão: oculto */
-  justify-content: center; /* centraliza horizontal */
-  align-items: center;     /* centraliza vertical */
-  z-index: 9999;           /* acima de tudo */
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);   /* 🔥 fundo escuro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
+/* Modal oculto */
+#modal-horas[aria-hidden="true"] {
+  display: none;
+}
 
-/* Caixa interna do modal */
+/* =============================
+   CAIXA DO MODAL
+============================= */
 #modal-horas .modal-content {
-  background: #fff;
-  padding: 15px;
-  width: 75%;
-  max-width: 400px;
+  background: #ffffff;
+  width: 85%;
+  max-width: 380px;
+  padding: 16px;
   border-radius: 12px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  box-shadow: none !important;    /* remove sombra */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  animation: modalFade 0.2s ease;
 }
 
-/* Mantém o título com a data */
+/* =============================
+   TÍTULO (DATA)
+============================= */
 #modal-horas h2#modal-data {
-  color: #2f4f4f;
-  margin-top: 50px;
-  text-align: center;             /* centraliza */
-  font-size: 25px;
+  margin: 0 0 6px 0;
+  text-align: center;
+  font-size: 18px;
   font-weight: bold;
+  color: #2f4f4f;
 }
 
-/* Inputs */
-#modal-horas .modal-content input {
+/* =============================
+   LABELS
+============================= */
+#modal-horas label {
+  font-size: 13px;
+  color: #444;
+}
+
+/* =============================
+   INPUTS
+============================= */
+#modal-horas input {
   width: 100%;
   padding: 8px 10px;
-  font-size: 15px;
-  border-radius: 5px;
+  font-size: 14px;
+  border-radius: 6px;
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
 
-/* Botões */
-#modal-horas .modal-content button {
-  width: 100%;
-  padding: 8px 10px;
-  font-size: 15px;
-  border-radius: 5px;
+/* =============================
+   BOTÕES
+============================= */
+#modal-horas button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: 0.2s;
+  transition: opacity 0.2s;
 }
 
 #salvar-horas {
-  background: #2196f3;
-  color: white;
+  background: #1e90ff;
+  color: #fff;
 }
 
 #fechar-modal {
-  background: #444;
-  color: white;
+  background: #555;
+  color: #fff;
 }
 
 #modal-horas button:hover {
   opacity: 0.9;
+}
+
+/* =============================
+   ANIMAÇÃO
+============================= */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 
@@ -1507,8 +1540,8 @@ div.h-safe-area-inset-top {
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     border: 1px solid rgba(255,255,255,0.5);
     padding: 30px 45px;
-    margin-top: 30px;
-    height: 70%;
+    margin-top: 50px;
+    height: 65%;
     max-width: 500px;
     color: #fff;
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
@@ -1609,7 +1642,9 @@ div.h-safe-area-inset-top {
 #pdf-container {   position: absolute;
     left: -9999px;
     top: 0;
-    display: block; }
+    display: block;
+    }
+
 #pdf-content {
     width: 100%;
     display: block !important;
