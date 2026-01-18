@@ -60,23 +60,46 @@
     <div class="perfil-card">
 
       <div class="perfil-topo">
-        <div class="foto-container">
-          <img src="URL_DA_SUA_FOTO.jpg" alt="" class="profile-pic" id="profile-image-display">
-          <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
-        </div>
-      </div>
+  <div class="foto-container">
+    <img
+      src=""
+      alt="Foto de perfil"
+      class="profile-pic"
+      id="profile-image-display"
+    >
 
-      <div class="menu-foto-container">
-        <button id="btn-gerir-foto" class="btn-perfil-acao">Editar</button>
-        <div id="popup-opcoes-foto" class="popup-opcoes">
-          <button id="btn-adicionar-nova-foto" class="opcao-foto">Adicionar/Mudar Foto</button>
-          <button id="btn-remover-foto" class="opcao-foto remover">Remover Foto</button>
-          <button id="btn-editar-perfil" class="btn-editar-perfil">
-  Editar Perfil
-</button>
-        </div>
+    <!-- 🔄 LOADING SOBRE A FOTO -->
+    <div id="foto-loading" class="foto-loading oculto">
+      <div class="spinner"></div>
+    </div>
 
-      </div>
+    <input
+      type="file"
+      id="file-input"
+      accept="image/png, image/jpeg"
+      style="display: none;"
+    >
+  </div>
+</div>
+
+<div class="menu-foto-container">
+  <button id="btn-gerir-foto" class="btn-perfil-acao">Editar</button>
+
+  <div id="popup-opcoes-foto" class="popup-opcoes">
+    <button id="btn-adicionar-nova-foto" class="opcao-foto">
+      Adicionar / Mudar Foto
+    </button>
+
+    <button id="btn-remover-foto" class="opcao-foto remover">
+      Remover Foto
+    </button>
+
+    <button id="btn-editar-perfil" class="btn-editar-perfil">
+      Editar Perfil
+    </button>
+  </div>
+</div>
+
 
     <div class="perfil-dados">
 
