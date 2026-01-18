@@ -1209,34 +1209,28 @@ if (btnImprimir) {
         fileInput.click();
     };
 
-    fileInput.addEventListener('change', function () {
-        const file = this.files[0];
-        if (!file) return;
+ fileInput.addEventListener('change', async function () {
+  const file = this.files[0];
+  if (!file || !window.usuario_atual) return;
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            if (!window.usuario_atual) {
-                alert("Usuário não definido. Foto não será salva.");
-                return;
-            }
+  const tiposPermitidos = ['image/jpeg', 'image/png'];
+  if (!tiposPermitidos.includes(file.type)) {
+    alert("Use apenas imagens JPG ou PNG.");
+    return;
+  }
 
-            try {
-                localStorage.setItem(
-                    `profile_pic_${window.usuario_atual}`,
-                    e.target.result
-                );
+  try {
+    const imagemReduzida = await reduzirImagem(file);
+    localStorage.setItem(`profile_pic_${window.usuario_atual}`, imagemReduzida);
+    profileImageDisplay.src = imagemReduzida;
+    avatarContainer.classList.remove('no-photo');
+  } catch (err) {
+    console.error(err);
+    alert("Erro ao salvar a foto.");
+  }
+});
 
-                profileImageDisplay.src = e.target.result;
-                avatarContainer.classList.remove('no-photo');
 
-            } catch (err) {
-                console.error("Erro ao salvar foto:", err);
-                alert("Erro ao salvar a foto. Talvez a imagem seja muito grande.");
-            }
-        };
-
-        reader.readAsDataURL(file);
-    });
 
     // =========================
     // REMOVER FOTO
@@ -1379,3 +1373,39 @@ function mostrarOutraTela() {
 }
 
 });
+
+// =========================
+// FUNÇÃO PARA REDUZIR FOTO
+// =========================
+function reduzirImagem(file, maxSize = 300) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
+
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // 🔑 gera a imagem reduzida
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+        // 🔥 LIMPA O CANVAS (importante para iOS / Safari)
+        canvas.width = 0;
+        canvas.height = 0;
+
+        resolve(dataUrl);
+      };
+
+      img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
