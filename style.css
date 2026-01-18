@@ -1949,7 +1949,8 @@ tr.fim-de-semana td {
 
 /* ===== AJUSTE MOBILE PDF ===== */
 .pdf-mobile #pdf-content {
-    transform: scale(0.98);
+    transform: scale(0.97);
     transform-origin: top left;
 }
+
 
