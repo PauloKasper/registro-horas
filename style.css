@@ -2,9 +2,8 @@
    BASE GERAL
 ========================================================== */
 
-@page {
-    margin: 20mm;
-}
+
+
 .page {
   page-break-after: auto;
   page-break-inside: auto;
