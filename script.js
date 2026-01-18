@@ -1,5 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+function abrirModalHoras() {
+  document.getElementById('modal-horas')
+    .setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-aberto');
+}
+
+function fecharModalHoras() {
+  document.getElementById('modal-horas')
+    .setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-aberto');
+}
+
+
+
 function getDeviceType() {
   const ua = navigator.userAgent;
 
