@@ -1877,7 +1877,7 @@ tr.fim-de-semana td {
 
 
 #pdf-content {
-    width: 267mm;
+    width: 260mm;
     margin: 0;          /* ❌ tira auto */
     padding: 0.1mm 5mm;
 }
@@ -1963,3 +1963,4 @@ tr.fim-de-semana td {
   transform: scale(0.96);
   transform-origin: top left;
 }
+
