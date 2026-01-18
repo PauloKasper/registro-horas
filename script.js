@@ -1018,14 +1018,11 @@ while (d <= fim) {
 const element = document.getElementById('pdf-content');
 const filename = `folha_horas_${new Date().toISOString().slice(0,10)}.pdf`;
 
-const isMobile = window.innerWidth < 768;
-
 const opt = {
-  margin: 0, // margens reais do PDF
+  margin: [10, 10, 10, 10],
   filename,
   html2canvas: {
-    scale: 3,
-    windowWidth: 1200,   // 🔑 largura virtual estável
+    scale: 2,
     scrollX: 0,
     scrollY: 0
   },
@@ -1034,10 +1031,11 @@ const opt = {
     format: 'a4',
     orientation: 'landscape'
   },
-   pagebreak: {
-        mode: ['avoid-all'] // 🔑 ISSO É O SEGREDO
-    }
+  pagebreak: {
+    mode: ['css', 'legacy']
+  }
 };
+
 
 
 // --- Totais ---
