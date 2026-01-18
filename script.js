@@ -1209,26 +1209,35 @@ if (btnImprimir) {
         fileInput.click();
     };
 
- fileInput.addEventListener('change', async function () {
+fileInput.addEventListener("change", async function () {
   const file = this.files[0];
   if (!file || !window.usuario_atual) return;
 
-  const tiposPermitidos = ['image/jpeg', 'image/png'];
-  if (!tiposPermitidos.includes(file.type)) {
-    alert("Use apenas imagens JPG ou PNG.");
-    return;
-  }
+  const loading = document.getElementById("foto-loading");
+
+  // 🔥 FORÇA renderização do loading
+  loading.classList.remove("oculto");
+  await new Promise(r => setTimeout(r, 500));
 
   try {
     const imagemReduzida = await reduzirImagem(file);
-    localStorage.setItem(`profile_pic_${window.usuario_atual}`, imagemReduzida);
+
+    localStorage.setItem(
+      `profile_pic_${window.usuario_atual}`,
+      imagemReduzida
+    );
+
     profileImageDisplay.src = imagemReduzida;
-    avatarContainer.classList.remove('no-photo');
+    avatarContainer.classList.remove("no-photo");
+
   } catch (err) {
-    console.error(err);
     alert("Erro ao salvar a foto.");
+    console.error(err);
+  } finally {
+    loading.classList.add("oculto");
   }
 });
+
 
 
 
