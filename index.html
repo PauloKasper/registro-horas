@@ -154,57 +154,57 @@
     </div>
 
 
-    <div id="card-horas-resumo" class="card-resumo">
+        <div id="card-horas-resumo" class="card-resumo">
 
-  <h3>Resumo de Horas</h3>
+      <h3>Resumo de Horas</h3>
 
-  <!-- PARTE EXISTENTE (mantida) -->
-  <div class="resumo-item">
-    <span>Total de Horas:</span>
-    <strong id="total-horas">0h</strong>
-  </div>
+      <!-- PARTE EXISTENTE (mantida) -->
+      <div class="resumo-item">
+        <span>Total de Horas:</span>
+        <strong id="total-horas">0h</strong>
+      </div>
 
-  <div class="resumo-item">
-    <span>Horas Extras (total):</span>
-    <strong id="horas-extras">0h</strong>
-  </div>
+      <div class="resumo-item">
+        <span>Horas Extras (total):</span>
+        <strong id="horas-extras">0h</strong>
+      </div>
 
-  <div class="resumo-item">
-    <span>Horas Negativas:</span>
-    <strong id="horas-negativas">0h</strong>
-  </div>
+      <div class="resumo-item">
+        <span>Horas Negativas:</span>
+        <strong id="horas-negativas">0h</strong>
+      </div>
 
-  <hr>
+      <hr>
 
-  <!-- NOVA PARTE -->
-  <h4 id="Extras-por-Escalão">Extras por Escalão</h4>
+      <!-- NOVA PARTE -->
+      <h4 id="Extras-por-Escalão">Extras por Escalão</h4>
 
-  <div class="resumo-item">
-    <span>1ª hora extra:</span>
-    <span id="extra-h1-horas">0.00h</span>
-    <strong id="extra-h1-valor">€ 0.00</strong>
-  </div>
+      <div class="resumo-item">
+        <span>1ª hora extra:</span>
+        <span id="extra-h1-horas">0.00h</span>
+        <strong id="extra-h1-valor">€ 0.00</strong>
+      </div>
 
-  <div class="resumo-item">
-    <span>2ª hora extra:</span>
-    <span id="extra-h2-horas">0.00h</span>
-    <strong id="extra-h2-valor">€ 0.00</strong>
-  </div>
+      <div class="resumo-item">
+        <span>2ª hora extra:</span>
+        <span id="extra-h2-horas">0.00h</span>
+        <strong id="extra-h2-valor">€ 0.00</strong>
+      </div>
 
-  <div class="resumo-item">
-    <span>3ª+ horas:</span>
-    <span id="extra-rest-horas">0.00h</span>
-    <strong id="extra-rest-valor">€ 0.00</strong>
-  </div>
+      <div class="resumo-item">
+        <span>3ª+ horas:</span>
+        <span id="extra-rest-horas">0.00h</span>
+        <strong id="extra-rest-valor">€ 0.00</strong>
+      </div>
 
-  <hr>
+      <hr>
 
-  <div class="resumo-item resumo-total">
-    <span>Total Extras (€):</span>
-    <strong id="extra-total-valor">€ 0.00</strong>
-  </div>
+      <div class="resumo-item resumo-total">
+        <span>Total Extras (€):</span>
+        <strong id="extra-total-valor">€ 0.00</strong>
+      </div>
 
-</div>
+    </div>
 
 
   </div>
@@ -241,17 +241,46 @@
   <div class="modal-content">
     <h2 id="modal-data"></h2>
 
-    <label>Entrada</label>
-    <input id="entrada" type="text" maxlength="5">
+<label>Entrada</label>
+<input
+  id="entrada"
+  type="text"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  maxlength="4"
+  placeholder="HHMM"
+/>
 
-    <label>Saída Almoço</label>
-    <input id="saidaAlmoco" type="text" maxlength="5">
+<label>Saída Almoço</label>
+<input
+  id="saidaAlmoco"
+  type="text"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  maxlength="4"
+  placeholder="HHMM"
+/>
 
-    <label>Retorno Almoço</label>
-    <input id="retornoAlmoco" type="text" maxlength="5">
+<label>Retorno Almoço</label>
+<input
+  id="retornoAlmoco"
+  type="text"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  maxlength="4"
+  placeholder="HHMM"
+/>
 
-    <label>Saída Final</label>
-    <input id="saidaFinal" type="text" maxlength="5">
+<label>Saída Final</label>
+<input
+  id="saidaFinal"
+  type="text"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  maxlength="4"
+  placeholder="HHMM"
+/>
+
 
     <div class="modal-actions">
       <button id="salvar-horas">Salvar</button>
