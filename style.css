@@ -1406,10 +1406,11 @@ div.h-safe-area-inset-top {
 }
 
 .day.hoje {
+  background: #0080ff;
   border: 2px solid #4caf50;
 }
 .day.hoje:hover {
-  color: black;
+  color: #333;
 }
 
 .day.weekend {
@@ -1612,7 +1613,7 @@ body.modal-aberto #bottom-nav {
     border: 1px solid rgba(255,255,255,0.5);
     padding: 30px 10px;
     margin-top: 80px;
-    height: 62%;
+    height: 50%;
     max-width: 360px;
     color: #fff;
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
