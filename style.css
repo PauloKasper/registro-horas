@@ -1379,15 +1379,15 @@ div.h-safe-area-inset-top {
 #calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 5px;
   margin: 0;
 
 }
 
 /* CÉLULAS DOS DIAS */
 .day {
-  height: 40px;
-  width: 40px;
+  height: 42px;
+  width: 42px;
   border-radius: 10px;
   border-shadow: 5px;
   background: #cccccc; /* branco com 50% de opacidade */
@@ -1614,7 +1614,7 @@ body.modal-aberto #bottom-nav {
     padding: 30px 10px;
     margin-top: 120px;
     height: 50%;
-    max-width: 330px;
+    max-width: 342px;
     color: #fff;
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
 
