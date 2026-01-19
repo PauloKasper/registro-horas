@@ -1611,10 +1611,11 @@ body.modal-aberto #bottom-nav {
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     border: 1px solid rgba(255,255,255,0.5);
-    padding: 30px 10px;
+    padding: 0px 10px;
     margin-top: 120px;
     height: 50%;
-    max-width: 330px;
+    width: 44.3%;
+
     color: #fff;
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
 
