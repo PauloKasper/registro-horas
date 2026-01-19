@@ -1372,7 +1372,7 @@ div.h-safe-area-inset-top {
   color: #2f4f4f;
   margin-bottom: 10px;
   padding: 0 5px;
-  gap: 15px;
+  gap: 18px;
 }
 
 /* GRADE DOS DIAS */
@@ -1614,7 +1614,7 @@ body.modal-aberto #bottom-nav {
     padding: 30px 10px;
     margin-top: 120px;
     height: 50%;
-    max-width: 342px;
+    max-width: 345px;
     color: #fff;
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
 
