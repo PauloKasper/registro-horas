@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js")
+    .then(() => console.log("Service Worker registrado"))
+    .catch(err => console.error("Erro ao registrar Service Worker:", err));
+}
 
 function abrirModalHoras() {
   document.getElementById('modal-horas')
@@ -118,15 +123,6 @@ document.getElementById("modal-horas").addEventListener("click", e => {
                 btnEditarPerfil.dataset.editando = "false";
             }
         };
-    }
-
-    /* =========================
-       SERVICE WORKER
-    ========================= */
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service-worker.js")
-            .then(() => console.log("Service Worker registrado"))
-            .catch(err => console.error("Erro ao registrar Service Worker:", err));
     }
 
 function sincronizarPerfilComPDF() {
