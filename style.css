@@ -1346,7 +1346,7 @@ div.h-safe-area-inset-top {
   font-weight: bold;
   font-size: 15px;
   box-sizing: border-box; /* importante */
-  padding: 10px; /* garante tamanho fixo */
+  padding: 17px; /* garante tamanho fixo */
   transform: none; /* bloqueia qualquer escala */
   transition: background-color 0.2s ease; /* só muda cor no hover */
 }
@@ -1372,22 +1372,22 @@ div.h-safe-area-inset-top {
   color: #2f4f4f;
   margin-bottom: 10px;
   padding: 0 5px;
-  gap: 9px;
+  gap: 15px;
 }
 
 /* GRADE DOS DIAS */
 #calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+  gap: 4px;
   margin: 0;
 
 }
 
 /* CÉLULAS DOS DIAS */
 .day {
-  height: 35px;
-  width: 35px;
+  height: 40px;
+  width: 40px;
   border-radius: 10px;
   border-shadow: 5px;
   background: #cccccc; /* branco com 50% de opacidade */
