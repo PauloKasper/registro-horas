@@ -1226,6 +1226,16 @@ div.h-safe-area-inset-top {
     color: gray;
 }
 
+.resumo-item strong.horas-negativas {
+    color: #d32f2f !important;
+}
+
+.resumo-item strong.horas-ok {
+    color: #2e7d32;
+}
+
+
+
 /* 1. Container fixo no rodapé */
 #bottom-nav.radio-inputs {
   position: fixed;
@@ -2032,4 +2042,12 @@ tr.fim-de-semana td {
 .pdf-ios body {
   overflow: visible !important;
   height: auto !important;
+}
+
+#extra-total-valor {
+  display: none;
+}
+
+.resumo-item.resumo-total {
+  display: none;
 }
