@@ -5,6 +5,118 @@ if ("serviceWorker" in navigator) {
     .catch(err => console.error("Erro ao registrar Service Worker:", err));
 }
 
+const SALARIO_MINIMO = 920;
+const HORAS_MES = 173.33;
+
+const VALOR_HORA = SALARIO_MINIMO / HORAS_MES; // ≈ 5.31
+const VALOR_HORA_EXTRA = VALOR_HORA * 2;       // ≈ 10.62
+
+function contarDiasUteisPeriodo() {
+  const [inicio, fim] = gerarPeriodo();
+  let dias = 0;
+
+  for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
+    if (!isWeekend(d)) dias++;
+  }
+
+  return dias;
+}
+
+function distribuirExtrasPorEscalao(horasExtras) {
+  // Menos de 30 minutos não conta
+  if (horasExtras < 0.5) {
+    return { e1: 0, e2: 0, e3: 0 };
+  }
+
+  const horasInteiras = Math.floor(horasExtras);
+  const fracao = horasExtras - horasInteiras;
+
+  let e1 = 0, e2 = 0, e3 = 0;
+
+  // FRAÇÃO vai sempre para o 1.º escalão
+  if (fracao > 0) {
+    e1 += fracao;
+  }
+
+  // Distribuição das horas inteiras
+  if (horasInteiras >= 1) {
+    e1 += 1;
+  }
+  if (horasInteiras >= 2) {
+    e2 += 1;
+  }
+  if (horasInteiras > 2) {
+    e3 += horasInteiras - 2;
+  }
+
+  return { e1, e2, e3 };
+}
+function calcularValorEscaloes(totalNormais, totalExtras) {
+  const valorNormal = totalNormais * VALOR_HORA;
+  const valorExtra = totalExtras * VALOR_HORA_EXTRA;
+
+  return {
+    valorNormal,
+    valorExtra,
+    valorTotal: valorNormal + valorExtra
+  };
+}
+
+function calcularExtrasTotaisPorEscalao() {
+  let totalE1 = 0;
+  let totalE2 = 0;
+  let totalE3 = 0;
+
+  for (const data in window.registros) {
+    const r = window.registros[data];
+    if (!r || !r.salvo) continue;
+
+    const horasDia = calcularHorasDoDia(r);
+    const extrasDia = Math.max(0, horasDia - 8);
+
+    const { e1, e2, e3 } = distribuirExtrasPorEscalao(extrasDia);
+
+    totalE1 += e1;
+    totalE2 += e2;
+    totalE3 += e3;
+  }
+
+  return { totalE1, totalE2, totalE3 };
+}
+function atualizarCardExtrasPorEscalao() {
+  const { totalE1, totalE2, totalE3 } = calcularExtrasTotaisPorEscalao();
+
+  const valorE1 = totalE1 * VALOR_HORA * 2;
+  const valorE2 = totalE2 * VALOR_HORA * 2.5;
+  const valorE3 = totalE3 * VALOR_HORA * 3;
+
+  const totalExtras = valorE1 + valorE2 + valorE3;
+
+  document.getElementById("extra-h1-horas").innerText = `${totalE1.toFixed(2)}h`;
+  document.getElementById("extra-h2-horas").innerText = `${totalE2.toFixed(2)}h`;
+  document.getElementById("extra-rest-horas").innerText = `${totalE3.toFixed(2)}h`;
+
+  document.getElementById("extra-h1-valor").innerText = `€ ${valorE1.toFixed(2)}`;
+  document.getElementById("extra-h2-valor").innerText = `€ ${valorE2.toFixed(2)}`;
+  document.getElementById("extra-rest-valor").innerText = `€ ${valorE3.toFixed(2)}`;
+
+  document.getElementById("extra-total-valor").innerText =
+    `€ ${totalExtras.toFixed(2)}`;
+
+  // 🔑 horas
+  window.totalExtraH1 = totalE1;
+  window.totalExtraH2 = totalE2;
+  window.totalExtraRest = totalE3;
+
+  // 🔑 valores
+  window.valorExtraH1 = valorE1;
+  window.valorExtraH2 = valorE2;
+  window.valorExtraRest = valorE3;
+  window.valorExtraTotal = totalExtras;
+}
+
+
+
 function abrirModalHoras() {
   document.getElementById('modal-horas')
     .setAttribute('aria-hidden', 'false');
@@ -17,7 +129,37 @@ function fecharModalHoras() {
   document.body.classList.remove('modal-aberto');
 }
 
+function calcularHorasNegativas() {
+  let horasTrabalhadas = 0;
+  let diasComRegistro = 0;
 
+  for (const data in window.registros) {
+    const r = window.registros[data];
+    if (!r || !r.salvo) continue;
+
+    const horasDia = Number(calcularHorasDoDia(r)) || 0;
+
+    if (horasDia > 0) {
+      diasComRegistro++;
+      horasTrabalhadas += horasDia;
+    }
+  }
+
+  const horasEsperadas = diasComRegistro * 8;
+  const negativas = horasEsperadas - horasTrabalhadas;
+
+  return negativas > 0 ? negativas : 0;
+}
+
+function horasParaHHMM(horas) {
+  if (!horas || horas <= 0) return "0:00";
+
+  const totalMin = Math.round(horas * 60);
+  const hh = Math.floor(totalMin / 60);
+  const mm = totalMin % 60;
+
+  return `${hh}:${String(mm).padStart(2, '0')}`;
+}
 
 function getDeviceType() {
   const ua = navigator.userAgent;
@@ -146,43 +288,35 @@ function sincronizarPerfilComPDF() {
 
     // --- FUNÇÕES DE CÁLCULO ---
 function calcularHorasDoDia(r) {
-    const paraMinutos = (h) => {
-        if (!h || !h.includes(':')) return null;
-        const [hh, mm] = h.split(':').map(Number);
-        return hh * 60 + mm;
-    };
+  function paraMinutos(h) {
+    if (!h || !h.includes(':')) return null;
+    const [hh, mm] = h.split(':').map(Number);
+    return hh * 60 + mm;
+  }
 
-    const entrada = paraMinutos(r.entrada);
-    if (entrada === null) return 0;
+  const entrada = paraMinutos(r.entrada);
+  if (entrada === null) return 0;
 
-    // CASO 1 — dia completo com almoço
-    if (r.saida_alm && r.retorno) {
-        const saidaAlm = paraMinutos(r.saida_alm);
-        const retorno = paraMinutos(r.retorno);
-        const saidaFinal = paraMinutos(r.saida_final);
+  let totalMin = 0;
 
-        if (saidaAlm !== null && retorno !== null && saidaFinal !== null) {
-            return +(((saidaAlm - entrada) + (saidaFinal - retorno)) / 60).toFixed(2);
-        }
+  // Período antes do almoço
+  if (r.saida_alm) {
+    const saidaAlm = paraMinutos(r.saida_alm);
+    if (saidaAlm !== null && saidaAlm > entrada) {
+      totalMin += (saidaAlm - entrada);
     }
+  }
 
-    // CASO 2 — meio período (entrada → saída almoço)
-    if (r.saida_alm) {
-        const saidaAlm = paraMinutos(r.saida_alm);
-        if (saidaAlm !== null) {
-            return +((saidaAlm - entrada) / 60).toFixed(2);
-        }
+  // Período depois do almoço
+  if (r.retorno && r.saida_final) {
+    const retorno = paraMinutos(r.retorno);
+    const saidaFinal = paraMinutos(r.saida_final);
+    if (retorno !== null && saidaFinal !== null && saidaFinal > retorno) {
+      totalMin += (saidaFinal - retorno);
     }
+  }
 
-    // CASO 3 — sem almoço (entrada → saída final)
-    if (r.saida_final) {
-        const saidaFinal = paraMinutos(r.saida_final);
-        if (saidaFinal !== null) {
-            return +((saidaFinal - entrada) / 60).toFixed(2);
-        }
-    }
-
-    return 0;
+  return +(totalMin / 60).toFixed(2); // 🔑 nunca arredonda pra 8
 }
 
     function calcularValeRefeicao(diasTrabalhados) {
@@ -392,11 +526,8 @@ function atualizarCardsPerfil() {
     const placar = calcularPlacarTotal();
     const { totalNormais, totalExtras } = calcularHorasNormaisExtras();
 
-    const horasEsperadas = placar.diasTrabalhados * 8;
-    const totalHorasNegativas = Math.max(
-        0,
-        horasEsperadas - placar.totalHoras
-    );
+    const totalHorasNegativas = calcularHorasNegativas();
+
         // CARD 1 – TOTAL DIAS (FRENTE) / TOTAL HORAS (VERSO)
     const elDiasFront = document.getElementById('dias-front');
     const elHorasBack = document.getElementById('horas-back');
@@ -406,10 +537,11 @@ function atualizarCardsPerfil() {
             `<span>Total Dias</span><strong>${placar.diasTrabalhados}</strong>`;
     }
 
-    if (elHorasBack) {
-        elHorasBack.innerHTML =
-            `<span>Total Horas</span><strong>${placar.totalHoras.toFixed(2)}h</strong>`;
+   if (elHorasBack) {
+      elHorasBack.innerHTML =
+        `<span>Total Horas</span><strong>${horasParaHHMM(placar.totalHoras)}</strong>`;
     }
+
 
     // =========================
     // CARD RESUMO (embaixo)
@@ -419,13 +551,23 @@ function atualizarCardsPerfil() {
     const elHorasNegativas = document.getElementById('horas-negativas');
 
     if (elTotalHoras)
-        elTotalHoras.innerText = `${placar.totalHoras.toFixed(2)}h`;
+        elTotalHoras.innerText = horasParaHHMM(placar.totalHoras);
 
     if (elHorasExtras)
-        elHorasExtras.innerText = `${totalExtras.toFixed(2)}h`;
+        elHorasExtras.innerText = horasParaHHMM(totalExtras);
 
-    if (elHorasNegativas)
-        elHorasNegativas.innerText = `${totalHorasNegativas.toFixed(2)}h`;
+    if (elHorasNegativas) {
+      elHorasNegativas.innerText = horasParaHHMM(totalHorasNegativas);
+
+      // remove estado anterior
+      elHorasNegativas.classList.remove('horas-negativas', 'horas-ok');
+
+    if (totalHorasNegativas > 0) {
+        elHorasNegativas.classList.add('horas-negativas');
+    } else {
+        elHorasNegativas.classList.add('horas-ok');
+      }
+    }
 
     // =========================
     // 🔥 CARDS DE CIMA (FLIP)
@@ -438,19 +580,19 @@ function atualizarCardsPerfil() {
         elEstimativaBack.innerHTML =
             `<span>Estimativa</span><strong>€ ${placar.estimativaVale.toFixed(2)}</strong>`;
     }
-    const elExtrasTotal = document.getElementById('extras-total');
+   const elExtrasTotal = document.getElementById('extras-total');
 
-    if (elExtrasTotal) {
-        elExtrasTotal.innerText = '€ 123.45';
+    if (elExtrasTotal && typeof window.valorExtraTotal === "number") {
+        elExtrasTotal.innerText = `€ ${window.valorExtraTotal.toFixed(2)}`;
     }
 
 
 }
+    window.addEventListener('dadosPWAHorasAtualizados', () => {
+  atualizarCardExtrasPorEscalao();
+  atualizarCardsPerfil();
 
-
-
-    window.addEventListener('dadosPWAHorasAtualizados', atualizarCardsPerfil);
-
+});
     // --- Modal e Calendário ---
     const calendarElId = "calendar";
     const modalHoras = document.getElementById("modal-horas");
@@ -461,6 +603,21 @@ function atualizarCardsPerfil() {
     const saidaFinal = document.getElementById("saidaFinal");
     const salvarHorasBtn = document.getElementById("salvar-horas");
     const fecharModalBtn = document.getElementById("fechar-modal");
+    // ✅ SALVAR HORAS — APENAS UMA VEZ
+    if (salvarHorasBtn) {
+        salvarHorasBtn.onclick = () => {
+            const key = modalHoras.dataset.dateKey;
+            if (!key) return;
+
+            salvarHorasDoDia(key);
+            modalHoras.style.display = "none";
+
+            window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
+
+            setTimeout(() => gerarCalendarioPeriodo(mesAtualExibido), 50);
+        };
+    }
+
     const camposHora = [entrada, saidaAlmoco, retornoAlmoco, saidaFinal];
     camposHora.forEach(campo => {
     if (!campo) return;
@@ -504,26 +661,34 @@ function salvarHorasDoDia(dateKey) {
         salvo: true
     };
 
-    const allEmpty = !dados.entrada && !dados.saida_alm && !dados.retorno && !dados.saida_final;
+    const allEmpty =
+        !dados.entrada &&
+        !dados.saida_alm &&
+        !dados.retorno &&
+        !dados.saida_final;
 
-    // Se tudo estiver vazio, remove o registro
     if (allEmpty) {
         delete window.registros[dateKey];
     } else {
-        window.registros[dateKey] = dados;
+        // ✅ OBJETO NOVO (SEM structuredClone)
+        window.registros[dateKey] = {
+            entrada: dados.entrada,
+            saida_alm: dados.saida_alm,
+            retorno: dados.retorno,
+            saida_final: dados.saida_final,
+            salvo: true
+        };
     }
 
     salvarRegistrosUsuario();
     window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
 
-    // --- Reset automático baseado no dia de fechamento da empresa ---
-    const [inicio, fim] = gerarPeriodo();
-    const fechamentoDia = 19; // dia fixo de fechamento na empresa
-    const dataFechamento = new Date(inicio.getFullYear(), inicio.getMonth(), fechamentoDia);
-    const fechamentoKey = formatarDataParaKey(dataFechamento);
+    const [inicio] = gerarPeriodo();
+    const fechamentoKey = formatarDataParaKey(
+        new Date(inicio.getFullYear(), inicio.getMonth(), 19)
+    );
 
     if (dateKey === fechamentoKey) {
-        // Calcula resumo
         let totalHoras = 0;
         let totalExtras = 0;
         let diasTrabalhados = 0;
@@ -531,32 +696,28 @@ function salvarHorasDoDia(dateKey) {
 
         for (const d in window.registros) {
             const r = window.registros[d];
-            if (!r || !r.salvo) continue;
+            if (!r?.salvo) continue;
 
             const horasDia = calcularHorasDoDia(r);
             if (horasDia > 0) {
                 diasTrabalhados++;
                 totalHoras += horasDia;
                 totalExtras += Math.max(0, horasDia - 8);
-                // Vale refeição extra por 4h extras
+
                 let refeicaoDia = 8;
-                if (Math.max(0, horasDia - 8) >= 4) refeicaoDia += 8;
+                if (horasDia - 8 >= 4) refeicaoDia += 8;
                 estimativaVale += refeicaoDia;
             }
         }
 
-        // Mostra resumo em alerta
-        const resumoMsg = `Resumo do mês:\nDias trabalhados: ${diasTrabalhados}\nHoras extras: ${totalExtras.toFixed(2)}h\nEstimativa de vale-refeição: €${estimativaVale.toFixed(2)}\n\nDeseja resetar os registros do mês?`;
-        const confirmReset = confirm(resumoMsg);
+        if (confirm(
+            `Resumo do mês:
+Dias trabalhados: ${diasTrabalhados}
+Horas extras: ${totalExtras.toFixed(2)}h
+Estimativa de vale-refeição: €${estimativaVale.toFixed(2)}
 
-        if (confirmReset) {
-            // Marca os registros atuais como "concluídos" e reseta o resto
-            for (const d in window.registros) {
-                if (!window.registros[d].salvo) continue;
-                window.registros[d].mesAnterior = true; // flag para indicar que é do mês passado
-            }
-
-            // Limpa registros do mês atual
+Deseja resetar os registros do mês?`
+        )) {
             window.registros = {};
             salvarRegistrosUsuario();
             atualizarCardsPerfil();
@@ -565,22 +726,25 @@ function salvarHorasDoDia(dateKey) {
         }
     }
 
-    // --- Bloqueio de preenchimento para dias do mês passado ---
     const registroDia = window.registros[dateKey];
-    if (registroDia && registroDia.mesAnterior) {
-        const aviso = `Este dia já pertence ao ciclo anterior. Tem certeza que deseja sobrescrever?`;
-        const confirmDia = confirm(aviso);
-        if (!confirmDia) {
-            // Recarrega os dados originais
+    if (registroDia?.mesAnterior) {
+        if (!confirm("Este dia pertence ao ciclo anterior. Sobrescrever?")) {
             carregarHorasDoDia(dateKey);
             return;
-        } else {
-            // Reseta apenas este dia
-            delete registroDia.mesAnterior;
-            window.registros[dateKey] = dados;
-            salvarRegistrosUsuario();
-            window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
         }
+
+        delete registroDia.mesAnterior;
+
+        window.registros[dateKey] = {
+            entrada: dados.entrada,
+            saida_alm: dados.saida_alm,
+            retorno: dados.retorno,
+            saida_final: dados.saida_final,
+            salvo: true
+        };
+
+        salvarRegistrosUsuario();
+        window.dispatchEvent(new Event('dadosPWAHorasAtualizados'));
     }
 }
 
@@ -657,18 +821,10 @@ function salvarHorasDoDia(dateKey) {
                 }
 
                 modalData.textContent = (new Date(key)).toLocaleDateString("pt-PT");
-                modalData.dataset.key = key;
+                modalHoras.dataset.dateKey = key;
                 carregarHorasDoDia(key);
                 modalHoras.style.display = "flex";
 
-                const novoSalvar = () => {
-                    salvarHorasDoDia(key);
-                    modalHoras.style.display = "none";
-                    setTimeout(() => gerarCalendarioPeriodo(mesAtualExibido), 50);
-                    atualizarCardsPerfil();
-                    salvarHorasBtn.removeEventListener("click", novoSalvar);
-                };
-                salvarHorasBtn.addEventListener("click", novoSalvar);
             });
 
             container.appendChild(dayEl);
@@ -730,6 +886,9 @@ function salvarHorasDoDia(dateKey) {
     carregarPerfil();
     carregarRegistrosUsuario();
     atualizarCardsPerfil();
+
+  // 🔥 ATUALIZA OS EXTRAS POR ESCALÃO
+    atualizarCardExtrasPorEscalao();
 
     // 🔑 Garante sincronização visual
     if (window.loadProfilePic) {
@@ -1414,3 +1573,5 @@ function reduzirImagem(file, maxSize = 300) {
     reader.readAsDataURL(file);
   });
 }
+
+
